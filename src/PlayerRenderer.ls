@@ -63,8 +63,8 @@ package
             if(!super.onAdd())
                 return false;
 
-            image = new Image(Texture.fromAsset("assets/logo.png"));
-            image.x = 300;
+            image = new Image(Texture.fromAsset("assets/player.png"));
+            image.x = 100;
             image.y = 100;
             Loom2D.stage.addChild(image);
 
