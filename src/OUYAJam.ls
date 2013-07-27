@@ -64,6 +64,8 @@ package
 
     public class OUYAJam extends Application
     {
+		public static var instance:OUYAJam;
+		
 		public var background:Image;
 		
         public var label:SimpleLabel;
@@ -80,16 +82,27 @@ package
     
         private var gamepadsConnected:Boolean = false;
 
-        private var players:Vector.<LoomGameObject>;
-        private var lastFrame:Number;
+        public var players:Vector.<LoomGameObject>;
+        public var heroes:Vector.<LoomGameObject>;
+        public var cities:Vector.<LoomGameObject>;
+        public var lastFrame:Number;
         private var playing:Boolean = false; 
 
         override public function run():void
         {
+			instance = this;
+			
 			// seed random value
 			var ts:int = Platform.getEpochTime() - 1374942470;
 			for (var i:int = 0; i < ts % 47; ++i) Math.random();
 			
+            // setup heroes
+            heroes = new Vector.<LoomGameObject>();
+            // setup cities
+            cities = new Vector.<LoomGameObject>();
+            // setup players
+            players = new Vector.<LoomGameObject>();
+
 			// setup background
 			background = new Image(Texture.fromAsset("assets/bg.png"));
             background.x = 0;
@@ -131,6 +144,12 @@ package
 					t.x = m.getPixelX (x,y);
 					t.y = m.getPixelY (x,y);
 					testMapRoot.addChild(t);
+					
+					if (idx == Map.TYPE_HERO_CITY)
+					{
+						trace("SPAWN CITY");
+						spawnCity(t.x, t.y);
+					}
 				}
 			}
 
@@ -147,7 +166,6 @@ package
                 // return;
             }
             // instantiate one player per gamepad
-            players = new Vector.<LoomGameObject>();
 
             var pads:Vector.<Gamepad> = Gamepad.gamepads;
             var player:LoomGameObject;
@@ -155,7 +173,6 @@ package
             for (i=0; i < pads.length; i++)
             {  
                 player = spawnPlayer("assets/player/", "mage", "mage-front-stand");
-                players.pushSingle(player);
                 mover = getPlayerMover(i);
                 if (mover)
                     mover.bindToPad(pads[i]);
@@ -167,7 +184,6 @@ package
             {
                 trace("defaulting to key controls");
                 player = spawnPlayer("assets/player/", "mage", "mage-front-stand");
-                players.pushSingle(player);
                 mover = getPlayerMover(0);
                 if (mover)
                     mover.bindToKeys();
@@ -213,6 +229,12 @@ package
                 if (mover)
                     mover.move(dt);
             }
+            
+            for (i=0; i < cities.length; i++)
+            {
+				var c = getHeroCity(i);
+				if (c) c.update(dt);
+			}
         }
 
         override public function onTick():void
@@ -320,7 +342,7 @@ package
         }        
         
         
-        protected function spawnPlayer(path:String, atlasName:String, aniName:String):LoomGameObject 
+        public function spawnPlayer(path:String, atlasName:String, aniName:String):LoomGameObject 
         {
             var gameObject = new LoomGameObject();
             gameObject.owningGroup = group;
@@ -336,8 +358,48 @@ package
             gameObject.addComponent(renderer, "renderer");
             gameObject.initialize();
 
-            return gameObject;
+			players.pushSingle(gameObject);
 
+            return gameObject;
+        }
+        
+        public function spawnHero(x:Number, y:Number):LoomGameObject 
+        {
+            var gameObject = new LoomGameObject();
+            gameObject.owningGroup = group;
+            //~ create a new mover and bind it to the pad
+            var mover = new HeroMover();
+            mover.x = x;
+            mover.y = y;
+
+            //mover.bindToPad(pad);
+            gameObject.addComponent(mover, "mover");
+            // create a new player renderer, bind it to the mover and save in component gameObject
+            var renderer = new HeroRenderer();
+            renderer.addBinding("x", "@mover.x");
+            renderer.addBinding("y", "@mover.y");
+            
+            gameObject.addComponent(renderer, "renderer");
+            gameObject.initialize();
+
+			heroes.pushSingle(gameObject);
+
+            return gameObject;
+        }
+        
+        public function spawnCity(x:Number, y:Number):LoomGameObject 
+        {
+            var gameObject = new LoomGameObject();
+            gameObject.owningGroup = group;
+            var city = new HeroCity();
+            city.x = x;
+            city.y = y;
+            gameObject.addComponent(city, "city");
+            gameObject.initialize();
+
+			cities.pushSingle(gameObject);
+
+            return gameObject;
         }
         
         public function isPlaying():Boolean
@@ -351,6 +413,22 @@ package
                 return null;
 
             return players[index].lookupComponentByName("mover") as PlayerMover;
+        }
+        
+        public function getHeroMover(index:int):HeroMover
+        {
+            if (index < 0 || index >= heroes.length)
+                return null;
+
+            return heroes[index].lookupComponentByName("mover") as HeroMover;
+        }
+        
+        public function getHeroCity(index:int):HeroCity
+        {
+            if (index < 0 || index >= cities.length)
+                return null;
+
+            return cities[index].lookupComponentByName("city") as HeroCity;
         }
     }
 }

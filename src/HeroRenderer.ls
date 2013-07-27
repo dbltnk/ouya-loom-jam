@@ -10,25 +10,12 @@ package
     import loom2d.textures.TextureAtlas;
     import system.xml.XMLDocument;
 
-	public class PlayerRenderer extends AnimatedComponent
+	public class HeroRenderer extends AnimatedComponent
 	{
-		protected var path:String;
-		protected var atlasName:String;
-		protected var aniName:String;
-
-		protected var anim:MovieClip;
 		protected var image:Image;
 
-		public function PlayerRenderer(path:String, atlasName:String, aniName:String)
+		public function HeroRenderer()
 		{
-			if (!path || !atlasName || !aniName)
-			{
-				return;
-			}
-
-			this.path = path;
-			this.atlasName = atlasName;
-			this.aniName = aniName;
 		}
 
 		/**
@@ -63,27 +50,10 @@ package
             if(!super.onAdd())
                 return false;
 
-            image = new Image(Texture.fromAsset("assets/player.png"));
+            image = new Image(Texture.fromAsset("assets/hero.png"));
             image.x = -1000;
             image.y = -1000;
             Loom2D.stage.addChild(image);
-
-            // var xml:XMLDocument = new XMLDocument();
-            // if (xml.loadFile(path + atlasName + ".xml") != 0)
-            // {
-            // 	trace("failed to load atlas data file for atlas " + atlasName );
-            // 	return false;
-            // }
-
-            // trace(xml.print())
-
-            // var atlas:TextureAtlas = new TextureAtlas(Texture.fromAsset(path + atlasName + ".png"), xml.firstChild());
-            
-            // anim = new MovieClip(atlas.getTextures(aniName), 24);
-            // anim.x = Loom2D.stage.stageWidth / 2; 
-            // anim.y = Loom2D.stage.stageHeight / 2;
-            // anim.play();
-            // Loom2D.stage.addChild(anim);
 
             return true;
         }
@@ -92,7 +62,7 @@ package
          */
         protected function onRemove():void
         {
-            Loom2D.stage.removeChild(anim);
+            Loom2D.stage.removeChild(image);
 
             super.onRemove();
         } 
