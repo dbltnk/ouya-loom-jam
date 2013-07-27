@@ -17,13 +17,15 @@ package
     	public var broken:Boolean = false;
     	public var lastSpawnTime:Number = 0;
     	public var spawnTimeout:Number = Config.CITY_SPAWN_TIMEOUT;
+    	public var spawnCount:int = 100;
 		
     	public function update(dt:Number):void
     	{
-			if (Platform.getTime() - lastSpawnTime > spawnTimeout)
+			if (Platform.getTime() - lastSpawnTime > spawnTimeout && spawnCount > 0)
 			{
 				lastSpawnTime = Platform.getTime();
 				OUYAJam.instance.spawnHero(x,y);
+				--spawnCount;
 			}
     	}
     }
