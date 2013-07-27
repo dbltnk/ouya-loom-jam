@@ -62,32 +62,18 @@ package
                 lookDirectionIndicator.y = value + (image.height / 2);
         }
 
-        protected var _lookX:Number = 0;
-        public function set lookX(value:Number):void
-        {
-            _lookX = value;
-            updateLookDirection();
-        }
-
-        protected var _lookY:Number = 0;
-        public function set lookY(value:Number):void
-        {
-            _lookY = value;
-            updateLookDirection();
-        }
-
-        protected function updateLookDirection():void
+        public function set lookAngle(value:Number):void
         {
             if (!lookDirectionIndicator)
                 return;
-
-            if (_lookX == 0 && _lookY == 0)
+            // hide if value is invalid
+            if (value < 0)
             {
                 lookDirectionIndicator.visible = false;
             }
             else
             {
-                lookDirectionIndicator.rotation = Math.atan2(_lookY, _lookX);
+                lookDirectionIndicator.rotation = value;
                 if (!lookDirectionIndicator.visible)
                     lookDirectionIndicator.visible = true;
             }

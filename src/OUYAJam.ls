@@ -159,11 +159,11 @@ package
 						map.forgeX = tx;
 						map.forgeY = ty;
 						
-						spawnBuilding(tx,ty, "assets/itemforge.png", "assets/itemforge_broken.png");
+						spawnBuilding(idx, tx,ty, "assets/itemforge.png", "assets/itemforge_broken.png");
 					}
 					else if (idx == Map.TYPE_WALL)
 					{
-						spawnBuilding(tx,ty, "assets/wall.png", "assets/wall_broken.png");
+						spawnBuilding(idx, tx,ty, "assets/wall.png", "assets/wall_broken.png");
 					}
 					else
 					{
@@ -192,11 +192,11 @@ package
             var pads:Vector.<Gamepad> = Gamepad.gamepads;
             var player:LoomGameObject;
             var mover:PlayerMover;
-            
+
             for (i=0; i < pads.length; i++)
             {  
                 player = spawnPlayer(Config.PLAYER_SPEED, Config.PLAYER_ATTACK_RANGE, Config.PLAYER_USE_RANGE, "assets/player/", "mage", "mage-front-stand");
-                players.pushSingle(player);
+                
                 mover = getPlayerMover(i);
                 if (mover)
                     mover.bindToPad(pads[i]);
@@ -420,8 +420,7 @@ package
             var renderer = new PlayerRenderer(path, atlasName, aniName);
             renderer.addBinding("x", "@mover.x");
             renderer.addBinding("y", "@mover.y");
-            renderer.addBinding("lookX", "@mover.lookX");
-            renderer.addBinding("lookY", "@mover.lookY");
+            renderer.addBinding("lookAngle", "@mover.lookAngle");
             
             gameObject.addComponent(renderer, "renderer");
             gameObject.initialize();
@@ -455,7 +454,7 @@ package
             return gameObject;
         }
         
-        public function spawnBuilding(x:Number, y:Number, normalImage:String, brokenImage:String):LoomGameObject 
+        public function spawnBuilding(type:int, x:Number, y:Number, normalImage:String, brokenImage:String):LoomGameObject 
         {
             var gameObject = new LoomGameObject();
             gameObject.owningGroup = group;
@@ -463,6 +462,7 @@ package
             var mover = new BuildingMover();
             mover.x = x;
             mover.y = y;
+            mover.type = type;
             //~ mover.broken = true;
 
             gameObject.addComponent(mover, "mover");

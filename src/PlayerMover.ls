@@ -27,6 +27,7 @@ package
 
     	public var lookX:Number = 0;
     	public var lookY:Number = 0;
+    	public var lookAngle:Number = 0;
 
     	public var attack:Number = 0;
     	public var use:Number = 0;
@@ -84,10 +85,12 @@ package
 
 	           	case 2:
 	           		lookX = state;
+	           		updateLookAngle();
 	           	break;
 
 	           	case 3:
 	           		lookY = state;
+	           		updateLookAngle();
 	           	break;
 
 	           	case 4:
@@ -102,6 +105,11 @@ package
 	           		trace("unknown axis " + axis);
 	           	break;
 	        }                   
+        }
+
+        protected function updateLookAngle():void
+        {
+        	lookAngle = (lookX == 0 && lookY == 0) ? -1 : Math.atan2(lookY, lookX);
         }
 
     	public function bindToKeys(up:int, left:int, down:int, right:int):void
