@@ -107,6 +107,7 @@ package
             lookDirectionIndicator = new Sprite();
             lookDirectionIndicator.addChild(img);
             lookDirectionIndicator.center();
+            lookDirectionIndicator.visible = false;
             Loom2D.stage.addChild(lookDirectionIndicator);
 
 
