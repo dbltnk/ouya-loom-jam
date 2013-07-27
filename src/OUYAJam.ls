@@ -208,10 +208,14 @@ package
             {
                 trace("defaulting to key controls");
                 player = spawnPlayer(Config.PLAYER_SPEED, Config.PLAYER_ATTACK_RANGE, Config.PLAYER_USE_RANGE, "assets/player/", "mage", "mage-front-stand");
-                players.pushSingle(player);
                 mover = getPlayerMover(0);
                 if (mover)
-                    mover.bindToKeys();
+                    mover.bindToKeys(LoomKey.W, LoomKey.A, LoomKey.S, LoomKey.D);
+                    
+                player = spawnPlayer(Config.PLAYER_SPEED, Config.PLAYER_ATTACK_RANGE, Config.PLAYER_USE_RANGE, "assets/player/", "mage", "mage-front-stand");
+                mover = getPlayerMover(1);
+                if (mover)
+                    mover.bindToKeys(LoomKey.UP_ARROW, LoomKey.LEFT_ARROW, LoomKey.DOWN_ARROW, LoomKey.RIGHT_ARROW);
             }
 
             playing = true;
