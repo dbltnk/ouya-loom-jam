@@ -109,7 +109,7 @@ package
 			mapImgDict[Map.TYPE_HEALPOINT] = "assets/healpoint.png";
 			mapImgDict[Map.TYPE_VILLAGE_HOUSE] = "assets/village_house.png";
 			mapImgDict[Map.TYPE_STORAGE_PLACE] = "assets/storage_place.png";
-			mapImgDict[Map.TYPE_WALL] = "assets/wall_tile_0.png";
+			mapImgDict[Map.TYPE_WALL] = "assets/wall.png";
 			mapImgDict[Map.TYPE_HERO_CITY] = "assets/hero_city.png";
 			mapImgDict[Map.TYPE_FOOD_PLACE] = "assets/food_place.png";
 			mapImgDict[Map.TYPE_RES_PLACE] = "assets/res_place.png";
