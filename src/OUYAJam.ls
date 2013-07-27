@@ -21,6 +21,12 @@ package
 	{
 		public var map:TMXTileMap;
 		
+		public static const TYPE_HEALPOINT = 0;
+		public static const TYPE_VILLAGE_HOUSE = 1;
+		public static const TYPE_STORAGE_PLACE = 2;
+		public static const TYPE_WALL = 3;
+		
+		
 		public function Map(map:TMXTileMap)
 		{
 			this.map = map;
