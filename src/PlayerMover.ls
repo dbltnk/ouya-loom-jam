@@ -26,17 +26,18 @@ package
     	public var attack:Number = 0;
     	public var use:Number = 0;
 
-    	public var speed:Number = 1000;
+    	public var attackRange:Number = 0;
+    	public var useRange:Number = 0;
 
-    	public function bindToPad(pad:Gamepad):void
+    	public var speed:Number = 0;
+
+    	public function PlayerMover(speed:Number,
+	    							attackRange:Number,
+	    							useRange:Number)
     	{
-    		if (this.pad)
-    		{
-    			unbindPad();
-    		}
-    		this.pad = pad;
-    		trace(pad);
-    		pad.axisEvent += onAxisChange;
+    		this.speed = speed;
+    		this.attackRange = attackRange;
+    		this.useRange = useRange;
     	}
 
     	public function move(dt:Number):void
@@ -45,12 +46,25 @@ package
             y += vY * (dt / 1000) * speed;
     	}
 
+    	public function bindToPad(pad:Gamepad):void
+    	{
+    		if (this.pad)
+    		{
+    			unbindPad();
+    		}
+    		this.pad = pad;
+    		// init pad
+    		pad.axisEvent += onAxisChange;
+    	}
+
     	protected function unbindPad():void
     	{
     		if (pad)
     			pad.axisEvent -= onAxisChange;
     		pad = null;
     	}
+
+
     	protected function onAxisChange(axis:int, state:float):void {
 			//trace("onAxisChange: " + axis + " state: " + state);
 			switch( axis )
@@ -102,7 +116,6 @@ package
                 vX = -1;
             if(keycode == LoomKey.D)
                 vX = 1;
-
         }
 
         protected function keyUpHandler(event:KeyboardEvent):void

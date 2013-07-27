@@ -4,6 +4,7 @@ package
     import loom.gameframework.AnimatedComponent;
 
     import loom2d.Loom2D;
+    import loom2d.display.Sprite;
     import loom2d.display.Image;
     import loom2d.display.MovieClip;
     import loom2d.textures.Texture;
@@ -17,7 +18,9 @@ package
 		protected var aniName:String;
 
 		protected var anim:MovieClip;
-		protected var image:Image;
+		
+        protected var image:Image;
+        protected var lookDirectionIndicator:Sprite;
 
 		public function PlayerRenderer(path:String, atlasName:String, aniName:String)
 		{
@@ -40,6 +43,9 @@ package
         {
             if(image)
                 image.x = value;
+
+            if (lookDirectionIndicator)
+                lookDirectionIndicator.x = value + (image.width / 2);
         }
 
         /**
@@ -51,6 +57,40 @@ package
         {
             if(image)
                 image.y = value;
+
+            if (lookDirectionIndicator)
+                lookDirectionIndicator.y = value + (image.height / 2);
+        }
+
+        protected var _lookX:Number = 0;
+        public function set lookX(value:Number):void
+        {
+            _lookX = value;
+            updateLookDirection();
+        }
+
+        protected var _lookY:Number = 0;
+        public function set lookY(value:Number):void
+        {
+            _lookY = value;
+            updateLookDirection();
+        }
+
+        protected function updateLookDirection():void
+        {
+            if (!lookDirectionIndicator)
+                return;
+
+            if (_lookX == 0 && _lookY == 0)
+            {
+                lookDirectionIndicator.visible = false;
+            }
+            else
+            {
+                lookDirectionIndicator.rotation = Math.atan2(_lookY, _lookX);
+                if (!lookDirectionIndicator.visible)
+                    lookDirectionIndicator.visible = true;
+            }
         }
 
 		/**
@@ -62,6 +102,13 @@ package
         {
             if(!super.onAdd())
                 return false;
+
+            var img:Image = new Image(Texture.fromAsset("assets/player/look-direction.png"));
+            lookDirectionIndicator = new Sprite();
+            lookDirectionIndicator.addChild(img);
+            lookDirectionIndicator.center();
+            Loom2D.stage.addChild(lookDirectionIndicator);
+
 
             image = new Image(Texture.fromAsset("assets/player.png"));
             image.x = -1000;

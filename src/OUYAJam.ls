@@ -187,9 +187,11 @@ package
             var pads:Vector.<Gamepad> = Gamepad.gamepads;
             var player:LoomGameObject;
             var mover:PlayerMover;
+            
             for (i=0; i < pads.length; i++)
             {  
-                player = spawnPlayer("assets/player/", "mage", "mage-front-stand");
+                player = spawnPlayer(Config.PLAYER_SPEED, Config.PLAYER_ATTACK_RANGE, Config.PLAYER_USE_RANGE, "assets/player/", "mage", "mage-front-stand");
+                players.pushSingle(player);
                 mover = getPlayerMover(i);
                 if (mover)
                     mover.bindToPad(pads[i]);
@@ -200,7 +202,8 @@ package
             if (players.length == 0)
             {
                 trace("defaulting to key controls");
-                player = spawnPlayer("assets/player/", "mage", "mage-front-stand");
+                player = spawnPlayer(Config.PLAYER_SPEED, Config.PLAYER_ATTACK_RANGE, Config.PLAYER_USE_RANGE, "assets/player/", "mage", "mage-front-stand");
+                players.pushSingle(player);
                 mover = getPlayerMover(0);
                 if (mover)
                     mover.bindToKeys();
@@ -373,18 +376,26 @@ package
         }        
         
         
-        public function spawnPlayer(path:String, atlasName:String, aniName:String):LoomGameObject 
+        
+        protected function spawnPlayer(speed:Number,
+                                       attackRange:Number,
+                                       useRange:Number,
+                                       path:String,
+                                       atlasName:String,
+                                       aniName:String):LoomGameObject 
         {
             var gameObject = new LoomGameObject();
             gameObject.owningGroup = group;
             // create a new mover and bind it to the pad
-            var mover = new PlayerMover();
+            var mover = new PlayerMover(speed, attackRange, useRange);
             //mover.bindToPad(pad);
             gameObject.addComponent(mover, "mover");
             // create a new player renderer, bind it to the mover and save in component gameObject
             var renderer = new PlayerRenderer(path, atlasName, aniName);
             renderer.addBinding("x", "@mover.x");
             renderer.addBinding("y", "@mover.y");
+            renderer.addBinding("lookX", "@mover.lookX");
+            renderer.addBinding("lookY", "@mover.lookY");
             
             gameObject.addComponent(renderer, "renderer");
             gameObject.initialize();
