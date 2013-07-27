@@ -11,13 +11,19 @@ package
 
     public class BuildingMover extends LoomComponent
     {
+		public var type:int = 0;
     	public var x:Number = 0;
     	public var y:Number = 0;
     	public var broken:Boolean = false;
-
+    	
+    	public var food:Number = 0;
+    	public var resources:Number = 0;
+    	public var hp:Number = Config.BUILDING_HP;
+    	public var hpMax:Number = Config.BUILDING_HP;
+    	
     	public function update(dt:Number):void
     	{
-			
+			broken = hp <= 0;
     	}
     }
 }

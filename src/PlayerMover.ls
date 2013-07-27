@@ -133,7 +133,7 @@ package
             }
         }
 
-    	public function bindToKeys():void
+    	public function bindToKeys(up:int, left:int, down:int, right:int):void
     	{
 			upKey = up;
 			leftKey = left;

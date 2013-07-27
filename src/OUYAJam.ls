@@ -161,11 +161,11 @@ package
 						map.forgeX = tx;
 						map.forgeY = ty;
 						
-						spawnBuilding(tx,ty, "assets/itemforge.png", "assets/itemforge_broken.png");
+						spawnBuilding(idx, tx,ty, "assets/itemforge.png", "assets/itemforge_broken.png");
 					}
 					else if (idx == Map.TYPE_WALL)
 					{
-						spawnBuilding(tx,ty, "assets/wall.png", "assets/wall_broken.png");
+						spawnBuilding(idx, tx,ty, "assets/wall.png", "assets/wall_broken.png");
 					}
 					else
 					{
@@ -240,7 +240,7 @@ package
             sadList = listSadSongs();
             suspenseList = listSuspenseSongs();
             athmoList = listAthmoSounds();
-			mood = "sad";
+			mood = "happy";
             playMyBGSong();   
             
         }
@@ -296,6 +296,23 @@ package
 
         override public function onTick():void
         {
+            if (heroes.length > 1000) {
+				mood = "sad";
+				//~ SimpleAudioEngine.sharedEngine().stopBackgroundMusic(false);
+				//~ maybeChangeBackgroundMusic();
+				//~ SimpleAudioEngine.sharedEngine().resumeBackgroundMusic();
+				//~ trace(mood,heroes.length);
+			}
+			else if (heroes.length > 500) {
+				mood = "suspense";
+				//~ SimpleAudioEngine.sharedEngine().stopBackgroundMusic(false);		
+				//~ maybeChangeBackgroundMusic();					
+				//~ SimpleAudioEngine.sharedEngine().resumeBackgroundMusic();	
+				//~ trace(mood,heroes.length);
+			}
+			else {
+				//~ trace(mood,heroes.length);
+			}
             maybeChangeBackgroundMusic();
             playRandomAthmo();
         }
@@ -386,7 +403,7 @@ package
          protected function playRandomAthmo():void
         {
              // pick an appropriate song and play it as the background music           
-            if (Math.random() <= 0.1 && Platform.getEpochTime() - lastTimeWePlayedAnAthmoSound >=8 ) {
+            if (Math.random() <= 0.05 && Platform.getEpochTime() - lastTimeWePlayedAnAthmoSound >=8 ) {
 				var randomNumber:Number = Math.random();
 				var pickedSound:int = Math.floor(randomNumber * athmoList.length);
 				var sound:String = athmoList[pickedSound];
@@ -470,7 +487,7 @@ package
             return gameObject;
         }
         
-        public function spawnBuilding(x:Number, y:Number, normalImage:String, brokenImage:String):LoomGameObject 
+        public function spawnBuilding(type:int, x:Number, y:Number, normalImage:String, brokenImage:String):LoomGameObject 
         {
             var gameObject = new LoomGameObject();
             gameObject.owningGroup = group;
@@ -478,6 +495,7 @@ package
             var mover = new BuildingMover();
             mover.x = x;
             mover.y = y;
+            mover.type = type;
             //~ mover.broken = true;
 
             gameObject.addComponent(mover, "mover");
