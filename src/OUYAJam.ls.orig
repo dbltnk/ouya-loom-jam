@@ -39,9 +39,6 @@ package
 		public static const TYPE_RES_PLACE = 8;		
 		public static const TYPE_ITEMFORGE = 9;		
 		
-		public var forgeX:Number = 0;
-		public var forgeY:Number = 0;
-		
 		public function Map(map:TMXTileMap)
 		{
 			this.map = map;
@@ -90,8 +87,6 @@ package
         public var lastFrame:Number;
         private var playing:Boolean = false; 
 
-		public var map:Map;
-		
         override public function run():void
         {
 			instance = this;
@@ -114,17 +109,17 @@ package
             stage.addChild(background);
 			
 			//~ trace("loading map");
-			var tileMap = new TMXTileMap()
-			map = new Map(tileMap);
-            tileMap.load("assets/map.tmx");
+			var map = new TMXTileMap()
+			var m = new Map(map);
+            map.load("assets/map.tmx");
 			//~ trace("num layers", map.numLayers(), "w", map.mapWidth());
-            //~ trace("house", map.getTile(0,3,4), map.getPixelX (3,4), map.getPixelY(3,4));
-            //~ trace("nop", map.getTile(0,0,0));
-            //~ trace("house", map.getTile(0,8,12));
-            //~ trace("heal", map.getTile(0,9,4));
-            //~ trace("storage", map.getTile(0,4,14));
-            //~ trace("wall", map.getTile(0,14,2));
-            //~ trace("test", map.getTile(0,1,1));
+            //~ trace("house", m.getTile(0,3,4), m.getPixelX (3,4), m.getPixelY(3,4));
+            //~ trace("nop", m.getTile(0,0,0));
+            //~ trace("house", m.getTile(0,8,12));
+            //~ trace("heal", m.getTile(0,9,4));
+            //~ trace("storage", m.getTile(0,4,14));
+            //~ trace("wall", m.getTile(0,14,2));
+            //~ trace("test", m.getTile(0,1,1));
 			            
 			var mapImgDict = new Dictionary();
 			mapImgDict[Map.TYPE_HEALPOINT] = "assets/healpoint.png";
@@ -141,23 +136,18 @@ package
             for (var x:int = 0; x <= 40; ++x)
             for (var y:int = 0; y <= 23; ++y)
             {
-				var idx:int = map.getTile(0,x,y);
+				var idx:int = m.getTile(0,x,y);
 				if (idx && mapImgDict[idx])
 				{
 					var t = new Image(Texture.fromAsset(String(mapImgDict[idx])));
-					t.x = map.getPixelX (x,y);
-					t.y = map.getPixelY (x,y);
+					t.x = m.getPixelX (x,y);
+					t.y = m.getPixelY (x,y);
 					testMapRoot.addChild(t);
 					
 					if (idx == Map.TYPE_HERO_CITY)
 					{
 						trace("SPAWN CITY");
 						spawnCity(t.x, t.y);
-					}
-					if (idx == Map.TYPE_ITEMFORGE)
-					{
-						map.forgeX = t.x;
-						map.forgeY = t.y;
 					}
 				}
 			}
@@ -205,9 +195,14 @@ package
             happyList = listHappySongs();
             sadList = listSadSongs();
             suspenseList = listSuspenseSongs();
+<<<<<<< HEAD
+            mood = "happy";
+            //~ playMyBGSong();   
+=======
             mood = "suspense";
             playMyBGSong();   
             
+>>>>>>> db20403b0fd480ee55e057c12713c296959b4d80
         }
 
         public function onFrame():void
@@ -236,13 +231,6 @@ package
                 mover = getPlayerMover(i);
                 if (mover)
                     mover.move(dt);
-            }
-            
-            for (i=0; i < heroes.length; i++)
-            {
-                var hm = getHeroMover(i);
-                if (hm)
-                    hm.move(dt);
             }
             
             for (i=0; i < cities.length; i++)

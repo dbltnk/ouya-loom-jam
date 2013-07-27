@@ -21,6 +21,13 @@ package
 
     	public function move(dt:Number):void
     	{
+			vX = OUYAJam.instance.map.forgeX - x;
+			vY = OUYAJam.instance.map.forgeY - y;
+			//~ trace(vX,vY);
+			var l = Math.sqrt(vX*vX+vY*vY);
+			vX /= l;
+			vY /= l;
+			
     		x += vX * (dt / 1000) * speed;
             y += vY * (dt / 1000) * speed;
     	}
