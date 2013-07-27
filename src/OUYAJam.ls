@@ -30,13 +30,14 @@ package
 	{
 		public var map:TMXTileMap;
 		
-		public static const TYPE_HEALPOINT = 5;
-		public static const TYPE_VILLAGE_HOUSE = 4;
 		public static const TYPE_STORAGE_PLACE = 2;
 		public static const TYPE_WALL = 3;		
+		public static const TYPE_VILLAGE_HOUSE = 4;
+		public static const TYPE_HEALPOINT = 5;
 		public static const TYPE_HERO_CITY = 6;		
 		public static const TYPE_FOOD_PLACE = 7;		
 		public static const TYPE_RES_PLACE = 8;		
+		public static const TYPE_ITEMFORGE = 9;		
 		
 		public function Map(map:TMXTileMap)
 		{
@@ -115,6 +116,7 @@ package
 			mapImgDict[Map.TYPE_HERO_CITY] = "assets/hero_city.png";
 			mapImgDict[Map.TYPE_FOOD_PLACE] = "assets/food_place.png";
 			mapImgDict[Map.TYPE_RES_PLACE] = "assets/res_place.png";
+			mapImgDict[Map.TYPE_ITEMFORGE] = "assets/itemforge.png";
             var testMapRoot = new Sprite();
             stage.addChild(testMapRoot);
             
