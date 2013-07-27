@@ -57,7 +57,11 @@ package
         public var label:SimpleLabel;
         //public var middleground:Image;
         public var sprite:Image;
-        var list:Vector.<String>;
+        var happyList:Vector.<String>;
+        var sadList:Vector.<String>;
+        var suspenseList:Vector.<String>;
+        var mood:String;
+        public var startTime:Number;
         
         var hatText:Dictionary.<int, string> = 
         { 
@@ -75,24 +79,28 @@ package
 
         override public function run():void
         {
+			// seed random value
+			var ts:int = Platform.getEpochTime() - 1374942470;
+			for (var i:int = 0; i < ts % 47; ++i) Math.random();
+			
 			// setup background
 			background = new Image(Texture.fromAsset("assets/bg.png"));
             background.x = 0;
             background.y = 0;
             stage.addChild(background);
 			
-			trace("loading map");
+			//~ trace("loading map");
 			var map = new TMXTileMap()
 			var m = new Map(map);
             map.load("assets/map.tmx");
-			trace("num layers", map.numLayers(), "w", map.mapWidth());
-            trace("house", m.getTile(0,3,4), m.getPixelX (3,4), m.getPixelY(3,4));
-            trace("nop", m.getTile(0,0,0));
-            trace("house", m.getTile(0,8,12));
-            trace("heal", m.getTile(0,9,4));
-            trace("storage", m.getTile(0,4,14));
-            trace("wall", m.getTile(0,14,2));
-            trace("test", m.getTile(0,1,1));
+			//~ trace("num layers", map.numLayers(), "w", map.mapWidth());
+            //~ trace("house", m.getTile(0,3,4), m.getPixelX (3,4), m.getPixelY(3,4));
+            //~ trace("nop", m.getTile(0,0,0));
+            //~ trace("house", m.getTile(0,8,12));
+            //~ trace("heal", m.getTile(0,9,4));
+            //~ trace("storage", m.getTile(0,4,14));
+            //~ trace("wall", m.getTile(0,14,2));
+            //~ trace("test", m.getTile(0,1,1));
 			            
 			var mapImgDict = new Dictionary();
 			mapImgDict[Map.TYPE_HEALPOINT] = "assets/healpoint.png";
@@ -163,18 +171,13 @@ package
             */
             
             stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
-            
+                        
 			// make a list of all our BG songs
-            list = listSongs();
-            
-            // pick one of our songs and play it as the background music
-            var randomNumber:int = Math.round(Math.random()*list.length) - 1;
-			var song:String = list[randomNumber];
-			//~ trace(list.length);
-			//~ trace(randomNumber);
-			//~ trace(song);
-            SimpleAudioEngine.sharedEngine().playBackgroundMusic(song, false); 
-            
+            happyList = listHappySongs();
+            sadList = listSadSongs();
+            suspenseList = listSuspenseSongs();
+            mood = "happy";
+            playMyBGSong();   
         }
 
         protected function checkForGamePads():void
@@ -194,21 +197,58 @@ package
             if(SimpleAudioEngine.sharedEngine().isBackgroundMusicPlaying())
 				return;
             else
-            // pick one of our songs and play it as the background music
-				var randomNumber:int = Math.round(Math.random()*list.length) - 1;
-				var song:String = list[randomNumber];
-				//~ trace(list.length);
-				//~ trace(randomNumber);
-				//~ trace(song);
-				SimpleAudioEngine.sharedEngine().playBackgroundMusic(song, false); 
+				playMyBGSong();
         }
         
-        protected function listSongs():Vector.<String>
+        protected function listHappySongs():Vector.<String>
         {
 			var musicFiles = new Vector.<String>(); 
-			Path.walkFiles("assets/audio/music",function(track:String) { musicFiles.push(track) }, null); 
+			Path.walkFiles("assets/audio/music/happy",function(track:String) { musicFiles.push(track) }, null); 
 			return musicFiles;
         }
+        
+        protected function listSadSongs():Vector.<String>
+        {
+			var musicFiles = new Vector.<String>(); 
+			Path.walkFiles("assets/audio/music/sad",function(track:String) { musicFiles.push(track) }, null); 
+			return musicFiles;
+        }
+        
+        protected function listSuspenseSongs():Vector.<String>
+        {
+			var musicFiles = new Vector.<String>(); 
+			Path.walkFiles("assets/audio/music/suspense",function(track:String) { musicFiles.push(track) }, null); 
+			return musicFiles;
+        }
+        
+        protected function playMyBGSong():void
+        {
+             // pick an appropriate song and play it as the background music           
+            if (mood == "happy") {
+				var randomNumber1:Number = Math.random();
+				var pickedSong1:int = Math.round(randomNumber1 * happyList.length);
+				var song1:String = happyList[pickedSong1];
+				SimpleAudioEngine.sharedEngine().playBackgroundMusic(song1, false); 
+			}
+            else if (mood == "sad") {
+				var randomNumber2:Number = Math.random();
+				var pickedSong2:int = Math.round(randomNumber2 * sadList.length);
+				var song2:String = sadList[pickedSong2];
+				SimpleAudioEngine.sharedEngine().playBackgroundMusic(song2, false); 
+			}
+            else if (mood == "suspense") {
+				var randomNumber3:Number = Math.random();
+				var pickedSong3:int = Math.round(randomNumber3 * suspenseList.length);
+				var song3:String = suspenseList[pickedSong3];
+				SimpleAudioEngine.sharedEngine().playBackgroundMusic(song3, false);   
+			}    
+			else
+				return;  
+        }        
+        
+        
+        
+        
         
         protected function keyDownHandler(event:KeyboardEvent):void
         {   
