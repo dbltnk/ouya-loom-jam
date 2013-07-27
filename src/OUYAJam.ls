@@ -24,8 +24,7 @@ package
 		public static const TYPE_HEALPOINT = 0;
 		public static const TYPE_VILLAGE_HOUSE = 1;
 		public static const TYPE_STORAGE_PLACE = 2;
-		public static const TYPE_WALL = 3;
-		
+		public static const TYPE_WALL = 3;		
 		
 		public function Map(map:TMXTileMap)
 		{
@@ -67,7 +66,13 @@ package
 			var m = new Map(map);
             map.load("assets/map.tmx");
 			trace("num layers", map.numLayers(), "w", map.mapWidth());
-            trace("tile my", m.getTile(0,0,0));
+            trace("house", m.getTile(0,3,4));
+            trace("nop", m.getTile(0,0,0));
+            trace("house", m.getTile(0,8,12));
+            trace("heal", m.getTile(0,9,4));
+            trace("storage", m.getTile(0,4,14));
+            trace("wall", m.getTile(0,14,2));
+            trace("test", m.getTile(0,1,1));
 			
             Gamepad.initialize();
             // Comment out this line to turn off automatic scaling.

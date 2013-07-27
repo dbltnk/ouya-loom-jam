@@ -1,22 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="40" height="23" tilewidth="32" tileheight="32">
- <tileset firstgid="1" name="tiled-map" tilewidth="32" tileheight="32">
-  <image source="tiled-map.png" width="512" height="512"/>
- </tileset>
- <tileset firstgid="257" name="definitions" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="definitions" tilewidth="32" tileheight="32">
   <image source="map.png" width="128" height="128"/>
  </tileset>
  <imagelayer name="bg" width="40" height="23">
   <image source="bg.png"/>
  </imagelayer>
- <layer name="optic" width="40" height="23">
-  <data encoding="base64" compression="zlib">
-   eJztlksKwCAMRO3Xdb/3P2pH6NKkUjBOaR7MRhJ4KAmG4LQg3mHG2m9Axsx5h/RCj6XjhuyZ8wVZhR72N06wO37Rr4azNgcaVn7aHGhY+b2lpZ+0E588rPyknah51HSbkLmwtsXdHchZUMf8P2B2SzC7Oc6fuACutAGV
-  </data>
- </layer>
  <layer name="definitions" width="40" height="23">
   <data encoding="base64" compression="zlib">
-   eJzt1tEKABAMheEN7//MkutNyBw5X7nlb0VE6IasfSGL7ivGeep0cIb70Btf7DvR7N0DT1TfKvbZrDdx1IEyv+jZpYm9kWeH/D9AbmuQ24h+UgHRAgB6
+   eJxjYBj8gG2gHUADwAzFgxnQ230sOMRZ8egZDUPKwWB341B0Hy3cjC8f4AP0ch+5YNR9uAGuMhEGcLljsIQfvcOOiQS1gznsBnP7YDC7DQQGs9tGwSgYSQAAfa0AaQ==
   </data>
  </layer>
 </map>
