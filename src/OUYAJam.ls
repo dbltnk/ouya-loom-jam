@@ -159,11 +159,11 @@ package
 						map.forgeX = tx;
 						map.forgeY = ty;
 						
-						spawnBuilding(tx,ty, "assets/itemforge.png", "assets/itemforge_broken.png");
+						spawnBuilding(idx, tx,ty, "assets/itemforge.png", "assets/itemforge_broken.png");
 					}
 					else if (idx == Map.TYPE_WALL)
 					{
-						spawnBuilding(tx,ty, "assets/wall.png", "assets/wall_broken.png");
+						spawnBuilding(idx, tx,ty, "assets/wall.png", "assets/wall_broken.png");
 					}
 					else
 					{
@@ -438,7 +438,7 @@ package
             return gameObject;
         }
         
-        public function spawnBuilding(x:Number, y:Number, normalImage:String, brokenImage:String):LoomGameObject 
+        public function spawnBuilding(type:int, x:Number, y:Number, normalImage:String, brokenImage:String):LoomGameObject 
         {
             var gameObject = new LoomGameObject();
             gameObject.owningGroup = group;
@@ -446,6 +446,7 @@ package
             var mover = new BuildingMover();
             mover.x = x;
             mover.y = y;
+            mover.type = type;
             //~ mover.broken = true;
 
             gameObject.addComponent(mover, "mover");
