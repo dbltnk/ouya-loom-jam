@@ -1,0 +1,12 @@
+DONE * werte: spieler anzahl
+DONE * werte: hero anzahl
+* werte: ress, essen im lager
+* werte: ress, essen draussen
+* werte: lebender mauern, tote mauern
+* hero laufen random (y) von rechts nach links
+* hero laufen direkt auf ein loch zu wenn da eines ist
+* hero greifen mauern an
+* hero greifen gebäude an
+* spieler kann held angreifen (schießen)
+* spieler kann ress, essen sammeln
+* heros respawnen

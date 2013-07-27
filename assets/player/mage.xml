@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker http://www.codeandweb.com/texturepacker-->
+<!-- $TexturePacker:SmartUpdate:f642639add1340e278c36c96a30b455e:1/1$ -->
+<TextureAtlas imagePath="mage.png">
+    <SubTexture name="mage-back-stand-1" x="0" y="0" width="26" height="44" frameX="-3" frameY="-2" frameWidth="32" frameHeight="48"/>
+    <SubTexture name="mage-back-walk-1" x="96" y="88" width="24" height="44" frameX="-4" frameY="-1" frameWidth="32" frameHeight="48"/>
+    <SubTexture name="mage-back-walk-2" x="0" y="0" width="26" height="44" frameX="-3" frameY="-2" frameWidth="32" frameHeight="48"/>
+    <SubTexture name="mage-back-walk-3" x="72" y="88" width="24" height="44" frameX="-4" frameY="-1" frameWidth="32" frameHeight="48"/>
+    <SubTexture name="mage-back-walk-4" x="0" y="0" width="26" height="44" frameX="-3" frameY="-2" frameWidth="32" frameHeight="48"/>
+    <SubTexture name="mage-front-stand-1" x="50" y="0" width="24" height="46" frameX="-4" frameY="0" frameWidth="32" frameHeight="48"/>
+    <SubTexture name="mage-front-walk-1" x="48" y="46" width="24" height="44" frameX="-4" frameY="-2" frameWidth="32" frameHeight="48"/>
+    <SubTexture name="mage-front-walk-2" x="50" y="0" width="24" height="46" frameX="-4" frameY="0" frameWidth="32" frameHeight="48"/>
+    <SubTexture name="mage-front-walk-3" x="24" y="46" width="24" height="44" frameX="-4" frameY="-2" frameWidth="32" frameHeight="48"/>
+    <SubTexture name="mage-front-walk-4" x="50" y="0" width="24" height="46" frameX="-4" frameY="0" frameWidth="32" frameHeight="48"/>
+    <SubTexture name="mage-left-stand-1" x="0" y="44" width="24" height="46" frameX="-4" frameY="0" frameWidth="32" frameHeight="48"/>
+    <SubTexture name="mage-left-walk-1" x="98" y="44" width="24" height="44" frameX="-4" frameY="-2" frameWidth="32" frameHeight="48"/>
+    <SubTexture name="mage-left-walk-2" x="0" y="44" width="24" height="46" frameX="-4" frameY="0" frameWidth="32" frameHeight="48"/>
+    <SubTexture name="mage-left-walk-3" x="74" y="44" width="24" height="44" frameX="-5" frameY="-2" frameWidth="32" frameHeight="48"/>
+    <SubTexture name="mage-left-walk-4" x="0" y="44" width="24" height="46" frameX="-4" frameY="0" frameWidth="32" frameHeight="48"/>
+    <SubTexture name="mage-right-stand-1" x="26" y="0" width="24" height="46" frameX="-4" frameY="0" frameWidth="32" frameHeight="48"/>
+    <SubTexture name="mage-right-walk-1" x="98" y="0" width="24" height="44" frameX="-4" frameY="-2" frameWidth="32" frameHeight="48"/>
+    <SubTexture name="mage-right-walk-2" x="26" y="0" width="24" height="46" frameX="-4" frameY="0" frameWidth="32" frameHeight="48"/>
+    <SubTexture name="mage-right-walk-3" x="74" y="0" width="24" height="44" frameX="-4" frameY="-2" frameWidth="32" frameHeight="48"/>
+    <SubTexture name="mage-right-walk-4" x="26" y="0" width="24" height="46" frameX="-4" frameY="0" frameWidth="32" frameHeight="48"/>
+</TextureAtlas>

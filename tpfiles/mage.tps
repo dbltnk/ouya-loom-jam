@@ -22,7 +22,7 @@
         <key>dataFormat</key>
         <string>sparrow</string>
         <key>textureFileName</key>
-        <filename>../assets/mage.png</filename>
+        <filename>../assets/player/mage.png</filename>
         <key>flipPVR</key>
         <false/>
         <key>ditherType</key>
@@ -111,7 +111,7 @@
             <enum type="AndEngine::MagFilter">MagLinear</enum>
         </struct>
         <key>dataFileName</key>
-        <filename>../assets/mage.xml</filename>
+        <filename>../assets/player/mage.xml</filename>
         <key>multiPack</key>
         <false/>
         <key>mainExtension</key>
@@ -148,26 +148,26 @@
         </struct>
         <key>fileList</key>
         <array>
-            <filename>../assets/original/mage-back-stand-01.png</filename>
-            <filename>../assets/original/mage-back-walk-01.png</filename>
-            <filename>../assets/original/mage-back-walk-02.png</filename>
-            <filename>../assets/original/mage-back-walk-03.png</filename>
-            <filename>../assets/original/mage-back-walk-04.png</filename>
-            <filename>../assets/original/mage-front-stand-01.png</filename>
-            <filename>../assets/original/mage-front-walk-01.png</filename>
-            <filename>../assets/original/mage-front-walk-02.png</filename>
-            <filename>../assets/original/mage-front-walk-03.png</filename>
-            <filename>../assets/original/mage-front-walk-04.png</filename>
-            <filename>../assets/original/mage-left-stand-01.png</filename>
-            <filename>../assets/original/mage-left-walk-01.png</filename>
-            <filename>../assets/original/mage-left-walk-02.png</filename>
-            <filename>../assets/original/mage-left-walk-03.png</filename>
-            <filename>../assets/original/mage-left-walk-04.png</filename>
-            <filename>../assets/original/mage-right-stand-01.png</filename>
-            <filename>../assets/original/mage-right-walk-01.png</filename>
-            <filename>../assets/original/mage-right-walk-02.png</filename>
-            <filename>../assets/original/mage-right-walk-03.png</filename>
-            <filename>../assets/original/mage-right-walk-04.png</filename>
+            <filename>../assets/original/mage-back-stand-1.png</filename>
+            <filename>../assets/original/mage-back-walk-1.png</filename>
+            <filename>../assets/original/mage-back-walk-2.png</filename>
+            <filename>../assets/original/mage-back-walk-3.png</filename>
+            <filename>../assets/original/mage-back-walk-4.png</filename>
+            <filename>../assets/original/mage-front-stand-1.png</filename>
+            <filename>../assets/original/mage-front-walk-1.png</filename>
+            <filename>../assets/original/mage-front-walk-2.png</filename>
+            <filename>../assets/original/mage-front-walk-3.png</filename>
+            <filename>../assets/original/mage-front-walk-4.png</filename>
+            <filename>../assets/original/mage-left-stand-1.png</filename>
+            <filename>../assets/original/mage-left-walk-1.png</filename>
+            <filename>../assets/original/mage-left-walk-2.png</filename>
+            <filename>../assets/original/mage-left-walk-3.png</filename>
+            <filename>../assets/original/mage-left-walk-4.png</filename>
+            <filename>../assets/original/mage-right-stand-1.png</filename>
+            <filename>../assets/original/mage-right-walk-1.png</filename>
+            <filename>../assets/original/mage-right-walk-2.png</filename>
+            <filename>../assets/original/mage-right-walk-3.png</filename>
+            <filename>../assets/original/mage-right-walk-4.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
