@@ -37,6 +37,8 @@ package
 
     	public var speed:Number = 0;
 
+        protected var coolTime:Number = 0;
+
     	public function PlayerMover(speed:Number,
 	    							attackRange:Number,
                                     attackCoolDown:Number,
