@@ -77,9 +77,10 @@ package
         var happyList:Vector.<String>;
         var sadList:Vector.<String>;
         var suspenseList:Vector.<String>;
+        var athmoList:Vector.<String>;
         var mood:String;
 
-        public var startTime:Number;
+        var lastTimeWePlayedAnAthmoSound:int;
         
     
         private var gamepadsConnected:Boolean = false;
@@ -205,7 +206,8 @@ package
             happyList = listHappySongs();
             sadList = listSadSongs();
             suspenseList = listSuspenseSongs();
-            mood = "suspense";
+            athmoList = listAthmoSounds();
+			mood = "sad";
             playMyBGSong();   
             
         }
@@ -255,6 +257,7 @@ package
         override public function onTick():void
         {
             maybeChangeBackgroundMusic();
+            playRandomAthmo();
         }
         
         protected function maybeChangeBackgroundMusic():void
@@ -298,7 +301,7 @@ package
 			musicFiles.push("assets/audio/music/suspense/suspense_mid_2.mp3")			
 			musicFiles.push("assets/audio/music/suspense/suspense_slow_1.mp3")
 			musicFiles.push("assets/audio/music/suspense/suspense_slow_2.mp3") 
-			musicFiles.push("assets/audio/music/suspense/suspense_slow_3.mp3")
+			musicFiles.push("assets/audio/music/suspense/suspense_slow_3.mp3")	
 			return musicFiles;
         }
         
@@ -326,8 +329,34 @@ package
 			}    
 			else
 				return;  
-        }        
+        }    
         
+        protected function listAthmoSounds():Vector.<String>
+        {
+			var musicFiles = new Vector.<String>(); 
+			//~ Path.walkFiles("assets/audio/music/suspense",function(track:String) { musicFiles.push(track) }, null); 
+			musicFiles.push("assets/audio/sfx/athmo/athmo_bird_1.wav")
+			musicFiles.push("assets/audio/sfx/athmo/athmo_bird_2.wav")
+			musicFiles.push("assets/audio/sfx/athmo/athmo_bird_3.wav")
+			musicFiles.push("assets/audio/sfx/athmo/athmo_bird_4.wav")
+			//~ musicFiles.push("assets/audio/sfx/athmo/athmo_wind_1.wav")
+			return musicFiles;
+        }
+            
+         protected function playRandomAthmo():void
+        {
+             // pick an appropriate song and play it as the background music           
+            if (Math.random() <= 0.1 && Platform.getEpochTime() - lastTimeWePlayedAnAthmoSound >=8 ) {
+				var randomNumber:Number = Math.random();
+				var pickedSound:int = Math.round(randomNumber * athmoList.length);
+				var sound:String = athmoList[pickedSound];
+				SimpleAudioEngine.sharedEngine().playEffect(sound, false); 
+				//~ trace("done",randomNumber,pickedSound,athmoList.length,sound,SimpleAudioEngine.sharedEngine().getEffectsVolume())
+				lastTimeWePlayedAnAthmoSound = Platform.getEpochTime();
+			}
+			else
+				return;  
+        }        
         
         
         public function spawnPlayer(path:String, atlasName:String, aniName:String):LoomGameObject 
