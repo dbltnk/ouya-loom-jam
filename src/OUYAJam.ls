@@ -98,7 +98,7 @@ package
 			mapImgDict[Map.TYPE_HEALPOINT] = "assets/healpoint.png";
 			mapImgDict[Map.TYPE_VILLAGE_HOUSE] = "assets/village_house.png";
 			mapImgDict[Map.TYPE_STORAGE_PLACE] = "assets/storage_place.png";
-			mapImgDict[Map.TYPE_WALL] = "assets/wall_front.png";
+			mapImgDict[Map.TYPE_WALL] = "assets/wall_tile_0.png";
             var testMapRoot = new Sprite();
             stage.addChild(testMapRoot);
             
