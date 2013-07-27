@@ -180,9 +180,10 @@ package
             var pads:Vector.<Gamepad> = Gamepad.gamepads;
             var player:LoomGameObject;
             var mover:PlayerMover;
+            
             for (i=0; i < pads.length; i++)
             {  
-                player = spawnPlayer(1000, 10, 10, "assets/player/", "mage", "mage-front-stand");
+                player = spawnPlayer(Config.PLAYER_SPEED, Config.PLAYER_ATTACK_RANGE, Config.PLAYER_USE_RANGE, "assets/player/", "mage", "mage-front-stand");
                 players.pushSingle(player);
                 mover = getPlayerMover(i);
                 if (mover)
@@ -194,7 +195,7 @@ package
             if (players.length == 0)
             {
                 trace("defaulting to key controls");
-                player = spawnPlayer(1000, 10, 10, "assets/player/", "mage", "mage-front-stand");
+                player = spawnPlayer(Config.PLAYER_SPEED, Config.PLAYER_ATTACK_RANGE, Config.PLAYER_USE_RANGE, "assets/player/", "mage", "mage-front-stand");
                 players.pushSingle(player);
                 mover = getPlayerMover(0);
                 if (mover)
