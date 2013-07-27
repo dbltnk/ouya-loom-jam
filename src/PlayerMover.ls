@@ -13,6 +13,11 @@ package
     {
 
 		protected var pad:Gamepad;
+		
+		public var upKey:int;
+		public var leftKey:int;
+		public var downKey:int;
+		public var rightKey:int;
 
     	public var x:Number = 0;
     	public var y:Number = 0;
@@ -109,6 +114,11 @@ package
 
     	public function bindToKeys():void
     	{
+			upKey = up;
+			leftKey = left;
+			downKey = down;
+			rightKey = right;
+			
     		Loom2D.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
     		Loom2D.stage.addEventListener(KeyboardEvent.KEY_UP, keyUpHandler);
     	}
@@ -116,26 +126,26 @@ package
     	protected function keyDownHandler(event:KeyboardEvent):void
         {   
             var keycode = event.keyCode;
-            if(keycode == LoomKey.W)
+            if(keycode == upKey)
             	vY = -1;
-            if(keycode == LoomKey.S)
+            if(keycode == downKey)
                 vY = 1;
-            if(keycode == LoomKey.A)
+            if(keycode == leftKey)
                 vX = -1;
-            if(keycode == LoomKey.D)
+            if(keycode == rightKey)
                 vX = 1;
         }
 
         protected function keyUpHandler(event:KeyboardEvent):void
         {
         	var keycode = event.keyCode;
-        	if(keycode == LoomKey.W)
+        	if(keycode == upKey)
             	vY = 0;
-            if(keycode == LoomKey.S)
+            if(keycode == downKey)
                 vY = 0;
-            if(keycode == LoomKey.A)
+            if(keycode == leftKey)
                 vX = 0;
-            if(keycode == LoomKey.D)
+            if(keycode == rightKey)
                 vX = 0;
         }
     }

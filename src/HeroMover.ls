@@ -17,7 +17,7 @@ package
     	public var vX:Number = 0;
     	public var vY:Number = 0;
 
-    	public var speed:Number = 1000;
+    	public var speed:Number = Config.HERO_SPEED;
 
     	public function move(dt:Number):void
     	{

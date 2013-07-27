@@ -88,6 +88,7 @@ package
         public var players:Vector.<LoomGameObject>;
         public var heroes:Vector.<LoomGameObject>;
         public var cities:Vector.<LoomGameObject>;
+        public var buildings:Vector.<LoomGameObject>;
         public var lastFrame:Number;
         private var playing:Boolean = false; 
 
@@ -101,12 +102,11 @@ package
 			var ts:int = Platform.getEpochTime() - 1374942470;
 			for (var i:int = 0; i < ts % 47; ++i) Math.random();
 			
-            // setup heroes
+            // setup object lists
             heroes = new Vector.<LoomGameObject>();
-            // setup cities
             cities = new Vector.<LoomGameObject>();
-            // setup players
             players = new Vector.<LoomGameObject>();
+            buildings = new Vector.<LoomGameObject>();
 
 			// setup background
 			background = new Image(Texture.fromAsset("assets/bg.png"));
@@ -145,20 +145,32 @@ package
 				var idx:int = map.getTile(0,x,y);
 				if (idx && mapImgDict[idx])
 				{
-					var t = new Image(Texture.fromAsset(String(mapImgDict[idx])));
-					t.x = map.getPixelX (x,y);
-					t.y = map.getPixelY (x,y);
-					testMapRoot.addChild(t);
+					var tx = map.getPixelX (x,y);
+					var ty = map.getPixelY (x,y);
 					
 					if (idx == Map.TYPE_HERO_CITY)
 					{
 						trace("SPAWN CITY");
-						spawnCity(t.x, t.y);
+						
+						spawnCity(tx, ty);
 					}
-					if (idx == Map.TYPE_ITEMFORGE)
+					else if (idx == Map.TYPE_ITEMFORGE)
 					{
-						map.forgeX = t.x;
-						map.forgeY = t.y;
+						map.forgeX = tx;
+						map.forgeY = ty;
+						
+						spawnBuilding(tx,ty, "assets/itemforge.png", "assets/itemforge_broken.png");
+					}
+					else if (idx == Map.TYPE_WALL)
+					{
+						spawnBuilding(tx,ty, "assets/wall.png", "assets/wall_broken.png");
+					}
+					else
+					{
+						var t = new Image(Texture.fromAsset(String(mapImgDict[idx])));
+						t.x = tx;
+						t.y = ty;
+						testMapRoot.addChild(t);
 					}
 				}
 			}
@@ -196,10 +208,14 @@ package
             {
                 trace("defaulting to key controls");
                 player = spawnPlayer(Config.PLAYER_SPEED, Config.PLAYER_ATTACK_RANGE, Config.PLAYER_USE_RANGE, "assets/player/", "mage", "mage-front-stand");
-                
                 mover = getPlayerMover(0);
                 if (mover)
-                    mover.bindToKeys();
+                    mover.bindToKeys(LoomKey.W, LoomKey.A, LoomKey.S, LoomKey.D);
+                    
+                player = spawnPlayer(Config.PLAYER_SPEED, Config.PLAYER_ATTACK_RANGE, Config.PLAYER_USE_RANGE, "assets/player/", "mage", "mage-front-stand");
+                mover = getPlayerMover(1);
+                if (mover)
+                    mover.bindToKeys(LoomKey.UP_ARROW, LoomKey.LEFT_ARROW, LoomKey.DOWN_ARROW, LoomKey.RIGHT_ARROW);
             }
 
             playing = true;
@@ -254,6 +270,12 @@ package
             {
 				var c = getHeroCity(i);
 				if (c) c.update(dt);
+			}
+			
+            for (i=0; i < buildings.length; i++)
+            {
+				var b = getBuildingMover(i);
+				if (b) b.update(dt);
 			}
         }
 
@@ -415,6 +437,33 @@ package
             return gameObject;
         }
         
+        public function spawnBuilding(x:Number, y:Number, normalImage:String, brokenImage:String):LoomGameObject 
+        {
+            var gameObject = new LoomGameObject();
+            gameObject.owningGroup = group;
+            //~ create a new mover and bind it to the pad
+            var mover = new BuildingMover();
+            mover.x = x;
+            mover.y = y;
+            //~ mover.broken = true;
+
+            gameObject.addComponent(mover, "mover");
+            // create a new player renderer, bind it to the mover and save in component gameObject
+            var renderer = new BuildingRenderer();
+            renderer.addBinding("x", "@mover.x");
+            renderer.addBinding("y", "@mover.y");
+            renderer.addBinding("broken", "@mover.broken");
+            renderer.imageFile = normalImage;
+            renderer.imageFileBroken = brokenImage;
+            
+            gameObject.addComponent(renderer, "renderer");
+            gameObject.initialize();
+
+			buildings.pushSingle(gameObject);
+
+            return gameObject;
+        }
+        
         public function spawnCity(x:Number, y:Number):LoomGameObject 
         {
             var gameObject = new LoomGameObject();
@@ -423,6 +472,16 @@ package
             city.x = x;
             city.y = y;
             gameObject.addComponent(city, "city");
+            gameObject.initialize();
+
+            var renderer = new BuildingRenderer();
+            renderer.addBinding("x", "@city.x");
+            renderer.addBinding("y", "@city.y");
+            renderer.addBinding("broken", "@city.broken");
+            renderer.imageFile = "assets/hero_city.png";
+            renderer.imageFileBroken = "assets/hero_city_broken.png";
+            
+            gameObject.addComponent(renderer, "renderer");
             gameObject.initialize();
 
 			cities.pushSingle(gameObject);
@@ -457,6 +516,14 @@ package
                 return null;
 
             return cities[index].lookupComponentByName("city") as HeroCity;
+        }
+        
+        public function getBuildingMover(index:int):BuildingMover
+        {
+            if (index < 0 || index >= buildings.length)
+                return null;
+
+            return buildings[index].lookupComponentByName("mover") as BuildingMover;
         }
     }
 }
