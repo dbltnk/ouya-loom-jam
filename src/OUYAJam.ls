@@ -5,33 +5,109 @@ package
     import loom2d.display.Image;
     import loom2d.textures.Texture;
     import loom2d.ui.SimpleLabel;
+    import loom2d.math.Point;
+
+    import loom2d.events.Event;
+    import loom2d.events.ResizeEvent;
+
+    import loom2d.events.KeyboardEvent;
+    import loom.platform.LoomKey;
+
+
+    import system.platform.Gamepad;
 
     public class OUYAJam extends Application
     {
+        public var label:SimpleLabel;
+        //public var middleground:Image;
+        public var sprite:Image;
+        
+        var hatText:Dictionary.<int, string> = 
+        { 
+            Gamepad.HAT_CENTERED: "Center",
+            Gamepad.HAT_UP: "Up",
+            Gamepad.HAT_RIGHT: "Right",
+            Gamepad.HAT_LEFT: "Left", 
+            Gamepad.HAT_DOWN: "Down",
+            Gamepad.HAT_RIGHTUP: "Right & Up",
+            Gamepad.HAT_RIGHTDOWN: "Right & Down",
+            Gamepad.HAT_LEFTUP: "Left & Up", 
+            Gamepad.HAT_LEFTDOWN: "Left & Down" 
+        };
+
+
         override public function run():void
         {
+            Gamepad.initialize();
             // Comment out this line to turn off automatic scaling.
             stage.scaleMode = StageScaleMode.LETTERBOX;
 
             // Setup anything else, like UI, or game objects.
-            var bg = new Image(Texture.fromAsset("assets/bg.png"));
-            bg.width = stage.stageWidth;
-            bg.height = stage.stageHeight;
+            /*var bg = new Image(Texture.fromAsset("assets/background.png"));
             stage.addChild(bg);
             
-            var sprite = new Image(Texture.fromAsset("assets/logo.png"));
+            middleground = new Image(Texture.fromAsset("assets/middleground.png"));
+            stage.addChild(middleground);
+            */
+            sprite = new Image(Texture.fromAsset("assets/sizes.png"));
             sprite.center();
             sprite.x = stage.stageWidth / 2;
             sprite.y = stage.stageHeight / 2 + 50;
             stage.addChild(sprite);
 
-            var label = new SimpleLabel("assets/Curse-hd.fnt");
-            label.text = "Hello Loom!";
+
+            // check whether any gamepads were detected
+            if (Gamepad.numGamepads)
+            {
+
+            }
+
+            /*label = new SimpleLabel("assets/Curse-hd.fnt");
+            label.text = "Yellow Doom!";
             label.center();
             label.x = stage.stageWidth / 2;
-            label.y = stage.stageHeight / 2 - 100;
+            label.y = 20;
             stage.addChild(label);
+            */
 
+            /*stage.addEventListener( Event.RESIZE, function(e:ResizeEvent) { 
+
+                // display the native side as the ResizeEvent stores 
+                // our pre-scaled width/height when using scale modes
+
+                var str = "Size: " + stage.nativeStageWidth + "x" + stage.nativeStageHeight;
+                label.text = str;
+                label.x = stage.stageWidth/2 - label.size.x/2;
+                trace(str);
+
+            } );              
+            */
+            
+            stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
+            
+        }
+
+        protected function checkForGamePads():void
+        {
+
+        }
+
+        override public function onTick():void
+        {
+            Gamepad.update();
+        }
+        
+        protected function keyDownHandler(event:KeyboardEvent):void
+        {   
+            var keycode = event.keyCode;
+            if(keycode == LoomKey.W)
+                sprite.y -= 10;
+            if(keycode == LoomKey.S)
+                sprite.y += 10;
+            if(keycode == LoomKey.A)
+                sprite.x -= 10;
+            if(keycode == LoomKey.D)
+                sprite.x += 10;
         }
     }
 }
