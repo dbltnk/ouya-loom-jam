@@ -174,12 +174,14 @@ package
 
             playing = true;
 
+			SimpleAudioEngine.sharedEngine().playBackgroundMusic("assets/audio/music/happy/happy_fast_1.mp3"); 
 			// make a list of all our BG songs
             happyList = listHappySongs();
             sadList = listSadSongs();
             suspenseList = listSuspenseSongs();
             mood = "happy";
-            playMyBGSong();   
+            //~ playMyBGSong();   
+            
         }
 
         public function onFrame():void
@@ -213,7 +215,7 @@ package
 
         override public function onTick():void
         {
-            maybeChangeBackgroundMusic();
+            //~ maybeChangeBackgroundMusic();
         }
         
         protected function maybeChangeBackgroundMusic():void
