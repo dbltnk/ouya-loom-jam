@@ -151,6 +151,7 @@ package
 					if (idx == Map.TYPE_HERO_CITY)
 					{
 						trace("SPAWN CITY");
+						
 						spawnCity(tx, ty);
 					}
 					else if (idx == Map.TYPE_ITEMFORGE)
@@ -159,6 +160,10 @@ package
 						map.forgeY = ty;
 						
 						spawnBuilding(tx,ty, "assets/itemforge.png", "assets/itemforge_broken.png");
+					}
+					else if (idx == Map.TYPE_WALL)
+					{
+						spawnBuilding(tx,ty, "assets/wall.png", "assets/wall_broken.png");
 					}
 					else
 					{
@@ -437,6 +442,7 @@ package
             var mover = new BuildingMover();
             mover.x = x;
             mover.y = y;
+            //~ mover.broken = true;
 
             gameObject.addComponent(mover, "mover");
             // create a new player renderer, bind it to the mover and save in component gameObject
@@ -463,6 +469,16 @@ package
             city.x = x;
             city.y = y;
             gameObject.addComponent(city, "city");
+            gameObject.initialize();
+
+            var renderer = new BuildingRenderer();
+            renderer.addBinding("x", "@city.x");
+            renderer.addBinding("y", "@city.y");
+            renderer.addBinding("broken", "@city.broken");
+            renderer.imageFile = "assets/hero_city.png";
+            renderer.imageFileBroken = "assets/hero_city_broken.png";
+            
+            gameObject.addComponent(renderer, "renderer");
             gameObject.initialize();
 
 			cities.pushSingle(gameObject);

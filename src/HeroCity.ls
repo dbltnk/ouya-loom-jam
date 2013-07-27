@@ -14,6 +14,7 @@ package
     {
     	public var x:Number = 0;
     	public var y:Number = 0;
+    	public var broken:Boolean = false;
     	public var lastSpawnTime:Number = 0;
     	public var spawnTimeout:Number = Config.CITY_SPAWN_TIMEOUT;
 		
