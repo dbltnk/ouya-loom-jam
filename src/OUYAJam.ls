@@ -13,6 +13,7 @@ package
     import loom2d.events.KeyboardEvent;
     import loom.platform.LoomKey;
     import loom2d.tmx.TMXTileMap;
+    import cocosdenshion.SimpleAudioEngine;
 
 
     import system.platform.Gamepad;
@@ -45,6 +46,7 @@ package
         public var label:SimpleLabel;
         //public var middleground:Image;
         public var sprite:Image;
+        var list:Vector.<String>;
         
         var hatText:Dictionary.<int, string> = 
         { 
@@ -116,6 +118,17 @@ package
             
             stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
             
+			// make a list of all our BG songs
+            list = listSongs();
+            
+            // pick one of our songs and play it as the background music
+            var randomNumber:int = Math.round(Math.random()*list.length) - 1;
+			var song:String = list[randomNumber];
+			//~ trace(list.length);
+			//~ trace(randomNumber);
+			//~ trace(song);
+            SimpleAudioEngine.sharedEngine().playBackgroundMusic(song, false); 
+            
         }
 
         protected function checkForGamePads():void
@@ -126,6 +139,29 @@ package
         override public function onTick():void
         {
             Gamepad.update();
+            maybeChangeBackgroundMusic();
+        }
+        
+        protected function maybeChangeBackgroundMusic():void
+        {
+			// change the BG music if none is playing
+            if(SimpleAudioEngine.sharedEngine().isBackgroundMusicPlaying())
+				return;
+            else
+            // pick one of our songs and play it as the background music
+				var randomNumber:int = Math.round(Math.random()*list.length) - 1;
+				var song:String = list[randomNumber];
+				//~ trace(list.length);
+				//~ trace(randomNumber);
+				//~ trace(song);
+				SimpleAudioEngine.sharedEngine().playBackgroundMusic(song, false); 
+        }
+        
+        protected function listSongs():Vector.<String>
+        {
+			var musicFiles = new Vector.<String>(); 
+			Path.walkFiles("assets/audio/music",function(track:String) { musicFiles.push(track) }, null); 
+			return musicFiles;
         }
         
         protected function keyDownHandler(event:KeyboardEvent):void
