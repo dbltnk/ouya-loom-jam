@@ -381,8 +381,7 @@ package
             var renderer = new PlayerRenderer(path, atlasName, aniName);
             renderer.addBinding("x", "@mover.x");
             renderer.addBinding("y", "@mover.y");
-            renderer.addBinding("lookX", "@mover.lookX");
-            renderer.addBinding("lookY", "@mover.lookY");
+            renderer.addBinding("lookAngle", "@mover.lookAngle");
             
             gameObject.addComponent(renderer, "renderer");
             gameObject.initialize();
