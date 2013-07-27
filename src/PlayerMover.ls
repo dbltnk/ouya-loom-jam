@@ -88,20 +88,34 @@ package
     	public function bindToKeys():void
     	{
     		Loom2D.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
+    		Loom2D.stage.addEventListener(KeyboardEvent.KEY_UP, keyUpHandler);
     	}
 
     	protected function keyDownHandler(event:KeyboardEvent):void
         {   
             var keycode = event.keyCode;
             if(keycode == LoomKey.W)
-            	y -= 10;
+            	vY = -1;
             if(keycode == LoomKey.S)
-                y += 10;
+                vY = 1;
             if(keycode == LoomKey.A)
-                x -= 10;
+                vX = -1;
             if(keycode == LoomKey.D)
-                x += 10;
+                vX = 1;
 
+        }
+
+        protected function keyUpHandler(event:KeyboardEvent):void
+        {
+        	var keycode = event.keyCode;
+        	if(keycode == LoomKey.W)
+            	vY = 0;
+            if(keycode == LoomKey.S)
+                vY = 0;
+            if(keycode == LoomKey.A)
+                vX = 0;
+            if(keycode == LoomKey.D)
+                vX = 0;
         }
     }
 }
