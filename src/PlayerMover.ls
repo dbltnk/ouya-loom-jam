@@ -26,7 +26,19 @@ package
     	public var attack:Number = 0;
     	public var use:Number = 0;
 
-    	public var speed:Number = 1000;
+    	public var attackRange:Number = 0;
+    	public var useRange:Number = 0;
+
+    	public var speed:Number = 0;
+
+    	public function PlayerMover(speed:Number,
+	    							attackRange:Number,
+	    							useRange:Number)
+    	{
+    		this.speed = speed;
+    		this.attackRange = attackRange;
+    		this.useRange = useRange;
+    	}
 
     	public function bindToPad(pad:Gamepad):void
     	{

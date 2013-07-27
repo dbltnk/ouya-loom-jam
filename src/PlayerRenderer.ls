@@ -4,6 +4,7 @@ package
     import loom.gameframework.AnimatedComponent;
 
     import loom2d.Loom2D;
+    import loom2d.display.Sprite;
     import loom2d.display.Image;
     import loom2d.display.MovieClip;
     import loom2d.textures.Texture;
@@ -17,7 +18,9 @@ package
 		protected var aniName:String;
 
 		protected var anim:MovieClip;
-		protected var image:Image;
+		
+        protected var image:Image;
+        protected var lookDirectionIndicator:Sprite;
 
 		public function PlayerRenderer(path:String, atlasName:String, aniName:String)
 		{
@@ -40,6 +43,9 @@ package
         {
             if(image)
                 image.x = value;
+
+            if (lookDirectionIndicator)
+                lookDirectionIndicator.x = value-8;
         }
 
         /**
@@ -51,7 +57,23 @@ package
         {
             if(image)
                 image.y = value;
+
+            if (lookDirectionIndicator)
+                lookDirectionIndicator.y = value-8;
         }
+
+        public function set lookX(value:Number):void
+        {
+            if (lookDirectionIndicator)
+                lookDirectionIndicator.rotation += 10;
+        }
+        /*
+        public function set lookY(value:Number):void
+        {
+            if (lookDirectionIndicator)
+                lookDirectionIndicator.y = value;
+        }
+        */
 
 		/**
          * Executed when this renderer is added. It create a sprites and sets the correct texture for it.
@@ -63,10 +85,14 @@ package
             if(!super.onAdd())
                 return false;
 
+            lookDirectionIndicator = new Sprite();
+            lookDirectionIndicator.addChild(Image(Texture.fromAsset("assets/player/look-direction.png")))
+            Loom2D.stage.addChild(lookDirectionIndicator);
+
             image = new Image(Texture.fromAsset("assets/player.png"));
-            image.x = 100;
-            image.y = 100;
             Loom2D.stage.addChild(image);
+
+
 
             // var xml:XMLDocument = new XMLDocument();
             // if (xml.loadFile(path + atlasName + ".xml") != 0)

@@ -153,7 +153,7 @@ package
             var mover:PlayerMover;
             for (i=0; i < pads.length; i++)
             {  
-                player = spawnPlayer("assets/player/", "mage", "mage-front-stand");
+                player = spawnPlayer(1000, 10, 10, "assets/player/", "mage", "mage-front-stand");
                 players.pushSingle(player);
                 mover = getPlayerMover(i);
                 if (mover)
@@ -165,7 +165,7 @@ package
             if (players.length == 0)
             {
                 trace("defaulting to key controls");
-                player = spawnPlayer("assets/player/", "mage", "mage-front-stand");
+                player = spawnPlayer(1000, 10, 10, "assets/player/", "mage", "mage-front-stand");
                 players.pushSingle(player);
                 mover = getPlayerMover(0);
                 if (mover)
@@ -291,24 +291,30 @@ package
         
         
         
-        protected function spawnPlayer(path:String, atlasName:String, aniName:String):LoomGameObject 
+        protected function spawnPlayer(speed:Number,
+                                       attackRange:Number,
+                                       useRange:Number,
+                                       path:String,
+                                       atlasName:String,
+                                       aniName:String):LoomGameObject 
         {
             var gameObject = new LoomGameObject();
             gameObject.owningGroup = group;
             // create a new mover and bind it to the pad
-            var mover = new PlayerMover();
+            var mover = new PlayerMover(speed, attackRange, useRange);
             //mover.bindToPad(pad);
             gameObject.addComponent(mover, "mover");
             // create a new player renderer, bind it to the mover and save in component gameObject
             var renderer = new PlayerRenderer(path, atlasName, aniName);
             renderer.addBinding("x", "@mover.x");
             renderer.addBinding("y", "@mover.y");
+            renderer.addBinding("lookX", "@mover.lookX");
+            renderer.addBinding("lookY", "@mover.lookY");
             
             gameObject.addComponent(renderer, "renderer");
             gameObject.initialize();
 
             return gameObject;
-
         }
         
         public function isPlaying():Boolean
