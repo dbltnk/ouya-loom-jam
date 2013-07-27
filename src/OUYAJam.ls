@@ -13,6 +13,9 @@ package
     import loom2d.events.KeyboardEvent;
     import loom.platform.LoomKey;
     import loom.gameframework.LoomGameObject;
+    import loom2d.tmx.TMXTileMap;
+    import cocosdenshion.SimpleAudioEngine;
+    import loom2d.display.Sprite;
 
     import system.platform.Gamepad;
 
@@ -23,8 +26,56 @@ package
     import system.xml.XMLError;
     import system.platform.Platform;
 
+	public class Map
+	{
+		public var map:TMXTileMap;
+		
+		public static const TYPE_HEALPOINT = 5;
+		public static const TYPE_VILLAGE_HOUSE = 4;
+		public static const TYPE_STORAGE_PLACE = 2;
+		public static const TYPE_WALL = 3;		
+		public static const TYPE_HERO_CITY = 6;		
+		public static const TYPE_FOOD_PLACE = 7;		
+		public static const TYPE_RES_PLACE = 8;		
+		
+		public function Map(map:TMXTileMap)
+		{
+			this.map = map;
+		}
+		
+		public function getPixelX(x:int, y:int):int 
+		{ 
+			return x * 32; 
+		}
+		
+		public function getPixelY(x:int, y:int):int 
+		{ 
+			return y * 32; 
+		}
+		
+		public function getTile(layer:int, x:int, y:int):int
+		{
+			var w:int = map.mapWidth();
+			var idx:int = y * w + x;
+			return map.layers()[layer].getData()[idx];
+		}
+	}
+
     public class OUYAJam extends Application
     {
+		public var background:Image;
+		
+        public var label:SimpleLabel;
+        //public var middleground:Image;
+        public var sprite:Image;
+        var happyList:Vector.<String>;
+        var sadList:Vector.<String>;
+        var suspenseList:Vector.<String>;
+        var mood:String;
+
+        public var startTime:Number;
+        
+    
         private var gamepadsConnected:Boolean = false;
 
         private var players:Vector.<LoomGameObject>;
@@ -33,49 +84,56 @@ package
 
         override public function run():void
         {
+			// seed random value
+			var ts:int = Platform.getEpochTime() - 1374942470;
+			for (var i:int = 0; i < ts % 47; ++i) Math.random();
+			
+			// setup background
+			background = new Image(Texture.fromAsset("assets/bg.png"));
+            background.x = 0;
+            background.y = 0;
+            stage.addChild(background);
+			
+			//~ trace("loading map");
+			var map = new TMXTileMap()
+			var m = new Map(map);
+            map.load("assets/map.tmx");
+			//~ trace("num layers", map.numLayers(), "w", map.mapWidth());
+            //~ trace("house", m.getTile(0,3,4), m.getPixelX (3,4), m.getPixelY(3,4));
+            //~ trace("nop", m.getTile(0,0,0));
+            //~ trace("house", m.getTile(0,8,12));
+            //~ trace("heal", m.getTile(0,9,4));
+            //~ trace("storage", m.getTile(0,4,14));
+            //~ trace("wall", m.getTile(0,14,2));
+            //~ trace("test", m.getTile(0,1,1));
+			            
+			var mapImgDict = new Dictionary();
+			mapImgDict[Map.TYPE_HEALPOINT] = "assets/healpoint.png";
+			mapImgDict[Map.TYPE_VILLAGE_HOUSE] = "assets/village_house.png";
+			mapImgDict[Map.TYPE_STORAGE_PLACE] = "assets/storage_place.png";
+			mapImgDict[Map.TYPE_WALL] = "assets/wall_tile_0.png";
+			mapImgDict[Map.TYPE_HERO_CITY] = "assets/hero_city.png";
+			mapImgDict[Map.TYPE_FOOD_PLACE] = "assets/food_place.png";
+			mapImgDict[Map.TYPE_RES_PLACE] = "assets/res_place.png";
+            var testMapRoot = new Sprite();
+            stage.addChild(testMapRoot);
+            
+            for (var x:int = 0; x <= 40; ++x)
+            for (var y:int = 0; y <= 23; ++y)
+            {
+				var idx:int = m.getTile(0,x,y);
+				if (idx && mapImgDict[idx])
+				{
+					var t = new Image(Texture.fromAsset(String(mapImgDict[idx])));
+					t.x = m.getPixelX (x,y);
+					t.y = m.getPixelY (x,y);
+					testMapRoot.addChild(t);
+				}
+			}
+
             // Comment out this line to turn off automatic scaling.
             stage.scaleMode = StageScaleMode.LETTERBOX;
 
-            // Setup anything else, like UI, or game objects.
-            /*var bg = new Image(Texture.fromAsset("assets/background.png"));
-            stage.addChild(bg);
-            
-            middleground = new Image(Texture.fromAsset("assets/middleground.png"));
-            stage.addChild(middleground);
-            */
-
-            // var sprite = new Image(Texture.fromAsset("assets/sizes.png"));
-            // sprite.center();
-            // sprite.x = stage.stageWidth / 2;
-            // sprite.y = stage.stageHeight / 2 + 50;
-            // stage.addChild(sprite);
-
-            
-            // TODO load and apply config
-            /*
-            var path = "assets/player/";
-            var atlasName ="mage";
-            var aniName = "mage-front-stand";
-
-            var xml:XMLDocument = new XMLDocument();
-            if (xml.loadFile(path + atlasName + ".xml") != XMLError.XML_NO_ERROR)
-            {
-                trace("failed to load atlas data file for atlas " + atlasName );
-                return;
-            }
-
-            trace(xml.rootElement().firstChild());
-
-            var atlas:TextureAtlas = new TextureAtlas(Texture.fromAsset(path + atlasName + ".png"), xml.rootElement().firstChild());
-            trace("creating animation");
-            return;
-            var anim = new MovieClip(atlas.getTextures(aniName), 24);
-            anim.x =stage.stageWidth / 2; 
-            anim.y = stage.stageHeight / 2;
-            anim.play();
-            stage.addChild(anim);
-            return;
-            */
             // init game pads
             Gamepad.initialize();
             gamepadsConnected = (Gamepad.numGamepads > 0);
@@ -91,7 +149,7 @@ package
             var pads:Vector.<Gamepad> = Gamepad.gamepads;
             var player:LoomGameObject;
             var mover:PlayerMover;
-            for (var i=0; i < pads.length; i++)
+            for (i=0; i < pads.length; i++)
             {  
                 player = spawnPlayer("assets/player/", "mage", "mage-front-stand");
                 players.pushSingle(player);
@@ -114,30 +172,12 @@ package
 
             playing = true;
 
-
-            /*label = new SimpleLabel("assets/Curse-hd.fnt");
-            label.text = "Yellow Doom!";
-            label.center();
-            label.x = stage.stageWidth / 2;
-            label.y = 20;
-            stage.addChild(label);
-            */
-
-            /*stage.addEventListener( Event.RESIZE, function(e:ResizeEvent) { 
-
-                // display the native side as the ResizeEvent stores 
-                // our pre-scaled width/height when using scale modes
-
-                var str = "Size: " + stage.nativeStageWidth + "x" + stage.nativeStageHeight;
-                label.text = str;
-                label.x = stage.stageWidth/2 - label.size.x/2;
-                trace(str);
-
-            } );              
-            */
-            
-            //stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
-            
+			// make a list of all our BG songs
+            happyList = listHappySongs();
+            sadList = listSadSongs();
+            suspenseList = listSuspenseSongs();
+            mood = "happy";
+            playMyBGSong();   
         }
 
         public function onFrame():void
@@ -168,21 +208,69 @@ package
                     mover.move(dt);
             }
         }
-        /*
-        protected function keyDownHandler(event:KeyboardEvent):void
-        {   
-            var keycode = event.keyCode;
-            if(keycode == LoomKey.W)
-                sprite.y -= 10;
-            if(keycode == LoomKey.S)
-                sprite.y += 10;
-            if(keycode == LoomKey.A)
-                sprite.x -= 10;
-            if(keycode == LoomKey.D)
-                sprite.x += 10;
 
-        }*/
-
+        override public function onTick():void
+        {
+            maybeChangeBackgroundMusic();
+        }
+        
+        protected function maybeChangeBackgroundMusic():void
+        {
+			// change the BG music if none is playing
+            if(SimpleAudioEngine.sharedEngine().isBackgroundMusicPlaying())
+				return;
+            else
+				playMyBGSong();
+        }
+        
+        protected function listHappySongs():Vector.<String>
+        {
+			var musicFiles = new Vector.<String>(); 
+			Path.walkFiles("assets/audio/music/happy",function(track:String) { musicFiles.push(track) }, null); 
+			return musicFiles;
+        }
+        
+        protected function listSadSongs():Vector.<String>
+        {
+			var musicFiles = new Vector.<String>(); 
+			Path.walkFiles("assets/audio/music/sad",function(track:String) { musicFiles.push(track) }, null); 
+			return musicFiles;
+        }
+        
+        protected function listSuspenseSongs():Vector.<String>
+        {
+			var musicFiles = new Vector.<String>(); 
+			Path.walkFiles("assets/audio/music/suspense",function(track:String) { musicFiles.push(track) }, null); 
+			return musicFiles;
+        }
+        
+        protected function playMyBGSong():void
+        {
+             // pick an appropriate song and play it as the background music           
+            if (mood == "happy") {
+				var randomNumber1:Number = Math.random();
+				var pickedSong1:int = Math.round(randomNumber1 * happyList.length);
+				var song1:String = happyList[pickedSong1];
+				SimpleAudioEngine.sharedEngine().playBackgroundMusic(song1, false); 
+			}
+            else if (mood == "sad") {
+				var randomNumber2:Number = Math.random();
+				var pickedSong2:int = Math.round(randomNumber2 * sadList.length);
+				var song2:String = sadList[pickedSong2];
+				SimpleAudioEngine.sharedEngine().playBackgroundMusic(song2, false); 
+			}
+            else if (mood == "suspense") {
+				var randomNumber3:Number = Math.random();
+				var pickedSong3:int = Math.round(randomNumber3 * suspenseList.length);
+				var song3:String = suspenseList[pickedSong3];
+				SimpleAudioEngine.sharedEngine().playBackgroundMusic(song3, false);   
+			}    
+			else
+				return;  
+        }        
+        
+        
+        
         protected function spawnPlayer(path:String, atlasName:String, aniName:String):LoomGameObject 
         {
             var gameObject = new LoomGameObject();
