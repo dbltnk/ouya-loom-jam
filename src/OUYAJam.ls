@@ -197,7 +197,11 @@ package
 
             for (i=0; i < pads.length; i++)
             {  
-                player = spawnPlayer(Config.PLAYER_SPEED, Config.PLAYER_ATTACK_RANGE, Config.PLAYER_USE_RANGE, "assets/player/", "mage", "mage-front-stand");
+                player = spawnPlayer(Config.PLAYER_SPEED,
+                                     Config.PLAYER_ATTACK_RANGE,
+                                     Config.PLAYER_ATTACK_COOL_DOWN,
+                                     Config.PLAYER_USE_RANGE,
+                                     "assets/player/", "mage", "mage-front-stand");
                 
                 mover = getPlayerMover(i);
                 if (mover)
@@ -209,12 +213,20 @@ package
             if (players.length == 0)
             {
                 trace("defaulting to key controls");
-                player = spawnPlayer(Config.PLAYER_SPEED, Config.PLAYER_ATTACK_RANGE, Config.PLAYER_USE_RANGE, "assets/player/", "mage", "mage-front-stand");
+                player = spawnPlayer(Config.PLAYER_SPEED,
+                                     Config.PLAYER_ATTACK_RANGE,
+                                     Config.PLAYER_ATTACK_COOL_DOWN,
+                                     Config.PLAYER_USE_RANGE,
+                                     "assets/player/", "mage", "mage-front-stand");
                 mover = getPlayerMover(0);
                 if (mover)
                     mover.bindToKeys(LoomKey.W, LoomKey.A, LoomKey.S, LoomKey.D);
                     
-                player = spawnPlayer(Config.PLAYER_SPEED, Config.PLAYER_ATTACK_RANGE, Config.PLAYER_USE_RANGE, "assets/player/", "mage", "mage-front-stand");
+                player = spawnPlayer(Config.PLAYER_SPEED,
+                                     Config.PLAYER_ATTACK_RANGE,
+                                     Config.PLAYER_ATTACK_COOL_DOWN,
+                                     Config.PLAYER_USE_RANGE,
+                                     "assets/player/", "mage", "mage-front-stand");
                 mover = getPlayerMover(1);
                 if (mover)
                     mover.bindToKeys(LoomKey.UP_ARROW, LoomKey.LEFT_ARROW, LoomKey.DOWN_ARROW, LoomKey.RIGHT_ARROW);
@@ -391,6 +403,7 @@ package
         
         protected function spawnPlayer(speed:Number,
                                        attackRange:Number,
+                                       attackCoolDown:Number,
                                        useRange:Number,
                                        path:String,
                                        atlasName:String,
@@ -399,7 +412,7 @@ package
             var gameObject = new LoomGameObject();
             gameObject.owningGroup = group;
             // create a new mover and bind it to the pad
-            var mover:PlayerMover = new PlayerMover(speed, attackRange, useRange);
+            var mover:PlayerMover = new PlayerMover(speed, attackRange, attackCoolDown, useRange);
             //mover.bindToPad(pad);
             gameObject.addComponent(mover, "mover");
             // create a new player renderer, bind it to the mover and save in component gameObject
