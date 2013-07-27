@@ -29,9 +29,9 @@ package
     	public var lookY:Number = 0;
     	public var lookAngle:Number = 0;
 
-    	public var attack:Number = 0;
     	public var use:Number = 0;
 
+        public var attackCoolDown:Number = 0;
     	public var attackRange:Number = 0;
     	public var useRange:Number = 0;
 
@@ -39,10 +39,12 @@ package
 
     	public function PlayerMover(speed:Number,
 	    							attackRange:Number,
+                                    attackCoolDown:Number,
 	    							useRange:Number)
     	{
     		this.speed = speed;
     		this.attackRange = attackRange;
+            this.attackCoolDown = attackCoolDown;
     		this.useRange = useRange;
     	}
 
@@ -50,7 +52,17 @@ package
     	{
     		x += vX * (dt / 1000) * speed;
             y += vY * (dt / 1000) * speed;
+
+            if (!hasCooledDown())
+                coolTime -= dt;
     	}
+
+        public function hasCooledDown():Boolean
+        {
+            if (coolTime < 0)
+                return true;
+            return false;
+        }
 
     	public function bindToPad(pad:Gamepad):void
     	{
@@ -98,7 +110,7 @@ package
 	           	break;
 
 	           	case 5:
-	           		attack = state;
+                    executeAttack(state);
 	           	break;
 
 	           	default:
@@ -110,6 +122,15 @@ package
         protected function updateLookAngle():void
         {
         	lookAngle = (lookX == 0 && lookY == 0) ? -1 : Math.atan2(lookY, lookX);
+        }
+
+        protected function executeAttack(state:float):void
+        {
+            if (hasCooledDown())
+            {
+                coolTime = attackCoolDown;
+                OUYAJam.instance.spawnProjectile(this);
+            }
         }
 
     	public function bindToKeys():void

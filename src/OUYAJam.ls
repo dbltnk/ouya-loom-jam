@@ -86,6 +86,7 @@ package
         private var gamepadsConnected:Boolean = false;
 
         public var players:Vector.<LoomGameObject>;
+        public var projectiles:Vector.<LoomGameObject>;
         public var heroes:Vector.<LoomGameObject>;
         public var cities:Vector.<LoomGameObject>;
         public var buildings:Vector.<LoomGameObject>;
@@ -106,6 +107,7 @@ package
             heroes = new Vector.<LoomGameObject>();
             cities = new Vector.<LoomGameObject>();
             players = new Vector.<LoomGameObject>();
+            projectiles = new Vector.<LoomGameObject>();
             buildings = new Vector.<LoomGameObject>();
 
 			// setup background
@@ -252,7 +254,8 @@ package
                 return;
                 
             var mover:PlayerMover;
-            for (var i=0; i < players.length; i++)
+            var n:int = players.length;
+            for (var i=0; i < n; i++)
             {
                 mover = getPlayerMover(i);
                 if (mover)
@@ -396,11 +399,11 @@ package
             var gameObject = new LoomGameObject();
             gameObject.owningGroup = group;
             // create a new mover and bind it to the pad
-            var mover = new PlayerMover(speed, attackRange, useRange);
+            var mover:PlayerMover = new PlayerMover(speed, attackRange, useRange);
             //mover.bindToPad(pad);
             gameObject.addComponent(mover, "mover");
             // create a new player renderer, bind it to the mover and save in component gameObject
-            var renderer = new PlayerRenderer(path, atlasName, aniName);
+            var renderer:PlayerRenderer = new PlayerRenderer(path, atlasName, aniName);
             renderer.addBinding("x", "@mover.x");
             renderer.addBinding("y", "@mover.y");
             renderer.addBinding("lookAngle", "@mover.lookAngle");
@@ -411,6 +414,23 @@ package
 			players.pushSingle(gameObject);
 
             return gameObject;
+        }
+
+        public function spawnProjectile(playerMover:PlayerMover):void
+        {
+            var projectile:LoomGameObject = new LoomGameObject();
+            projectile.owningGroup = group;
+
+            var mover:ProjectileMover = new ProjectileMover();
+            projectile.addComponent(mover, "mover");
+
+            var renderer:ProjectileRenderer = new ProjectileRenderer();
+            renderer.addBinding("x", "@mover.x");
+            renderer.addBinding("y", "@mover.y");
+            projectile.addComponent(renderer, "renderer");
+            projectile.initialize();
+
+            projectiles.pushSingle(projectile);
         }
         
         public function spawnHero(x:Number, y:Number):LoomGameObject 
