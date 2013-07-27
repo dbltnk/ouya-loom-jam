@@ -192,11 +192,11 @@ package
             var pads:Vector.<Gamepad> = Gamepad.gamepads;
             var player:LoomGameObject;
             var mover:PlayerMover;
-            
+
             for (i=0; i < pads.length; i++)
             {  
                 player = spawnPlayer(Config.PLAYER_SPEED, Config.PLAYER_ATTACK_RANGE, Config.PLAYER_USE_RANGE, "assets/player/", "mage", "mage-front-stand");
-                players.pushSingle(player);
+                
                 mover = getPlayerMover(i);
                 if (mover)
                     mover.bindToPad(pads[i]);
@@ -403,8 +403,7 @@ package
             var renderer = new PlayerRenderer(path, atlasName, aniName);
             renderer.addBinding("x", "@mover.x");
             renderer.addBinding("y", "@mover.y");
-            renderer.addBinding("lookX", "@mover.lookX");
-            renderer.addBinding("lookY", "@mover.lookY");
+            renderer.addBinding("lookAngle", "@mover.lookAngle");
             
             gameObject.addComponent(renderer, "renderer");
             gameObject.initialize();
