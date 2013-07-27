@@ -14,7 +14,7 @@ package
     import loom.platform.LoomKey;
     import loom2d.tmx.TMXTileMap;
     import cocosdenshion.SimpleAudioEngine;
-
+    import loom2d.display.Sprite;
 
     import system.platform.Gamepad;
 
@@ -22,14 +22,24 @@ package
 	{
 		public var map:TMXTileMap;
 		
-		public static const TYPE_HEALPOINT = 0;
-		public static const TYPE_VILLAGE_HOUSE = 1;
+		public static const TYPE_HEALPOINT = 5;
+		public static const TYPE_VILLAGE_HOUSE = 4;
 		public static const TYPE_STORAGE_PLACE = 2;
 		public static const TYPE_WALL = 3;		
 		
 		public function Map(map:TMXTileMap)
 		{
 			this.map = map;
+		}
+		
+		public function getPixelX(x:int, y:int):int 
+		{ 
+			return x * 32; 
+		}
+		
+		public function getPixelY(x:int, y:int):int 
+		{ 
+			return y * 32; 
 		}
 		
 		public function getTile(layer:int, x:int, y:int):int
@@ -42,6 +52,8 @@ package
 
     public class OUYAJam extends Application
     {
+		public var background:Image;
+		
         public var label:SimpleLabel;
         //public var middleground:Image;
         public var sprite:Image;
@@ -63,19 +75,48 @@ package
 
         override public function run():void
         {
+			// setup background
+			background = new Image(Texture.fromAsset("assets/bg.png"));
+            background.x = 0;
+            background.y = 0;
+            stage.addChild(background);
+			
 			trace("loading map");
 			var map = new TMXTileMap()
 			var m = new Map(map);
             map.load("assets/map.tmx");
 			trace("num layers", map.numLayers(), "w", map.mapWidth());
-            trace("house", m.getTile(0,3,4));
+            trace("house", m.getTile(0,3,4), m.getPixelX (3,4), m.getPixelY(3,4));
             trace("nop", m.getTile(0,0,0));
             trace("house", m.getTile(0,8,12));
             trace("heal", m.getTile(0,9,4));
             trace("storage", m.getTile(0,4,14));
             trace("wall", m.getTile(0,14,2));
             trace("test", m.getTile(0,1,1));
-			
+			            
+			var mapImgDict = new Dictionary();
+			mapImgDict[Map.TYPE_HEALPOINT] = "assets/healpoint.png";
+			mapImgDict[Map.TYPE_VILLAGE_HOUSE] = "assets/village_house.png";
+			mapImgDict[Map.TYPE_STORAGE_PLACE] = "assets/storage_place.png";
+			mapImgDict[Map.TYPE_WALL] = "assets/wall_tile_0.png";
+            var testMapRoot = new Sprite();
+            stage.addChild(testMapRoot);
+            
+            for (var x:int = 0; x <= 40; ++x)
+            for (var y:int = 0; y <= 23; ++y)
+            {
+				var idx:int = m.getTile(0,x,y);
+				if (idx && mapImgDict[idx])
+				{
+					var t = new Image(Texture.fromAsset(String(mapImgDict[idx])));
+					t.x = m.getPixelX (x,y);
+					t.y = m.getPixelY (x,y);
+					testMapRoot.addChild(t);
+				}
+			}
+
+
+
             Gamepad.initialize();
             // Comment out this line to turn off automatic scaling.
             stage.scaleMode = StageScaleMode.LETTERBOX;
