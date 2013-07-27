@@ -12,15 +12,40 @@ package
 
     import loom2d.events.KeyboardEvent;
     import loom.platform.LoomKey;
+    import loom2d.tmx.TMXTileMap;
+    import cocosdenshion.SimpleAudioEngine;
 
 
     import system.platform.Gamepad;
+
+	public class Map
+	{
+		public var map:TMXTileMap;
+		
+		public static const TYPE_HEALPOINT = 0;
+		public static const TYPE_VILLAGE_HOUSE = 1;
+		public static const TYPE_STORAGE_PLACE = 2;
+		public static const TYPE_WALL = 3;		
+		
+		public function Map(map:TMXTileMap)
+		{
+			this.map = map;
+		}
+		
+		public function getTile(layer:int, x:int, y:int):int
+		{
+			var w:int = map.mapWidth();
+			var idx:int = y * w + x;
+			return map.layers()[layer].getData()[idx];
+		}
+	}
 
     public class OUYAJam extends Application
     {
         public var label:SimpleLabel;
         //public var middleground:Image;
         public var sprite:Image;
+        var list:Vector.<String>;
         
         var hatText:Dictionary.<int, string> = 
         { 
@@ -38,6 +63,19 @@ package
 
         override public function run():void
         {
+			trace("loading map");
+			var map = new TMXTileMap()
+			var m = new Map(map);
+            map.load("assets/map.tmx");
+			trace("num layers", map.numLayers(), "w", map.mapWidth());
+            trace("house", m.getTile(0,3,4));
+            trace("nop", m.getTile(0,0,0));
+            trace("house", m.getTile(0,8,12));
+            trace("heal", m.getTile(0,9,4));
+            trace("storage", m.getTile(0,4,14));
+            trace("wall", m.getTile(0,14,2));
+            trace("test", m.getTile(0,1,1));
+			
             Gamepad.initialize();
             // Comment out this line to turn off automatic scaling.
             stage.scaleMode = StageScaleMode.LETTERBOX;
@@ -85,6 +123,17 @@ package
             
             stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
             
+			// make a list of all our BG songs
+            list = listSongs();
+            
+            // pick one of our songs and play it as the background music
+            var randomNumber:int = Math.round(Math.random()*list.length) - 1;
+			var song:String = list[randomNumber];
+			//~ trace(list.length);
+			//~ trace(randomNumber);
+			//~ trace(song);
+            SimpleAudioEngine.sharedEngine().playBackgroundMusic(song, false); 
+            
         }
 
         protected function checkForGamePads():void
@@ -95,6 +144,29 @@ package
         override public function onTick():void
         {
             Gamepad.update();
+            maybeChangeBackgroundMusic();
+        }
+        
+        protected function maybeChangeBackgroundMusic():void
+        {
+			// change the BG music if none is playing
+            if(SimpleAudioEngine.sharedEngine().isBackgroundMusicPlaying())
+				return;
+            else
+            // pick one of our songs and play it as the background music
+				var randomNumber:int = Math.round(Math.random()*list.length) - 1;
+				var song:String = list[randomNumber];
+				//~ trace(list.length);
+				//~ trace(randomNumber);
+				//~ trace(song);
+				SimpleAudioEngine.sharedEngine().playBackgroundMusic(song, false); 
+        }
+        
+        protected function listSongs():Vector.<String>
+        {
+			var musicFiles = new Vector.<String>(); 
+			Path.walkFiles("assets/audio/music",function(track:String) { musicFiles.push(track) }, null); 
+			return musicFiles;
         }
         
         protected function keyDownHandler(event:KeyboardEvent):void
