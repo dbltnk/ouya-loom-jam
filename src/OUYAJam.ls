@@ -190,13 +190,14 @@ package
 
             playing = true;
 
-			SimpleAudioEngine.sharedEngine().playBackgroundMusic("assets/audio/music/happy/happy_fast_1.mp3"); 
+			//~ SimpleAudioEngine.sharedEngine().playBackgroundMusic("assets/audio/music/happy/happy_fast_1.mp3"); 
 			// make a list of all our BG songs
             happyList = listHappySongs();
             sadList = listSadSongs();
             suspenseList = listSuspenseSongs();
-            mood = "happy";
-            //~ playMyBGSong();   
+            mood = "suspense";
+            playMyBGSong();   
+            
         }
 
         public function onFrame():void
@@ -236,7 +237,7 @@ package
 
         override public function onTick():void
         {
-            //~ maybeChangeBackgroundMusic();
+            maybeChangeBackgroundMusic();
         }
         
         protected function maybeChangeBackgroundMusic():void
@@ -251,21 +252,36 @@ package
         protected function listHappySongs():Vector.<String>
         {
 			var musicFiles = new Vector.<String>(); 
-			Path.walkFiles("assets/audio/music/happy",function(track:String) { musicFiles.push(track) }, null); 
+			//~ Path.walkFiles("assets/audio/music/happy",function(track:String) { musicFiles.push(track) }, null);
+			musicFiles.push("assets/audio/music/happy/happy_fast_1.mp3")
+			musicFiles.push("assets/audio/music/happy/happy_mid_1.mp3")
+			musicFiles.push("assets/audio/music/happy/happy_mid_2.mp3")
+			musicFiles.push("assets/audio/music/happy/happy_slow_1.mp3")
+			musicFiles.push("assets/audio/music/happy/happy_slow_2.mp3") 
 			return musicFiles;
         }
         
         protected function listSadSongs():Vector.<String>
         {
 			var musicFiles = new Vector.<String>(); 
-			Path.walkFiles("assets/audio/music/sad",function(track:String) { musicFiles.push(track) }, null); 
+			//~ Path.walkFiles("assets/audio/music/sad",function(track:String) { musicFiles.push(track) }, null); 
+			musicFiles.push("assets/audio/music/sad/sad_mid_1.mp3")
+			musicFiles.push("assets/audio/music/sad/sad_slow_1.mp3")
+			musicFiles.push("assets/audio/music/sad/sad_slow_2.mp3") 
+			musicFiles.push("assets/audio/music/sad/sad_slow_3.mp3")
+			musicFiles.push("assets/audio/music/sad/sad_slow_4.mp3") 			
 			return musicFiles;
         }
         
         protected function listSuspenseSongs():Vector.<String>
         {
 			var musicFiles = new Vector.<String>(); 
-			Path.walkFiles("assets/audio/music/suspense",function(track:String) { musicFiles.push(track) }, null); 
+			//~ Path.walkFiles("assets/audio/music/suspense",function(track:String) { musicFiles.push(track) }, null); 
+			musicFiles.push("assets/audio/music/suspense/suspense_mid_1.mp3")
+			musicFiles.push("assets/audio/music/suspense/suspense_mid_2.mp3")			
+			musicFiles.push("assets/audio/music/suspense/suspense_slow_1.mp3")
+			musicFiles.push("assets/audio/music/suspense/suspense_slow_2.mp3") 
+			musicFiles.push("assets/audio/music/suspense/suspense_slow_3.mp3")
 			return musicFiles;
         }
         
@@ -289,6 +305,7 @@ package
 				var pickedSong3:int = Math.round(randomNumber3 * suspenseList.length);
 				var song3:String = suspenseList[pickedSong3];
 				SimpleAudioEngine.sharedEngine().playBackgroundMusic(song3, false);   
+				//~ trace(randomNumber3,pickedSong3,suspenseList.length,song3)
 			}    
 			else
 				return;  
