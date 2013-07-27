@@ -12,9 +12,27 @@ package
 
     import loom2d.events.KeyboardEvent;
     import loom.platform.LoomKey;
+    import loom2d.tmx.TMXTileMap;
 
 
     import system.platform.Gamepad;
+
+	public class Map
+	{
+		public var map:TMXTileMap;
+		
+		public function Map(map:TMXTileMap)
+		{
+			this.map = map;
+		}
+		
+		public function getTile(layer:int, x:int, y:int):int
+		{
+			var w:int = map.mapWidth();
+			var idx:int = y * w + x;
+			return map.layers()[layer].getData()[idx];
+		}
+	}
 
     public class OUYAJam extends Application
     {
@@ -38,6 +56,13 @@ package
 
         override public function run():void
         {
+			trace("loading map");
+			var map = new TMXTileMap()
+			var m = new Map(map);
+            map.load("assets/map.tmx");
+			trace("num layers", map.numLayers(), "w", map.mapWidth());
+            trace("tile my", m.getTile(0,0,0));
+			
             Gamepad.initialize();
             // Comment out this line to turn off automatic scaling.
             stage.scaleMode = StageScaleMode.LETTERBOX;
