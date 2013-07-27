@@ -94,13 +94,13 @@ package
         {   
             var keycode = event.keyCode;
             if(keycode == LoomKey.W)
-            	y -= 10;
+            	vY = -1;
             if(keycode == LoomKey.S)
-                y += 10;
+                vY = 1;
             if(keycode == LoomKey.A)
-                x -= 10;
+                vX = -1;
             if(keycode == LoomKey.D)
-                x += 10;
+                vX = 1;
 
         }
     }
