@@ -45,7 +45,7 @@ package
                 image.x = value;
 
             if (lookDirectionIndicator)
-                lookDirectionIndicator.x = value-8;
+                lookDirectionIndicator.x = value + (image.width / 2);
         }
 
         /**
@@ -59,21 +59,39 @@ package
                 image.y = value;
 
             if (lookDirectionIndicator)
-                lookDirectionIndicator.y = value-8;
+                lookDirectionIndicator.y = value + (image.height / 2);
         }
 
+        protected var _lookX:Number = 0;
         public function set lookX(value:Number):void
         {
-            if (lookDirectionIndicator)
-                lookDirectionIndicator.rotation += 10;
+            _lookX = value;
+            updateLookDirection();
         }
-        
+
+        protected var _lookY:Number = 0;
         public function set lookY(value:Number):void
         {
-            // if (lookDirectionIndicator)
-            //     lookDirectionIndicator.y = value;
+            _lookY = value;
+            updateLookDirection();
         }
-        
+
+        protected function updateLookDirection():void
+        {
+            if (!lookDirectionIndicator)
+                return;
+
+            if (_lookX == 0 && _lookY == 0)
+            {
+                lookDirectionIndicator.visible = false;
+            }
+            else
+            {
+                lookDirectionIndicator.rotation = Math.atan2(_lookY, _lookX);
+                if (!lookDirectionIndicator.visible)
+                    lookDirectionIndicator.visible = true;
+            }
+        }
 
 		/**
          * Executed when this renderer is added. It create a sprites and sets the correct texture for it.
@@ -96,9 +114,6 @@ package
             image.x = -1000;
             image.y = -1000;
             Loom2D.stage.addChild(image);
-
-            lookDirectionIndicator.x += image.x;
-            lookDirectionIndicator.y += image.y;
 
             // var xml:XMLDocument = new XMLDocument();
             // if (xml.loadFile(path + atlasName + ".xml") != 0)
