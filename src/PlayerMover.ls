@@ -112,7 +112,7 @@ package
         	lookAngle = (lookX == 0 && lookY == 0) ? -1 : Math.atan2(lookY, lookX);
         }
 
-    	public function bindToKeys():void
+    	public function bindToKeys(up:int, left:int, down:int, right:int):void
     	{
 			upKey = up;
 			leftKey = left;
