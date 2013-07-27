@@ -64,6 +64,8 @@ package
 
     public class OUYAJam extends Application
     {
+		public static var instance:OUYAJam;
+		
 		public var background:Image;
 		
         public var label:SimpleLabel;
@@ -72,23 +74,35 @@ package
         var happyList:Vector.<String>;
         var sadList:Vector.<String>;
         var suspenseList:Vector.<String>;
+        var athmoList:Vector.<String>;
         var mood:String;
 
-        public var startTime:Number;
+        var lastTimeWePlayedAnAthmoSound:int;
         
     
         private var gamepadsConnected:Boolean = false;
 
-        private var players:Vector.<LoomGameObject>;
-        private var lastFrame:Number;
+        public var players:Vector.<LoomGameObject>;
+        public var heroes:Vector.<LoomGameObject>;
+        public var cities:Vector.<LoomGameObject>;
+        public var lastFrame:Number;
         private var playing:Boolean = false; 
 
         override public function run():void
         {
+			instance = this;
+			
 			// seed random value
 			var ts:int = Platform.getEpochTime() - 1374942470;
 			for (var i:int = 0; i < ts % 47; ++i) Math.random();
 			
+            // setup heroes
+            heroes = new Vector.<LoomGameObject>();
+            // setup cities
+            cities = new Vector.<LoomGameObject>();
+            // setup players
+            players = new Vector.<LoomGameObject>();
+
 			// setup background
 			background = new Image(Texture.fromAsset("assets/bg.png"));
             background.x = 0;
@@ -130,6 +144,12 @@ package
 					t.x = m.getPixelX (x,y);
 					t.y = m.getPixelY (x,y);
 					testMapRoot.addChild(t);
+					
+					if (idx == Map.TYPE_HERO_CITY)
+					{
+						trace("SPAWN CITY");
+						spawnCity(t.x, t.y);
+					}
 				}
 			}
 
@@ -146,7 +166,6 @@ package
                 // return;
             }
             // instantiate one player per gamepad
-            players = new Vector.<LoomGameObject>();
 
             var pads:Vector.<Gamepad> = Gamepad.gamepads;
             var player:LoomGameObject;
@@ -179,7 +198,8 @@ package
             happyList = listHappySongs();
             sadList = listSadSongs();
             suspenseList = listSuspenseSongs();
-            mood = "suspense";
+            athmoList = listAthmoSounds();
+			mood = "sad";
             playMyBGSong();   
             
         }
@@ -211,11 +231,18 @@ package
                 if (mover)
                     mover.move(dt);
             }
+            
+            for (i=0; i < cities.length; i++)
+            {
+				var c = getHeroCity(i);
+				if (c) c.update(dt);
+			}
         }
 
         override public function onTick():void
         {
             maybeChangeBackgroundMusic();
+            playRandomAthmo();
         }
         
         protected function maybeChangeBackgroundMusic():void
@@ -259,7 +286,7 @@ package
 			musicFiles.push("assets/audio/music/suspense/suspense_mid_2.mp3")			
 			musicFiles.push("assets/audio/music/suspense/suspense_slow_1.mp3")
 			musicFiles.push("assets/audio/music/suspense/suspense_slow_2.mp3") 
-			musicFiles.push("assets/audio/music/suspense/suspense_slow_3.mp3")
+			musicFiles.push("assets/audio/music/suspense/suspense_slow_3.mp3")	
 			return musicFiles;
         }
         
@@ -285,6 +312,33 @@ package
 				SimpleAudioEngine.sharedEngine().playBackgroundMusic(song3, false);   
 				//~ trace(randomNumber3,pickedSong3,suspenseList.length,song3)
 			}    
+			else
+				return;  
+        }    
+        
+        protected function listAthmoSounds():Vector.<String>
+        {
+			var musicFiles = new Vector.<String>(); 
+			//~ Path.walkFiles("assets/audio/music/suspense",function(track:String) { musicFiles.push(track) }, null); 
+			musicFiles.push("assets/audio/sfx/athmo/athmo_bird_1.wav")
+			musicFiles.push("assets/audio/sfx/athmo/athmo_bird_2.wav")
+			musicFiles.push("assets/audio/sfx/athmo/athmo_bird_3.wav")
+			musicFiles.push("assets/audio/sfx/athmo/athmo_bird_4.wav")
+			//~ musicFiles.push("assets/audio/sfx/athmo/athmo_wind_1.wav")
+			return musicFiles;
+        }
+            
+         protected function playRandomAthmo():void
+        {
+             // pick an appropriate song and play it as the background music           
+            if (Math.random() <= 0.1 && Platform.getEpochTime() - lastTimeWePlayedAnAthmoSound >=8 ) {
+				var randomNumber:Number = Math.random();
+				var pickedSound:int = Math.round(randomNumber * athmoList.length);
+				var sound:String = athmoList[pickedSound];
+				SimpleAudioEngine.sharedEngine().playEffect(sound, false); 
+				//~ trace("done",randomNumber,pickedSound,athmoList.length,sound,SimpleAudioEngine.sharedEngine().getEffectsVolume())
+				lastTimeWePlayedAnAthmoSound = Platform.getEpochTime();
+			}
 			else
 				return;  
         }        
@@ -314,6 +368,47 @@ package
             gameObject.addComponent(renderer, "renderer");
             gameObject.initialize();
 
+			players.pushSingle(gameObject);
+
+            return gameObject;
+        }
+        
+        public function spawnHero(x:Number, y:Number):LoomGameObject 
+        {
+            var gameObject = new LoomGameObject();
+            gameObject.owningGroup = group;
+            //~ create a new mover and bind it to the pad
+            var mover = new HeroMover();
+            mover.x = x;
+            mover.y = y;
+
+            //mover.bindToPad(pad);
+            gameObject.addComponent(mover, "mover");
+            // create a new player renderer, bind it to the mover and save in component gameObject
+            var renderer = new HeroRenderer();
+            renderer.addBinding("x", "@mover.x");
+            renderer.addBinding("y", "@mover.y");
+            
+            gameObject.addComponent(renderer, "renderer");
+            gameObject.initialize();
+
+			heroes.pushSingle(gameObject);
+
+            return gameObject;
+        }
+        
+        public function spawnCity(x:Number, y:Number):LoomGameObject 
+        {
+            var gameObject = new LoomGameObject();
+            gameObject.owningGroup = group;
+            var city = new HeroCity();
+            city.x = x;
+            city.y = y;
+            gameObject.addComponent(city, "city");
+            gameObject.initialize();
+
+			cities.pushSingle(gameObject);
+
             return gameObject;
         }
         
@@ -328,6 +423,22 @@ package
                 return null;
 
             return players[index].lookupComponentByName("mover") as PlayerMover;
+        }
+        
+        public function getHeroMover(index:int):HeroMover
+        {
+            if (index < 0 || index >= heroes.length)
+                return null;
+
+            return heroes[index].lookupComponentByName("mover") as HeroMover;
+        }
+        
+        public function getHeroCity(index:int):HeroCity
+        {
+            if (index < 0 || index >= cities.length)
+                return null;
+
+            return cities[index].lookupComponentByName("city") as HeroCity;
         }
     }
 }

@@ -67,13 +67,13 @@ package
             if (lookDirectionIndicator)
                 lookDirectionIndicator.rotation += 10;
         }
-        /*
+        
         public function set lookY(value:Number):void
         {
-            if (lookDirectionIndicator)
-                lookDirectionIndicator.y = value;
+            // if (lookDirectionIndicator)
+            //     lookDirectionIndicator.y = value;
         }
-        */
+        
 
 		/**
          * Executed when this renderer is added. It create a sprites and sets the correct texture for it.
@@ -85,14 +85,20 @@ package
             if(!super.onAdd())
                 return false;
 
+            var img:Image = new Image(Texture.fromAsset("assets/player/look-direction.png"));
             lookDirectionIndicator = new Sprite();
-            lookDirectionIndicator.addChild(Image(Texture.fromAsset("assets/player/look-direction.png")))
+            lookDirectionIndicator.addChild(img);
+            lookDirectionIndicator.center();
             Loom2D.stage.addChild(lookDirectionIndicator);
 
+
             image = new Image(Texture.fromAsset("assets/player.png"));
+            image.x = -1000;
+            image.y = -1000;
             Loom2D.stage.addChild(image);
 
-
+            lookDirectionIndicator.x += image.x;
+            lookDirectionIndicator.y += image.y;
 
             // var xml:XMLDocument = new XMLDocument();
             // if (xml.loadFile(path + atlasName + ".xml") != 0)
