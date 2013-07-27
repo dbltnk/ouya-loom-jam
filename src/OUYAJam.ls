@@ -26,6 +26,9 @@ package
 		public static const TYPE_VILLAGE_HOUSE = 4;
 		public static const TYPE_STORAGE_PLACE = 2;
 		public static const TYPE_WALL = 3;		
+		public static const TYPE_HERO_CITY = 6;		
+		public static const TYPE_FOOD_PLACE = 7;		
+		public static const TYPE_RES_PLACE = 8;		
 		
 		public function Map(map:TMXTileMap)
 		{
@@ -99,6 +102,9 @@ package
 			mapImgDict[Map.TYPE_VILLAGE_HOUSE] = "assets/village_house.png";
 			mapImgDict[Map.TYPE_STORAGE_PLACE] = "assets/storage_place.png";
 			mapImgDict[Map.TYPE_WALL] = "assets/wall_tile_0.png";
+			mapImgDict[Map.TYPE_HERO_CITY] = "assets/hero_city.png";
+			mapImgDict[Map.TYPE_FOOD_PLACE] = "assets/food_place.png";
+			mapImgDict[Map.TYPE_RES_PLACE] = "assets/res_place.png";
             var testMapRoot = new Sprite();
             stage.addChild(testMapRoot);
             
@@ -128,11 +134,11 @@ package
             middleground = new Image(Texture.fromAsset("assets/middleground.png"));
             stage.addChild(middleground);
             */
-            sprite = new Image(Texture.fromAsset("assets/sizes.png"));
-            sprite.center();
-            sprite.x = stage.stageWidth / 2;
-            sprite.y = stage.stageHeight / 2 + 50;
-            stage.addChild(sprite);
+            //~ sprite = new Image(Texture.fromAsset("assets/sizes.png"));
+            //~ sprite.center();
+            //~ sprite.x = stage.stageWidth / 2;
+            //~ sprite.y = stage.stageHeight / 2 + 50;
+            //~ stage.addChild(sprite);
 
 
             // check whether any gamepads were detected
