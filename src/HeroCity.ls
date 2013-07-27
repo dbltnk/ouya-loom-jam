@@ -23,7 +23,6 @@ package
 			{
 				lastSpawnTime = Platform.getTime();
 				OUYAJam.instance.spawnHero(x,y);
-				trace("SPAWN");
 			}
     	}
     }
