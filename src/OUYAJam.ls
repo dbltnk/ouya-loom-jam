@@ -310,19 +310,19 @@ package
              // pick an appropriate song and play it as the background music           
             if (mood == "happy") {
 				var randomNumber1:Number = Math.random();
-				var pickedSong1:int = Math.round(randomNumber1 * happyList.length);
+				var pickedSong1:int = Math.floor(randomNumber1 * happyList.length);
 				var song1:String = happyList[pickedSong1];
 				SimpleAudioEngine.sharedEngine().playBackgroundMusic(song1, false); 
 			}
             else if (mood == "sad") {
 				var randomNumber2:Number = Math.random();
-				var pickedSong2:int = Math.round(randomNumber2 * sadList.length);
+				var pickedSong2:int = Math.floor(randomNumber2 * sadList.length);
 				var song2:String = sadList[pickedSong2];
 				SimpleAudioEngine.sharedEngine().playBackgroundMusic(song2, false); 
 			}
             else if (mood == "suspense") {
 				var randomNumber3:Number = Math.random();
-				var pickedSong3:int = Math.round(randomNumber3 * suspenseList.length);
+				var pickedSong3:int = Math.floor(randomNumber3 * suspenseList.length);
 				var song3:String = suspenseList[pickedSong3];
 				SimpleAudioEngine.sharedEngine().playBackgroundMusic(song3, false);   
 				//~ trace(randomNumber3,pickedSong3,suspenseList.length,song3)
@@ -348,10 +348,11 @@ package
              // pick an appropriate song and play it as the background music           
             if (Math.random() <= 0.1 && Platform.getEpochTime() - lastTimeWePlayedAnAthmoSound >=8 ) {
 				var randomNumber:Number = Math.random();
-				var pickedSound:int = Math.round(randomNumber * athmoList.length);
+				var pickedSound:int = Math.floor(randomNumber * athmoList.length);
 				var sound:String = athmoList[pickedSound];
+				//~ trace("SOUND",sound);
+				trace("done",randomNumber,pickedSound,athmoList.length,sound,SimpleAudioEngine.sharedEngine().getEffectsVolume())
 				SimpleAudioEngine.sharedEngine().playEffect(sound, false); 
-				//~ trace("done",randomNumber,pickedSound,athmoList.length,sound,SimpleAudioEngine.sharedEngine().getEffectsVolume())
 				lastTimeWePlayedAnAthmoSound = Platform.getEpochTime();
 			}
 			else
