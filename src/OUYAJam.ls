@@ -462,7 +462,7 @@ package
 			{
 				if (effectSounds[i].indexOf(prefix) >= 0) {
 					if (skip == 0) {
-						//~ trace("SOUND", effectSounds[i]);
+						trace("SOUND", effectSounds[i]);
 						SimpleAudioEngine.sharedEngine().playEffect(effectSounds[i], false);
 						return;
 					} else {
