@@ -6,8 +6,6 @@ package
     import loom2d.Loom2D;
     import loom2d.display.Image;
     import loom2d.display.MovieClip;
-    
-    import loom2d.math.Point;
 
     import loom2d.textures.Texture;
     import loom2d.textures.TextureAtlas;
@@ -41,13 +39,6 @@ package
         {
             if(image)
                 image.y = value;
-        }
-
-        public function hitTest(p:Point):Boolean
-        {
-            if (image && image.hitTest(p))
-                return true;
-            return false;
         }
 
 		/**

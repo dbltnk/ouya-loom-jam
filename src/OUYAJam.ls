@@ -294,7 +294,6 @@ package
             var mover:PlayerMover;
             var pm:ProjectileMover;
             var p:Point;
-            var hr:HeroRenderer;
             var hm:HeroMover;
 
             for (i=0; i < n; i++)
@@ -315,8 +314,8 @@ package
 
                     for (j=0; j < heroes.length; j++)
                     {
-                        hr = getHeroRenderer(j);
-                        if (hr && hr.hitTest(p));
+                        hm = getHeroMover(j);
+                        if (hm && hm.hitTestSphere(p, pm.radius));
                         {
                             // TODO kill hero
                             // TODO kill projectile
@@ -678,13 +677,6 @@ package
                 return null;
 
             return projectiles[index].lookupComponentByName("mover") as ProjectileMover;
-        }
-        public function getHeroRenderer(index:int):HeroRenderer
-        {
-            if (index < 0 || index >= heroes.length)
-                return null;
-
-            return heroes[index].lookupComponentByName("renderer") as HeroRenderer;
         }
         public function getHeroMover(index:int):HeroMover
         {
