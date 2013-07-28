@@ -246,7 +246,7 @@ package
                                      Config.PLAYER_ATTACK_DAMAGE,
                                      Config.PLAYER_ATTACK_COOL_DOWN,
                                      Config.PLAYER_USE_RANGE,
-                                     "assets/player/", "mage", "mage-front-stand");
+                                     "assets/", "mage");
                 
                 mover = getPlayerMover(i);
                 if (mover)
@@ -263,7 +263,7 @@ package
                                      Config.PLAYER_ATTACK_DAMAGE,
                                      Config.PLAYER_ATTACK_COOL_DOWN,
                                      Config.PLAYER_USE_RANGE,
-                                     "assets/player/", "mage", "mage-front-stand");
+                                     "assets/", "mage");
                 mover = getPlayerMover(0);
                 if (mover)
                     mover.bindToKeys(LoomKey.W, LoomKey.A, LoomKey.S, LoomKey.D,
@@ -274,7 +274,7 @@ package
                                      Config.PLAYER_ATTACK_DAMAGE,
                                      Config.PLAYER_ATTACK_COOL_DOWN,
                                      Config.PLAYER_USE_RANGE,
-                                     "assets/player/", "mage", "mage-front-stand");
+                                     "assets/", "mage");
                 mover = getPlayerMover(1);
                 if (mover)
                     mover.bindToKeys(LoomKey.UP_ARROW, LoomKey.LEFT_ARROW, LoomKey.DOWN_ARROW, LoomKey.RIGHT_ARROW,
@@ -567,8 +567,7 @@ package
                                        attackCoolDown:Number,
                                        useRange:Number,
                                        path:String,
-                                       atlasName:String,
-                                       aniName:String):LoomGameObject 
+                                       atlasName:String):LoomGameObject 
         {
             var gameObject = new LoomGameObject();
             gameObject.owningGroup = group;
@@ -577,7 +576,7 @@ package
             //mover.bindToPad(pad);
             gameObject.addComponent(mover, "mover");
             // create a new player renderer, bind it to the mover and save in component gameObject
-            var renderer:PlayerRenderer = new PlayerRenderer(path, atlasName, aniName);
+            var renderer:PlayerRenderer = new PlayerRenderer(path, atlasName);
             renderer.addBinding("x", "@mover.x");
             renderer.addBinding("y", "@mover.y");
             renderer.addBinding("lookAngle", "@mover.lookAngle");

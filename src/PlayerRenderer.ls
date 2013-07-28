@@ -15,23 +15,20 @@ package
 	{
 		protected var path:String;
 		protected var atlasName:String;
-		protected var aniName:String;
 
 		protected var anim:MovieClip;
 		
-        //protected var anim:Image;
         protected var lookDirectionIndicator:Sprite;
 
-		public function PlayerRenderer(path:String, atlasName:String, aniName:String)
+		public function PlayerRenderer(path:String, atlasName:String)
 		{
-			if (!path || !atlasName || !aniName)
+			if (!path || !atlasName)
 			{
 				return;
 			}
 
 			this.path = path;
 			this.atlasName = atlasName;
-			this.aniName = aniName;
 		}
 
 		/**
@@ -89,7 +86,7 @@ package
             if(!super.onAdd())
                 return false;
 
-            var img:Image = new Image(Texture.fromAsset("assets/player/look-direction.png"));
+            var img:Image = new Image(Texture.fromAsset("assets/look-direction.png"));
             lookDirectionIndicator = new Sprite();
             lookDirectionIndicator.addChild(img);
             lookDirectionIndicator.center();
