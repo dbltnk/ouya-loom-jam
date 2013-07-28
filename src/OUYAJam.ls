@@ -217,8 +217,8 @@ package
 					{
 						spawnBuilding(idx, tx,ty, "assets/village_house.png", "assets/village_house_broken.png", true);
 						
-						spawnPig(tx,ty, Config.PIG_SPEED, Config.PIG_RANGE, "assets/", "animals", "schwein");
-						spawnPig(tx,ty, Config.PIG_SPEED, Config.PIG_RANGE, "assets/", "animals", "schwein");
+						spawnPig(tx,ty, Config.PIG_SPEED, Config.PIG_RANGE, "schwein");
+						spawnPig(tx,ty, Config.PIG_SPEED, Config.PIG_RANGE, "schwein");
 					}										
 					else if (idx == Map.TYPE_STORAGE_PLACE)
 					{
@@ -230,8 +230,8 @@ package
 						storageMover.heroDamage = Config.STORAGE_HERO_DAMAGE;
 						storageMover.damageTimeout = Config.STORAGE_DAMAGE_TIMEOUT;
 
-						spawnPig(tx,ty, Config.CHICKEN_SPEED, Config.CHICKEN_SPEED, "assets/", "animals", "huhn");
-						spawnPig(tx,ty, Config.CHICKEN_SPEED, Config.CHICKEN_SPEED, "assets/", "animals", "huhn");
+						spawnPig(tx,ty, Config.CHICKEN_SPEED, Config.CHICKEN_SPEED, "huhn");
+						spawnPig(tx,ty, Config.CHICKEN_SPEED, Config.CHICKEN_SPEED, "huhn");
 					}										
 					else if (idx == Map.TYPE_WALL)
 					{
@@ -768,9 +768,8 @@ package
             return gameObject;
         }
         
-        public function spawnPig(x:Number, y:Number, speed:Number, range:Number, path:String, atlasName:String, animName:String):LoomGameObject 
+        public function spawnPig(x:Number, y:Number, speed:Number, range:Number, animName:String):LoomGameObject 
         {
-			trace("spawn pig");
             var gameObject = new LoomGameObject();
             gameObject.owningGroup = group;
             var mover = new PigMover(x,y,speed,range);
@@ -779,7 +778,7 @@ package
 
             gameObject.addComponent(mover, "mover");
             // create a new player renderer, bind it to the mover and save in component gameObject
-            var renderer = new PigRenderer(path, atlasName, animName);
+            var renderer = new PigRenderer(animName);
             renderer.addBinding("x", "@mover.x");
             renderer.addBinding("y", "@mover.y");
             
