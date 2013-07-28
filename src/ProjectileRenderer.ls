@@ -38,7 +38,7 @@ package
             if(!super.onAdd())
                 return false;
 
-            image = new Image(Texture.fromAsset(Config.PATH_ASSETS + "projectile.png"));
+            image = OUYAJam.instance.getImage("projectile");
             image.x = -1000;
             image.y = -1000;
             Loom2D.stage.addChild(image);
