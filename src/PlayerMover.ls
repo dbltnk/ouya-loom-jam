@@ -19,6 +19,11 @@ package
 		public var downKey:int;
 		public var rightKey:int;
 
+    	public var health:Number = Config.PLAYER_HP;
+    	public var healthMax:Number = Config.PLAYER_HP;		
+
+		public var radius:Number = Config.PLAYER_RADIUS;
+
     	public var x:Number = 0;
     	public var y:Number = 0;
 
