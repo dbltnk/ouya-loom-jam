@@ -13,6 +13,8 @@ package
 
 		public var speed:Number = 0;
 
+		public var radius:Number = Config.PROJECTILE_RADIUS;
+
 		public function ProjectileMover(x:Number, y:Number, vX:Number, vY:Number, speed:Number)
 		{
 			this.x = x;
