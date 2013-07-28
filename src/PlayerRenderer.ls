@@ -20,8 +20,8 @@ package
         protected var anims:Dictionary;
 
 		protected var currentAnim:MovieClip;
-        protected var currentState:int = 0;
-        protected var currentDirection:int = 0;
+        protected var currentState:int = PlayerState.STAND;
+        protected var currentDirection:int = PlayerDirection.RIGHT;
 
 		
         protected var lookDirectionIndicator:Sprite;
@@ -99,10 +99,10 @@ package
             switch (direction)
             {
                 case PlayerDirection.LEFT:
-                    str += "right"
+                    str += "left"
                     break;
                 case PlayerDirection.RIGHT:
-                    str += "left"
+                    str += "right"
                     break;
             }
             switch (state)
@@ -169,6 +169,8 @@ package
             addAnim("right-walk");
             addAnim("left-stand");
             addAnim("left-walk");
+
+            setAnimation(currentState, currentDirection);
 
             return true;
         }
