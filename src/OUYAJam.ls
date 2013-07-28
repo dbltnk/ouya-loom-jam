@@ -86,6 +86,7 @@ package
         private var gamepadsConnected:Boolean = false;
 
         public var players:Vector.<LoomGameObject>;
+        public var projectiles:Vector.<LoomGameObject>;
         public var heroes:Vector.<LoomGameObject>;
         public var cities:Vector.<LoomGameObject>;
         public var buildings:Vector.<LoomGameObject>;
@@ -107,6 +108,7 @@ package
             heroes = new Vector.<LoomGameObject>();
             cities = new Vector.<LoomGameObject>();
             players = new Vector.<LoomGameObject>();
+            projectiles = new Vector.<LoomGameObject>();
             buildings = new Vector.<LoomGameObject>();
             village = new Village();
 
@@ -200,7 +202,11 @@ package
 
             for (i=0; i < pads.length; i++)
             {  
-                player = spawnPlayer(Config.PLAYER_SPEED, Config.PLAYER_ATTACK_RANGE, Config.PLAYER_USE_RANGE, "assets/player/", "mage", "mage-front-stand");
+                player = spawnPlayer(Config.PLAYER_SPEED,
+                                     Config.PLAYER_ATTACK_RANGE,
+                                     Config.PLAYER_ATTACK_COOL_DOWN,
+                                     Config.PLAYER_USE_RANGE,
+                                     "assets/player/", "mage", "mage-front-stand");
                 
                 mover = getPlayerMover(i);
                 if (mover)
@@ -212,12 +218,20 @@ package
             if (players.length == 0)
             {
                 trace("defaulting to key controls");
-                player = spawnPlayer(Config.PLAYER_SPEED, Config.PLAYER_ATTACK_RANGE, Config.PLAYER_USE_RANGE, "assets/player/", "mage", "mage-front-stand");
+                player = spawnPlayer(Config.PLAYER_SPEED,
+                                     Config.PLAYER_ATTACK_RANGE,
+                                     Config.PLAYER_ATTACK_COOL_DOWN,
+                                     Config.PLAYER_USE_RANGE,
+                                     "assets/player/", "mage", "mage-front-stand");
                 mover = getPlayerMover(0);
                 if (mover)
                     mover.bindToKeys(LoomKey.W, LoomKey.A, LoomKey.S, LoomKey.D);
                     
-                player = spawnPlayer(Config.PLAYER_SPEED, Config.PLAYER_ATTACK_RANGE, Config.PLAYER_USE_RANGE, "assets/player/", "mage", "mage-front-stand");
+                player = spawnPlayer(Config.PLAYER_SPEED,
+                                     Config.PLAYER_ATTACK_RANGE,
+                                     Config.PLAYER_ATTACK_COOL_DOWN,
+                                     Config.PLAYER_USE_RANGE,
+                                     "assets/player/", "mage", "mage-front-stand");
                 mover = getPlayerMover(1);
                 if (mover)
                     mover.bindToKeys(LoomKey.UP_ARROW, LoomKey.LEFT_ARROW, LoomKey.DOWN_ARROW, LoomKey.RIGHT_ARROW);
@@ -257,11 +271,20 @@ package
                 return;
                 
             var mover:PlayerMover;
-            for (var i=0; i < players.length; i++)
+            var n:int = players.length;
+            for (var i=0; i < n; i++)
             {
                 mover = getPlayerMover(i);
                 if (mover)
                     mover.move(dt);
+            }
+
+            n = projectiles.length;
+            for (i = 0; i < n; i ++)
+            {
+                var pm = getProjectileMover(i);
+                if (pm)
+                    pm.move(dt);
             }
             
             for (i=0; i < heroes.length; i++)
@@ -282,7 +305,7 @@ package
 				var b = getBuildingMover(i);
 				if (b) b.update(dt);
 			}
-			
+
 			village.update(dt);
 			
 			// remove dead objects
@@ -459,6 +482,7 @@ package
         
         protected function spawnPlayer(speed:Number,
                                        attackRange:Number,
+                                       attackCoolDown:Number,
                                        useRange:Number,
                                        path:String,
                                        atlasName:String,
@@ -467,11 +491,11 @@ package
             var gameObject = new LoomGameObject();
             gameObject.owningGroup = group;
             // create a new mover and bind it to the pad
-            var mover = new PlayerMover(speed, attackRange, useRange);
+            var mover:PlayerMover = new PlayerMover(speed, attackRange, attackCoolDown, useRange);
             //mover.bindToPad(pad);
             gameObject.addComponent(mover, "mover");
             // create a new player renderer, bind it to the mover and save in component gameObject
-            var renderer = new PlayerRenderer(path, atlasName, aniName);
+            var renderer:PlayerRenderer = new PlayerRenderer(path, atlasName, aniName);
             renderer.addBinding("x", "@mover.x");
             renderer.addBinding("y", "@mover.y");
             renderer.addBinding("lookAngle", "@mover.lookAngle");
@@ -484,6 +508,31 @@ package
 			players.pushSingle(gameObject);
 
             return gameObject;
+        }
+
+        public function spawnProjectile(playerMover:PlayerMover,
+                                        posX:Number, posY:Number,
+                                        directionX:Number, directionY:Number):void
+        {
+            var projectile:LoomGameObject = new LoomGameObject();
+            projectile.owningGroup = group;
+
+            var mover:ProjectileMover = new ProjectileMover(
+                posX,
+                posY,
+                directionX,
+                directionY,
+                Config.PROJECTILE_SPEED
+            );
+            projectile.addComponent(mover, "mover");
+
+            var renderer:ProjectileRenderer = new ProjectileRenderer();
+            renderer.addBinding("x", "@mover.x");
+            renderer.addBinding("y", "@mover.y");
+            projectile.addComponent(renderer, "renderer");
+            projectile.initialize();
+
+            projectiles.pushSingle(projectile);
         }
         
         public function spawnHero(x:Number, y:Number):LoomGameObject 
@@ -581,6 +630,13 @@ package
                 return null;
 
             return players[index].lookupComponentByName("mover") as PlayerMover;
+        }
+        public function getProjectileMover(index:int):ProjectileMover
+        {
+            if (index < 0 || index >= projectiles.length)
+                return null;
+
+            return projectiles[index].lookupComponentByName("mover") as ProjectileMover;
         }
         
         public function getHeroMover(index:int):HeroMover
