@@ -59,12 +59,12 @@ package
             if(!super.onAdd())
                 return false;
 
-            image = new Image(Texture.fromAsset(imageFile));
+            image = OUYAJam.instance.getImage(imageFile);
             image.x = -1000;
             image.y = -1000;
             Loom2D.stage.addChild(image);
 
-            imageBroken = new Image(Texture.fromAsset(imageFileBroken));
+            imageBroken = OUYAJam.instance.getImage(imageFileBroken);
             imageBroken.x = -1000;
             imageBroken.y = -1000;
             Loom2D.stage.addChild(imageBroken);

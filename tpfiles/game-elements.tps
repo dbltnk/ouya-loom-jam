@@ -152,19 +152,9 @@
             <filename>../assets/enemy_small</filename>
             <filename>../assets/health</filename>
             <filename>../assets/animals</filename>
-            <filename>../assets/original/mage-right-stand-1.png</filename>
-            <filename>../assets/original/mage-right-walk-1.png</filename>
-            <filename>../assets/original/mage-right-walk-2.png</filename>
-            <filename>../assets/original/mage-right-walk-3.png</filename>
-            <filename>../assets/original/mage-right-walk-4.png</filename>
-            <filename>../assets/original/mage-left-stand-1.png</filename>
-            <filename>../assets/original/mage-left-walk-1.png</filename>
-            <filename>../assets/original/mage-left-walk-2.png</filename>
-            <filename>../assets/original/mage-left-walk-3.png</filename>
-            <filename>../assets/original/mage-left-walk-4.png</filename>
-            <filename>../assets/look-direction.png</filename>
-            <filename>../assets/projectile.png</filename>
             <filename>../assets/hero.png</filename>
+            <filename>../assets/buildings</filename>
+            <filename>../assets/character</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

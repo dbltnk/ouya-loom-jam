@@ -47,6 +47,7 @@ package
 		public var healY:Number = 0;
 		public var storageX:Number = 0;
 		public var storageY:Number = 0;
+
 				
 		public function Map(map:TMXTileMap)
 		{
@@ -109,7 +110,9 @@ package
 
 		public var map:Map;
 
-		public var atlas:TextureAtlas;
+		protected var atlas:TextureAtlas;
+        protected var textures:Dictionary;
+        protected var animations:Dictionary;
 		
         override public function run():void
         {
@@ -154,14 +157,14 @@ package
 			
 
 			var mapImgDict = new Dictionary();
-			mapImgDict[Map.TYPE_HEALPOINT] = "assets/healpoint.png";
-			mapImgDict[Map.TYPE_VILLAGE_HOUSE] = "assets/village_house.png";
-			mapImgDict[Map.TYPE_STORAGE_PLACE] = "assets/storage_place.png";
-			mapImgDict[Map.TYPE_WALL] = "assets/wall.png";
-			mapImgDict[Map.TYPE_HERO_CITY] = "assets/hero_city.png";
-			mapImgDict[Map.TYPE_FOOD_PLACE] = "assets/food_place.png";
-			mapImgDict[Map.TYPE_RES_PLACE] = "assets/res_place.png";
-			mapImgDict[Map.TYPE_ITEMFORGE] = "assets/itemforge.png";
+			mapImgDict[Map.TYPE_HEALPOINT] = "healpoint";
+			mapImgDict[Map.TYPE_VILLAGE_HOUSE] = "village_house";
+			mapImgDict[Map.TYPE_STORAGE_PLACE] = "storage_place";
+			mapImgDict[Map.TYPE_WALL] = "wall";
+			mapImgDict[Map.TYPE_HERO_CITY] = "hero_city";
+			mapImgDict[Map.TYPE_FOOD_PLACE] = "food_place";
+			mapImgDict[Map.TYPE_RES_PLACE] = "res_place";
+			mapImgDict[Map.TYPE_ITEMFORGE] = "itemforge";
             var testMapRoot = new Sprite();
             stage.addChild(testMapRoot);
             
@@ -182,14 +185,14 @@ package
 					}
 					else if (idx == Map.TYPE_FOOD_PLACE)
 					{
-						var food = spawnBuilding(idx, tx,ty, "assets/food_place.png", "assets/food_place_broken.png", false);
+						var food = spawnBuilding(idx, tx,ty, "food_place", "food_place_broken", false);
 						var foodMover = food.lookupComponentByName("mover") as BuildingMover;
 						foodMover.breakOnEmptyFood = true;
 						foodMover.food = Config.FOOD_AMOUNT;
 					}
 					else if (idx == Map.TYPE_RES_PLACE)
 					{
-						var res = spawnBuilding(idx, tx,ty, "assets/res_place.png", "assets/res_place_broken.png", false);
+						var res = spawnBuilding(idx, tx,ty, "res_place", "res_place_broken", false);
 						var resMover = res.lookupComponentByName("mover") as BuildingMover;
 						resMover.breakOnEmptyResources = true;
 						resMover.resources = Config.RESOURCE_AMOUNT;
@@ -199,7 +202,7 @@ package
 						map.forgeX = tx;
 						map.forgeY = ty;
 						
-						var forge = spawnBuilding(idx, tx,ty, "assets/itemforge.png", "assets/itemforge_broken.png", true);
+						var forge = spawnBuilding(idx, tx,ty, "itemforge", "itemforge_broken", true);
 						var forgeMover = forge.lookupComponentByName("mover") as BuildingMover;
 						forgeMover.heroDamage = Config.FORGE_HERO_DAMAGE;
 						forgeMover.damageTimeout = Config.FORGE_DAMAGE_TIMEOUT;
@@ -209,14 +212,14 @@ package
 						map.healX = tx;
 						map.healY = ty;
 						
-						var heal = spawnBuilding(idx, tx,ty, "assets/healpoint.png", "assets/healpoint_broken.png", true);
+						var heal = spawnBuilding(idx, tx,ty, "healpoint", "healpoint_broken", true);
 						var healMover = heal.lookupComponentByName("mover") as BuildingMover;
 						healMover.heroDamage = Config.HEALPOINT_HERO_DAMAGE;
 						healMover.damageTimeout = Config.HEALPOINT_DAMAGE_TIMEOUT;
 					}
 					else if (idx == Map.TYPE_VILLAGE_HOUSE)
 					{
-						spawnBuilding(idx, tx,ty, "assets/village_house.png", "assets/village_house_broken.png", true);
+						spawnBuilding(idx, tx,ty, "village_house", "village_house_broken", true);
 						
 						spawnPig(tx,ty, Config.PIG_SPEED, Config.PIG_RANGE, "schwein");
 						spawnPig(tx,ty, Config.PIG_SPEED, Config.PIG_RANGE, "schwein");
@@ -226,7 +229,7 @@ package
 						map.storageX = tx;
 						map.storageY = ty;
 						
-						var storage = spawnBuilding(idx, tx,ty, "assets/storage_place.png", "assets/storage_place_broken.png", true);
+						var storage = spawnBuilding(idx, tx,ty, "storage_place", "storage_place_broken", true);
 						var storageMover = storage.lookupComponentByName("mover") as BuildingMover;
 						storageMover.heroDamage = Config.STORAGE_HERO_DAMAGE;
 						storageMover.damageTimeout = Config.STORAGE_DAMAGE_TIMEOUT;
@@ -236,11 +239,11 @@ package
 					}										
 					else if (idx == Map.TYPE_WALL)
 					{
-						spawnBuilding(idx, tx,ty, "assets/wall.png", "assets/wall_broken.png", true);
+						spawnBuilding(idx, tx,ty, "wall", "wall_broken", true);
 					}
 					else
 					{
-						var t = new Image(Texture.fromAsset(String(mapImgDict[idx])));
+						var t = getImage(String(mapImgDict[idx]));//new Image(Texture.fromAsset(String(mapImgDict[idx])));
 						t.x = tx;
 						t.y = ty;
 						testMapRoot.addChild(t);
@@ -953,8 +956,8 @@ package
             renderer.addBinding("x", "@city.x");
             renderer.addBinding("y", "@city.y");
             renderer.addBinding("broken", "@city.broken");
-            renderer.imageFile = "assets/hero_city.png";
-            renderer.imageFileBroken = "assets/hero_city_broken.png";
+            renderer.imageFile = "hero_city";
+            renderer.imageFileBroken = "hero_city_broken";
             
             gameObject.addComponent(renderer, "renderer");
             gameObject.initialize();
@@ -1055,17 +1058,14 @@ package
             textures = new Dictionary();
             animations = new Dictionary();
         }
-        
-        protected var textures:Dictionary;
-        protected var animations:Dictionary;
 
         public function getImage(name:String):Image
         {
-        	trace("Getting image '" + name + "'");
+        	//trace("Getting image '" + name + "'");
 
         	if (!textures[name])
         	{
-        		trace("Image '"+name+"' not available. Extracting from atlas...");
+        		trace("Extracting image '"+name+"' from atlas...");
         		textures[name] = atlas.getTexture( name );
         	}
         	
@@ -1080,11 +1080,11 @@ package
 
         public function getAnimation(name:String):MovieClip
         {
-        	trace("Getting animation '" + name + "'");
+        	//trace("Getting animation '" + name + "'");
 
         	if (!animations[name])
         	{
-        		trace("Animation '"+name+"' not available. Extracting from atlas...");
+        		trace("Extracting animation '"+name+"' from atlas...");
         		animations[name] = atlas.getTextures( name );
         	}
         	
