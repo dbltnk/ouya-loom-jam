@@ -335,15 +335,20 @@ package
                 if (pm)
                 {
                     pm.move(dt);
+                    // don't check against fresh projectiles
+                    if (pm.fresh)
+                        continue;
+
                     p = new Point(pm.x, pm.y);
 
                     for (j=0; j < heroes.length; j++)
                     {
                         hm = getHeroMover(j);
-                        if (hm && hm.hitTestSphere(p, pm.radius));
+
+                        if (hm && hm.hitTestSphere(p, pm.radius))
                         {
                             hm.health -= pm.damage;
-                            killGameObject(pm._owner);
+                            killObject(pm);
                             trace("Hero down!");
                             break;
                         }   
@@ -751,11 +756,11 @@ package
             return buildings[index].lookupComponentByName("mover") as BuildingMover;
         }
 
-        public function killGameObject(object:LoomGameObject):void
+        public function killObject(object:LoomComponent):void
         {
-            if (object)
+            if (object && object._owner)
             {
-                var k:Killable = object.lookupComponentByName("killable") as Killable;
+                var k:Killable = object._owner.lookupComponentByName("killable") as Killable;
                 if (k) k.dead = true;
             }
         }

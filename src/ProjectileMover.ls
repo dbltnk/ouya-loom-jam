@@ -14,6 +14,8 @@ package
 		public var speed:Number = 0;
 		public var damage:Number = 0;
 
+		public var fresh = true;
+
 		public var radius:Number = Config.PROJECTILE_RADIUS;
 
 		public function ProjectileMover(x:Number, y:Number, vX:Number, vY:Number, speed:Number, damage:Number)
@@ -36,6 +38,8 @@ package
     	{
     		x += vX * (dt / 1000) * speed;
             y += vY * (dt / 1000) * speed;
+            // make sure this is being displayed at least one frame
+            fresh = false;
     	}
 	}
 }
