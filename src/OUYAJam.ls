@@ -12,6 +12,7 @@ package
 
     import loom2d.events.KeyboardEvent;
     import loom.platform.LoomKey;
+    import loom.gameframework.LoomComponent;
     import loom.gameframework.LoomGameObject;
     import loom2d.tmx.TMXTileMap;
     import cocosdenshion.SimpleAudioEngine;
