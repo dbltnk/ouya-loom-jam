@@ -84,10 +84,13 @@ package
         var happyList:Vector.<String>;
         var sadList:Vector.<String>;
         var suspenseList:Vector.<String>;
-        var athmoList:Vector.<String>;
+        var happyAtmoList:Vector.<String>;
+        var sadAtmoList:Vector.<String>;
+        var suspenseAtmoList:Vector.<String>;
         var mood:String;
 
-        var lastTimeWePlayedAnAthmoSound:int;
+
+        var lastTimeWePlayedAnatmoSound:int;
         
     
         private var gamepadsConnected:Boolean = false;
@@ -254,7 +257,7 @@ package
                                      Config.PLAYER_ATTACK_DAMAGE,
                                      Config.PLAYER_ATTACK_COOL_DOWN,
                                      Config.PLAYER_USE_RANGE,
-                                     "assets/player/", "mage", "mage-front-stand");
+                                     "assets/", "mage");
                 
                 mover = getPlayerMover(i);
                 if (mover)
@@ -271,7 +274,7 @@ package
                                      Config.PLAYER_ATTACK_DAMAGE,
                                      Config.PLAYER_ATTACK_COOL_DOWN,
                                      Config.PLAYER_USE_RANGE,
-                                     "assets/player/", "mage", "mage-front-stand");
+                                     "assets/", "mage");
                 mover = getPlayerMover(0);
                 if (mover)
                     mover.bindToKeys(LoomKey.W, LoomKey.A, LoomKey.S, LoomKey.D,
@@ -282,7 +285,7 @@ package
                                      Config.PLAYER_ATTACK_DAMAGE,
                                      Config.PLAYER_ATTACK_COOL_DOWN,
                                      Config.PLAYER_USE_RANGE,
-                                     "assets/player/", "mage", "mage-front-stand");
+                                     "assets/", "mage");
                 mover = getPlayerMover(1);
                 if (mover)
                     mover.bindToKeys(LoomKey.UP_ARROW, LoomKey.LEFT_ARROW, LoomKey.DOWN_ARROW, LoomKey.RIGHT_ARROW,
@@ -296,10 +299,12 @@ package
             happyList = listHappySongs();
             sadList = listSadSongs();
             suspenseList = listSuspenseSongs();
-            athmoList = listAthmoSounds();
-			mood = "happy";
+            happyAtmoList = listHappyAtmoSounds();
+            sadAtmoList = listSadAtmoSounds();
+            suspenseAtmoList = listSuspenseAtmoSounds();
+            mood = "happy";
             playMyBGSong();   
-            
+			SimpleAudioEngine.sharedEngine().setEffectsVolume(Config.VOLUME_SFX);
         }
 
         public function onFrame():void
@@ -452,7 +457,7 @@ package
 				//~ trace(mood,heroes.length);
 			}
             maybeChangeBackgroundMusic();
-            playRandomAthmo();
+            playRandomAtmo();
         }
         
         protected function maybeChangeBackgroundMusic():void
@@ -526,29 +531,73 @@ package
 				return;  
         }    
         
-        protected function listAthmoSounds():Vector.<String>
+        protected function listHappyAtmoSounds():Vector.<String>
         {
 			var musicFiles = new Vector.<String>(); 
 			//~ Path.walkFiles("assets/audio/music/suspense",function(track:String) { musicFiles.push(track) }, null); 
-			musicFiles.push("assets/audio/sfx/athmo/athmo_bird_1.wav")
-			musicFiles.push("assets/audio/sfx/athmo/athmo_bird_2.wav")
-			musicFiles.push("assets/audio/sfx/athmo/athmo_bird_3.wav")
-			musicFiles.push("assets/audio/sfx/athmo/athmo_bird_4.wav")
-			//~ musicFiles.push("assets/audio/sfx/athmo/athmo_wind_1.wav")
+			musicFiles.push("assets/audio/sfx/atmo/atmo_happy_bird_1.wav")
+			musicFiles.push("assets/audio/sfx/atmo/atmo_happy_bird_2.wav")
+			musicFiles.push("assets/audio/sfx/atmo/atmo_happy_bird_3.wav")
+			musicFiles.push("assets/audio/sfx/atmo/atmo_happy_bird_4.wav")
+			musicFiles.push("assets/audio/sfx/atmo/atmo_happy_bird_5.wav")
+			musicFiles.push("assets/audio/sfx/atmo/atmo_happy_bird_6.wav")
+			musicFiles.push("assets/audio/sfx/atmo/atmo_happy_bird_7.wav")			
+			return musicFiles;
+        }
+        
+        protected function listSadAtmoSounds():Vector.<String>
+        {
+			var musicFiles = new Vector.<String>(); 
+			//~ Path.walkFiles("assets/audio/music/suspense",function(track:String) { musicFiles.push(track) }, null); 
+			musicFiles.push("assets/audio/sfx/atmo/atmo_sad_bird_1.wav")
+			musicFiles.push("assets/audio/sfx/atmo/atmo_sad_bird_2.wav")
+			musicFiles.push("assets/audio/sfx/atmo/atmo_sad_bird_3.wav")
+			musicFiles.push("assets/audio/sfx/atmo/atmo_sad_bird_4.wav")
+			musicFiles.push("assets/audio/sfx/atmo/atmo_sad_bird_5.wav")
+			return musicFiles;
+        }
+        
+        protected function listSuspenseAtmoSounds():Vector.<String>
+        {
+			var musicFiles = new Vector.<String>(); 
+			//~ Path.walkFiles("assets/audio/music/suspense",function(track:String) { musicFiles.push(track) }, null); 
+			musicFiles.push("assets/audio/sfx/atmo/atmo_suspense_pig_1.wav")			
+			musicFiles.push("assets/audio/sfx/atmo/atmo_suspense_bird_1.wav")			
+			musicFiles.push("assets/audio/sfx/atmo/atmo_suspense_thunder_1.wav")			
+			musicFiles.push("assets/audio/sfx/atmo/atmo_suspense_thunder_2.wav")			
 			return musicFiles;
         }
             
-         protected function playRandomAthmo():void
+         protected function playRandomAtmo():void
         {
              // pick an appropriate song and play it as the background music           
-            if (Math.random() <= 0.05 && Platform.getEpochTime() - lastTimeWePlayedAnAthmoSound >=8 ) {
-				var randomNumber:Number = Math.random();
-				var pickedSound:int = Math.floor(randomNumber * athmoList.length);
-				var sound:String = athmoList[pickedSound];
-				//~ trace("SOUND",sound);
-				//~ trace("done",randomNumber,pickedSound,athmoList.length,sound,SimpleAudioEngine.sharedEngine().getEffectsVolume())
-				SimpleAudioEngine.sharedEngine().playEffect(sound, false); 
-				lastTimeWePlayedAnAthmoSound = Platform.getEpochTime();
+            if (Math.random() <= 0.05 && Platform.getEpochTime() - lastTimeWePlayedAnatmoSound >=12 ) {
+				if (mood == "happy") {
+					var randomNumber1:Number = Math.random();
+					var pickedSound1:int = Math.floor(randomNumber1 * happyAtmoList.length);
+					var sound1:String = happyAtmoList[pickedSound1];
+					//~ trace("done",randomNumber1,pickedSound1,happyAtmoList.length,sound1,SimpleAudioEngine.sharedEngine().getEffectsVolume())
+					SimpleAudioEngine.sharedEngine().playEffect(sound1, false); 
+					lastTimeWePlayedAnatmoSound = Platform.getEpochTime();
+				}
+				else if (mood == "sad") {
+					var randomNumber2:Number = Math.random();
+					var pickedSound2:int = Math.floor(randomNumber2 * sadAtmoList.length);
+					var sound2:String = sadAtmoList[pickedSound2];
+					//~ trace("done",randomNumber2,pickedSound2,sadAtmoList.length,sound2,SimpleAudioEngine.sharedEngine().getEffectsVolume())
+					SimpleAudioEngine.sharedEngine().playEffect(sound2, false); 
+					lastTimeWePlayedAnatmoSound = Platform.getEpochTime();
+				}
+				else if (mood == "suspense") {
+					var randomNumber3:Number = Math.random();
+					var pickedSound3:int = Math.floor(randomNumber3 * suspenseAtmoList.length);
+					var sound3:String = suspenseAtmoList[pickedSound3];
+					//~ trace("done",randomNumber3,pickedSound3,suspenseAtmoList.length,sound3,SimpleAudioEngine.sharedEngine().getEffectsVolume())
+					SimpleAudioEngine.sharedEngine().playEffect(sound3, false); 
+					lastTimeWePlayedAnatmoSound = Platform.getEpochTime();
+				}    
+				else
+					return;  	
 			}
 			else
 				return;  
@@ -562,8 +611,7 @@ package
                                        attackCoolDown:Number,
                                        useRange:Number,
                                        path:String,
-                                       atlasName:String,
-                                       aniName:String):LoomGameObject 
+                                       atlasName:String):LoomGameObject 
         {
             var gameObject = new LoomGameObject();
             gameObject.owningGroup = group;
@@ -572,7 +620,7 @@ package
             //mover.bindToPad(pad);
             gameObject.addComponent(mover, "mover");
             // create a new player renderer, bind it to the mover and save in component gameObject
-            var renderer:PlayerRenderer = new PlayerRenderer(path, atlasName, aniName);
+            var renderer:PlayerRenderer = new PlayerRenderer(path, atlasName);
             renderer.addBinding("x", "@mover.x");
             renderer.addBinding("y", "@mover.y");
             renderer.addBinding("lookAngle", "@mover.lookAngle");

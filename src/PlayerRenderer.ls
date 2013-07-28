@@ -15,23 +15,20 @@ package
 	{
 		protected var path:String;
 		protected var atlasName:String;
-		protected var aniName:String;
 
 		protected var anim:MovieClip;
 		
-        protected var image:Image;
         protected var lookDirectionIndicator:Sprite;
 
-		public function PlayerRenderer(path:String, atlasName:String, aniName:String)
+		public function PlayerRenderer(path:String, atlasName:String)
 		{
-			if (!path || !atlasName || !aniName)
+			if (!path || !atlasName)
 			{
 				return;
 			}
 
 			this.path = path;
 			this.atlasName = atlasName;
-			this.aniName = aniName;
 		}
 
 		/**
@@ -41,11 +38,11 @@ package
          */
         public function set x(value:Number):void
         {
-            if(image)
-                image.x = value;
+            if(anim)
+                anim.x = value;
 
             if (lookDirectionIndicator)
-                lookDirectionIndicator.x = value + (image.width / 2);
+                lookDirectionIndicator.x = value + (anim.width / 2);
         }
 
         /**
@@ -55,11 +52,11 @@ package
          */
         public function set y(value:Number):void
         {
-            if(image)
-                image.y = value;
+            if(anim)
+                anim.y = value;
 
             if (lookDirectionIndicator)
-                lookDirectionIndicator.y = value + (image.height / 2);
+                lookDirectionIndicator.y = value + (anim.height / 2);
         }
 
         public function set lookAngle(value:Number):void
@@ -89,35 +86,26 @@ package
             if(!super.onAdd())
                 return false;
 
-            var img:Image = new Image(Texture.fromAsset("assets/player/look-direction.png"));
+            var img:Image = new Image(Texture.fromAsset("assets/look-direction.png"));
             lookDirectionIndicator = new Sprite();
             lookDirectionIndicator.addChild(img);
             lookDirectionIndicator.center();
             lookDirectionIndicator.visible = false;
             Loom2D.stage.addChild(lookDirectionIndicator);
 
+            var xml:XMLDocument = new XMLDocument();
+            if (xml.loadFile(path + atlasName + ".xml") != 0)
+            {
+            	trace("failed to load atlas data file for atlas " + atlasName );
+            	return false;
+            }
 
-            image = new Image(Texture.fromAsset("assets/player.png"));
-            image.x = -1000;
-            image.y = -1000;
-            Loom2D.stage.addChild(image);
-
-            // var xml:XMLDocument = new XMLDocument();
-            // if (xml.loadFile(path + atlasName + ".xml") != 0)
-            // {
-            // 	trace("failed to load atlas data file for atlas " + atlasName );
-            // 	return false;
-            // }
-
-            // trace(xml.print())
-
-            // var atlas:TextureAtlas = new TextureAtlas(Texture.fromAsset(path + atlasName + ".png"), xml.firstChild());
-            
-            // anim = new MovieClip(atlas.getTextures(aniName), 24);
-            // anim.x = Loom2D.stage.stageWidth / 2; 
-            // anim.y = Loom2D.stage.stageHeight / 2;
-            // anim.play();
-            // Loom2D.stage.addChild(anim);
+            var atlas:TextureAtlas = new TextureAtlas(Texture.fromAsset(path + atlasName + ".png"), xml.rootElement());
+            anim = new MovieClip(atlas.getTextures(atlasName + "-front-walk"), 6);
+            anim.x = -1000;
+            anim.y = -1000; 
+            Loom2D.juggler.add(anim);
+            Loom2D.stage.addChild(anim);
 
             return true;
         }
@@ -126,7 +114,7 @@ package
          */
         protected function onRemove():void
         {
-            Loom2D.stage.removeChild(image);
+            Loom2D.stage.removeChild(anim);
 
             super.onRemove();
         } 

@@ -22,7 +22,7 @@
         <key>dataFormat</key>
         <string>sparrow</string>
         <key>textureFileName</key>
-        <filename>../assets/player/mage.png</filename>
+        <filename>../assets/mage.png</filename>
         <key>flipPVR</key>
         <false/>
         <key>ditherType</key>
@@ -111,7 +111,7 @@
             <enum type="AndEngine::MagFilter">MagLinear</enum>
         </struct>
         <key>dataFileName</key>
-        <filename>../assets/player/mage.xml</filename>
+        <filename>../assets/mage.xml</filename>
         <key>multiPack</key>
         <false/>
         <key>mainExtension</key>
@@ -136,7 +136,7 @@
             <key>scaleMode</key>
             <enum type="ScaleMode">Smooth</enum>
             <key>innerPadding</key>
-            <uint>0</uint>
+            <uint>1</uint>
             <key>extrude</key>
             <uint>0</uint>
             <key>trimThreshold</key>
