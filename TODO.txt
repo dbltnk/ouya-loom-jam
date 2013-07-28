@@ -6,6 +6,7 @@
 * spieler kann held angreifen (schießen)
 * spieler kann ress, essen sammeln
 * heros respawnen
+
 DONE * werte: spieler anzahl
 DONE * werte: hero anzahl
 DONE * hero greifen mauern an

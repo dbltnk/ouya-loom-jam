@@ -158,6 +158,20 @@ package
 						
 						spawnCity(tx, ty);
 					}
+					else if (idx == Map.TYPE_FOOD_PLACE)
+					{
+						var food = spawnBuilding(idx, tx,ty, "assets/food_place.png", "assets/food_place_broken.png", false);
+						var foodMover = food.lookupComponentByName("mover") as BuildingMover;
+						foodMover.breakOnEmptyFood = true;
+						foodMover.food = Config.FOOD_AMOUNT;
+					}
+					else if (idx == Map.TYPE_RES_PLACE)
+					{
+						var res = spawnBuilding(idx, tx,ty, "assets/res_place.png", "assets/res_place_broken.png", false);
+						var resMover = res.lookupComponentByName("mover") as BuildingMover;
+						resMover.breakOnEmptyResources = true;
+						resMover.resources = Config.RESOURCE_AMOUNT;
+					}
 					else if (idx == Map.TYPE_ITEMFORGE)
 					{
 						map.forgeX = tx;
