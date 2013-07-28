@@ -1,5 +1,6 @@
 package
 {
+    import loom2d.Loom2D;
 	import loom2d.display.Image;
 	import loom2d.textures.Texture;
     import loom.gameframework.AnimatedComponent;
@@ -40,7 +41,10 @@ package
             if(!super.onAdd())
                 return false;
 
-            image = new Image(Texture.fromAsset())
+            image = new Image(Texture.fromAsset(Config.PATH_ASSETS + "projectile.png"));
+            image.x = -1000;
+            image.y = -1000;
+            Loom2D.stage.addChild(image);
             return true;
         }
         /**
