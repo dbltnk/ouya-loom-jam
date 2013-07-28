@@ -75,6 +75,7 @@ package
                 coolTime -= dt;
                 
             executeAttack();
+            executeUse();
     	}
 
         public function hasCooledDown():Boolean
@@ -143,6 +144,25 @@ package
         {
         	lookAngle = (lookX == 0 && lookY == 0) ? -1 : Math.atan2(lookY, lookX);
         }
+
+		protected function executeUse():void
+		{
+			if (use > 0.5)
+			{
+				trace("use");
+				var b = OUYAJam.instance.findBuildingInRange(x,y,radius);
+				if (b)
+				if (harvestTimeout.tryToActivate())
+				{
+					trace("use found");
+					var a = Math.min(b.resources, Config.PLAYER_HARVEST_AMOUNT);
+					if (a > 0) { b.resources -= a; OUYAJam.instance.village.resources += a; }
+					a = Math.min(b.food, Config.PLAYER_HARVEST_AMOUNT);
+					if (a > 0) { b.food -= a; OUYAJam.instance.village.food += a; }
+					trace("VILLAGE", "food", OUYAJam.instance.village.food, "resources", OUYAJam.instance.village.resources);
+				}
+			}
+		}
 
         protected function executeAttack():void
         {

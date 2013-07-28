@@ -266,7 +266,7 @@ package
                 mover = getPlayerMover(0);
                 if (mover)
                     mover.bindToKeys(LoomKey.W, LoomKey.A, LoomKey.S, LoomKey.D,
-						LoomKey.T, LoomKey.Z);
+						LoomKey.R, LoomKey.T);
                     
                 player = spawnPlayer(Config.PLAYER_SPEED,
                                      Config.PLAYER_ATTACK_RANGE,
@@ -755,6 +755,20 @@ package
 
             return buildings[index].lookupComponentByName("mover") as BuildingMover;
         }
+        
+        public function findBuildingInRange(x:Number, y:Number, r:Number):BuildingMover
+        {
+			for (var i:int = 0; i < buildings.length; ++i)
+            {
+				var b = getBuildingMover(i);
+				if (Geometry.doSpheresOverap(x,y,r, b.x,b.y,b.radius))
+				{
+					return b;
+				}
+			}
+			
+			return null;
+		}
 
         public function killObject(object:LoomComponent):void
         {
