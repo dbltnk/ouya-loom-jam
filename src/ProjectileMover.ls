@@ -22,7 +22,7 @@ package
 			this.vY = vY;
 			
 			this.speed = speed;
-
+			// norm the vector. vX and vY may not be 0 at the same time. Would cause division by 0.
 			var l:Number = Math.sqrt(vX * vX + vY * vY);
 			this.vX /= l;
 			this.vY /= l;
