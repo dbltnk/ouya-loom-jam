@@ -601,6 +601,14 @@ package
             return gameObject;
         }
         
+        public function spawnHeroGroup(x:Number, y:Number, target:String, amount:Number):void 
+        {
+			for (var i=0; i < amount; i++)
+            {
+				OUYAJam.instance.spawnHero(x, y, target);
+            } 
+		}
+        
         public function spawnBuilding(type:int, x:Number, y:Number, normalImage:String, brokenImage:String, solid:Boolean):LoomGameObject 
         {
             var gameObject = new LoomGameObject();
