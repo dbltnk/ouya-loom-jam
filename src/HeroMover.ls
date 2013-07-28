@@ -20,9 +20,9 @@ package
     	public var radius:Number = Config.HERO_RADIUS;
 
 		public var lastDamageTime:Number = -100000;
-		public var damageTimeout:Number = 1000;
+		public var damageTimeout:Number = Config.HERO_DAMAGE_TIMEOUT;
 		
-		public var damage:Number = 10;
+		public var damage:Number = Config.HERO_DAMAGE;
 		
     	public var vX:Number = 0;
     	public var vY:Number = 0;
@@ -90,6 +90,9 @@ package
 						{
 							b.hp -= damage;
 							lastDamageTime = Platform.getTime();
+							//~ OUYAJam.instance.playEffect("enemy_action_attack_");
+							if (b.hp <= 0) OUYAJam.instance.playEffect("wall_destroyed_");
+							else OUYAJam.instance.playEffect("wall_hit_");							
 						}
 					}					
 				}
@@ -99,6 +102,7 @@ package
 			{
 				trace("omg im dead");
 				var killable = _owner.lookupComponentByName("killable") as Killable;
+				OUYAJam.instance.playEffect("enemy_event_death_");
 				killable.dead = true;
 			}
 			

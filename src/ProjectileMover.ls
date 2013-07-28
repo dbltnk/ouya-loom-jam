@@ -59,6 +59,7 @@ package
 				if (!done && hm && hm.hitTestSphere(p, radius))
 				{
 					hm.health -= damage;
+					OUYAJam.instance.playEffect("enemy_event_hit_");
 					OUYAJam.instance.killObject(this);
 					trace("Hero down!");
 					done = true;
