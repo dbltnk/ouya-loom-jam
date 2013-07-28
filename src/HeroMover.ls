@@ -9,6 +9,7 @@ package
     import loom2d.events.KeyboardEvent;
     import loom.platform.LoomKey;
     import loom2d.math.Point;
+    import system.platform.Platform;
 
     public class HeroMover extends LoomComponent
     {
@@ -16,6 +17,11 @@ package
     	public var y:Number = 0;
     	public var radius:Number = 16;
 
+		public var lastDamageTime:Number = 0;
+		public var damageTimeout:Number = 1000;
+		
+		public var damage:Number = 10;
+		
     	public var vX:Number = 0;
     	public var vY:Number = 0;
 
@@ -36,11 +42,17 @@ package
             for (var i:int = 0; i < OUYAJam.instance.buildings.length; ++i)
             {
 				var b = OUYAJam.instance.getBuildingMover(i);
-				if (b.isSolid())
+				if (b.isSolid() && Geometry.doSpheresOverap(x,y,radius, b.x,b.y,b.radius))
 				{
 					var p = Geometry.resolveAOverlapB(x,y,radius, b.x,b.y,b.radius);
 					x += p.x;
 					y += p.y;
+					
+					if (Platform.getTime() - lastDamageTime > damageTimeout)
+					{
+						b.hp -= damage;
+						lastDamageTime = Platform.getTime();	
+					}					
 				}
 			}
     	}
