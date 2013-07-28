@@ -202,8 +202,20 @@ package
          */
         protected function onRemove():void
         {
-            // TODO kill all anims
-            //Loom2D.stage.removeChild(anim);
+            currentAnim = null;
+
+            var anim:MovieClip;
+            for (var i in anims)
+            {
+                anim = anims[i] as MovieClip;
+                if (anim)
+                {
+                    Loom2D.stage.removeChild(anim);
+                    Loom2D.juggler.remove(anim);
+                    anim.stop();
+                }
+                anims[i] = null;
+            }
 
             super.onRemove();
         } 
