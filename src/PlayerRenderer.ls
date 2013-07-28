@@ -126,7 +126,7 @@ package
          */
         protected function onRemove():void
         {
-            Loom2D.stage.removeChild(anim);
+            //Loom2D.stage.removeChild(anim);
 
             super.onRemove();
         } 
