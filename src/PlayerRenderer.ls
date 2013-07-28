@@ -201,9 +201,8 @@ package
                 }
                 anims[i] = null;
             }
+
             Loom2D.stage.removeChild(lookDirectionIndicator);
-            // TODO kill all anims
-            //Loom2D.stage.removeChild(anim);
 
             super.onRemove();
         } 

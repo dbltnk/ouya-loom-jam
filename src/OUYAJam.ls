@@ -88,6 +88,7 @@ package
         var happyAtmoList:Vector.<String>;
         var sadAtmoList:Vector.<String>;
         var suspenseAtmoList:Vector.<String>;
+        var effectSounds:Vector.<String>;
         var mood:String;
 
 
@@ -323,7 +324,153 @@ package
             mood = "happy";
             playMyBGSong();   
 			SimpleAudioEngine.sharedEngine().setEffectsVolume(Config.VOLUME_SFX);
+			
+			// preload effects
+			preloadEffects();
         }
+
+		public function preloadEffect(path:String)
+		{
+			SimpleAudioEngine.sharedEngine().preloadEffect(path);
+			effectSounds.push(path);
+		}
+
+		public function preloadEffects():void
+		{
+			effectSounds = new Vector.<String>();
+			
+			preloadEffect("assets/audio/sfx/atmo/atmo_happy_bird_1.wav");
+			preloadEffect("assets/audio/sfx/atmo/atmo_happy_bird_2.wav");
+			preloadEffect("assets/audio/sfx/atmo/atmo_happy_bird_3.wav");
+			preloadEffect("assets/audio/sfx/atmo/atmo_happy_bird_4.wav");
+			preloadEffect("assets/audio/sfx/atmo/atmo_happy_bird_5.wav");
+			preloadEffect("assets/audio/sfx/atmo/atmo_happy_bird_6.wav");
+			preloadEffect("assets/audio/sfx/atmo/atmo_happy_bird_7.wav");
+			preloadEffect("assets/audio/sfx/atmo/atmo_happy_chicken_1.wav");
+			preloadEffect("assets/audio/sfx/atmo/atmo_happy_pig_1.wav");
+			preloadEffect("assets/audio/sfx/atmo/atmo_happy_pig_2.wav");
+			preloadEffect("assets/audio/sfx/atmo/atmo_happy_pig_3.wav");
+			preloadEffect("assets/audio/sfx/atmo/atmo_happy_wind_1.wav");
+			preloadEffect("assets/audio/sfx/atmo/atmo_happy_wind_2.wav");
+			preloadEffect("assets/audio/sfx/atmo/atmo_sad_bird_1.wav");
+			preloadEffect("assets/audio/sfx/atmo/atmo_sad_bird_2.wav");
+			preloadEffect("assets/audio/sfx/atmo/atmo_sad_bird_3.wav");
+			preloadEffect("assets/audio/sfx/atmo/atmo_sad_bird_4.wav");
+			preloadEffect("assets/audio/sfx/atmo/atmo_sad_bird_5.wav");
+			preloadEffect("assets/audio/sfx/atmo/atmo_sad_bird_6.wav");
+			preloadEffect("assets/audio/sfx/atmo/atmo_sad_pig_1.wav");
+			preloadEffect("assets/audio/sfx/atmo/atmo_sad_thunder_1.wav");
+			preloadEffect("assets/audio/sfx/atmo/atmo_sad_thunder_2.wav");
+			preloadEffect("assets/audio/sfx/atmo/atmo_sad_wind_1.wav");
+			preloadEffect("assets/audio/sfx/atmo/atmo_sad_wind_2.wav");
+			preloadEffect("assets/audio/sfx/atmo/atmo_sad_wind_3.wav");
+			preloadEffect("assets/audio/sfx/atmo/atmo_suspense_bird_1.wav");
+			preloadEffect("assets/audio/sfx/atmo/atmo_suspense_bird_2.wav");
+			preloadEffect("assets/audio/sfx/atmo/atmo_suspense_bird_3.wav");
+			preloadEffect("assets/audio/sfx/atmo/atmo_suspense_bird_4.wav");
+			preloadEffect("assets/audio/sfx/atmo/atmo_suspense_bird_5.wav");
+			preloadEffect("assets/audio/sfx/atmo/atmo_suspense_pig_1.wav");
+			preloadEffect("assets/audio/sfx/atmo/atmo_suspense_pig_2.wav");
+			preloadEffect("assets/audio/sfx/atmo/atmo_suspense_thunder_1.wav");
+			preloadEffect("assets/audio/sfx/atmo/atmo_suspense_thunder_2.wav");
+			preloadEffect("assets/audio/sfx/atmo/atmo_suspense_wind_1.wav");
+			preloadEffect("assets/audio/sfx/atmo/atmo_suspense_wind_2.wav");
+			preloadEffect("assets/audio/sfx/atmo/atmo_suspense_wind_3.wav");
+			preloadEffect("assets/audio/sfx/char_action_build_1.wav");
+			preloadEffect("assets/audio/sfx/char_action_build_ready.wav");
+			preloadEffect("assets/audio/sfx/char_action_hit_1.wav");
+			preloadEffect("assets/audio/sfx/char_action_hit_2.wav");
+			preloadEffect("assets/audio/sfx/char_action_hit_3.wav");
+			preloadEffect("assets/audio/sfx/char_action_hit_4.wav");
+			preloadEffect("assets/audio/sfx/char_action_pumpkin_1.wav");
+			preloadEffect("assets/audio/sfx/char_action_walk_1.wav");
+			preloadEffect("assets/audio/sfx/char_action_wood_1.wav");
+			preloadEffect("assets/audio/sfx/char_action_wood_2.wav");
+			preloadEffect("assets/audio/sfx/char_action_wood_3.wav");
+			preloadEffect("assets/audio/sfx/char_event_block_1.wav");
+			preloadEffect("assets/audio/sfx/char_event_block_2.wav");
+			preloadEffect("assets/audio/sfx/char_event_block_3.wav");
+			preloadEffect("assets/audio/sfx/char_event_death_1.wav");
+			preloadEffect("assets/audio/sfx/char_event_death_2.wav");
+			preloadEffect("assets/audio/sfx/char_event_death_3.wav");
+			preloadEffect("assets/audio/sfx/char_event_death_4.wav");
+			preloadEffect("assets/audio/sfx/char_event_death_5.wav");
+			preloadEffect("assets/audio/sfx/char_event_heal_1.wav");
+			preloadEffect("assets/audio/sfx/char_event_hit_1.wav");
+			preloadEffect("assets/audio/sfx/char_event_hit_2.wav");
+			preloadEffect("assets/audio/sfx/char_event_hit_3.wav");
+			preloadEffect("assets/audio/sfx/char_event_respawn_1.wav");
+			preloadEffect("assets/audio/sfx/enemy_action_attack_1.wav");
+			preloadEffect("assets/audio/sfx/enemy_action_spawn_1.wav");
+			preloadEffect("assets/audio/sfx/enemy_action_walk_1.wav");
+			preloadEffect("assets/audio/sfx/enemy_event_death_1.wav");
+			preloadEffect("assets/audio/sfx/enemy_event_death_2.wav");
+			preloadEffect("assets/audio/sfx/enemy_event_death_3.wav");
+			preloadEffect("assets/audio/sfx/enemy_event_death_4.wav");
+			preloadEffect("assets/audio/sfx/enemy_event_death_5.wav");
+			preloadEffect("assets/audio/sfx/enemy_event_death_6.wav");
+			preloadEffect("assets/audio/sfx/enemy_event_death_7.wav");
+			preloadEffect("assets/audio/sfx/enemy_event_hit_1.wav");
+			preloadEffect("assets/audio/sfx/enemy_event_hit_2.wav");
+			preloadEffect("assets/audio/sfx/enemy_event_hit_3.wav");
+			preloadEffect("assets/audio/sfx/enemy_event_hit_4.wav");
+			preloadEffect("assets/audio/sfx/enemy_event_hit_5.wav");
+			preloadEffect("assets/audio/sfx/enemy_event_hit_6.wav");
+			preloadEffect("assets/audio/sfx/enemy_event_hit_7.wav");
+			preloadEffect("assets/audio/sfx/enemy_event_hit_8.wav");
+			preloadEffect("assets/audio/sfx/enemy_event_killChar_1.wav");
+			preloadEffect("assets/audio/sfx/enemy_event_towndown_1.wav");
+			preloadEffect("assets/audio/sfx/interaction_gate_close_long.wav");
+			preloadEffect("assets/audio/sfx/interaction_gate_open_long.wav");
+			preloadEffect("assets/audio/sfx/interaction_respumpkin_empty.wav");
+			preloadEffect("assets/audio/sfx/interaction_restree_empty.wav");
+			preloadEffect("assets/audio/sfx/tower_burn_1.wav");
+			preloadEffect("assets/audio/sfx/tower_destroyed_1.wav");
+			preloadEffect("assets/audio/sfx/tower_hit_1.wav");
+			preloadEffect("assets/audio/sfx/tower_hit_2.wav");
+			preloadEffect("assets/audio/sfx/tower_hit_3.wav");
+			preloadEffect("assets/audio/sfx/tower_hit_4.wav");
+			preloadEffect("assets/audio/sfx/tower_select_1.wav");
+			preloadEffect("assets/audio/sfx/tower_shoot_1.wav");
+			preloadEffect("assets/audio/sfx/tower_shoot_2.wav");
+			preloadEffect("assets/audio/sfx/wall_destroyed_1.wav");
+			preloadEffect("assets/audio/sfx/wall_hit_1.wav");
+			preloadEffect("assets/audio/sfx/wall_hit_2.wav");
+			preloadEffect("assets/audio/sfx/wall_hit_3.wav");
+			preloadEffect("assets/audio/sfx/wall_hit_4.wav");
+			preloadEffect("assets/audio/sfx/wall_hit_5.wav");
+		}
+		
+		public function playEffect(prefix:String):void
+		{
+			var count:int = 0;
+			
+			for(var i:int = 0; i < effectSounds.length; ++i)
+			{
+				if (effectSounds[i].indexOf(prefix) >= 0) {
+					++count;
+				}
+			}
+			
+			//~ trace("COUNT", count);
+			if (count == 0) return;
+			
+			var skip:int = int(Math.floor(Math.random() * (count)));
+			//~ trace("skip", skip);
+			
+			for(i = 0; i < effectSounds.length; ++i)
+			{
+				if (effectSounds[i].indexOf(prefix) >= 0) {
+					if (skip == 0) {
+						trace("SOUND", effectSounds[i]);
+						SimpleAudioEngine.sharedEngine().playEffect(effectSounds[i], false);
+						return;
+					} else {
+						--skip;
+					}
+				}
+			}			
+		}
 
         public function onFrame():void
         {

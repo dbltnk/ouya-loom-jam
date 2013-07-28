@@ -2,6 +2,9 @@
 * hero laufen direkt auf ein loch zu wenn da eines ist
 * heros respawnen
 * werte: lebender mauern, tote mauern
+* reparieren
+* hp bar bei player
+* sounds einbauen
 
 DONE * werte: ress, essen im lager
 DONE * spieler kann held angreifen (schießen)
