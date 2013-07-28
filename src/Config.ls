@@ -22,6 +22,7 @@ package
     	public static const PLAYER_RADIUS:Number = 16;
     	public static const PLAYER_HP:Number = 100;
     	public static const PLAYER_HARVEST_TIMEOUT:Number = 500;
+    	public static const PLAYER_HARVEST_AMOUNT:Number = 10;
     	
     	public static const PROJECTILE_SPEED:Number = 200;
     	
