@@ -10,7 +10,7 @@ package
     import loom.platform.LoomKey;
     import system.platform.Platform;
 
-    public class Timeout extends LoomComponent
+    public class Timeout
     {
 		public var lastUsedTime:Number = -100000;
 		public var timeout:Number = 1000;

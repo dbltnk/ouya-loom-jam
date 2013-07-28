@@ -74,6 +74,8 @@ package
     {
 		public static var instance:OUYAJam;
 		
+		public var grid:Grid;
+		
 		public var background:Image;
 		
         public var label:SimpleLabel;
@@ -104,6 +106,8 @@ package
         override public function run():void
         {
 			instance = this;
+			
+			grid = new Grid();
 			
 			// seed random value
 			var ts:int = Platform.getEpochTime() - 1374942470;
@@ -373,6 +377,7 @@ package
 				{
 					trace("remove player");
 					players.splice(i, 1);
+					grid.removeObj(killable._owner);
 					killable._owner.destroy();
 					--i;
 				}
@@ -384,6 +389,7 @@ package
                 {
                     trace("remove projectile");
                     projectiles.splice(i, 1);
+                    grid.removeObj(killable._owner);
                     killable._owner.destroy();
                     --i;
                 }
@@ -395,6 +401,7 @@ package
 				{
 					trace("remove city");
 					cities.splice(i, 1);
+					grid.removeObj(killable._owner);
 					killable._owner.destroy();
 					--i;
 				}
@@ -406,6 +413,7 @@ package
 				{
 					trace("remove building");
 					buildings.splice(i, 1);
+					grid.removeObj(killable._owner);
 					killable._owner.destroy();
 					--i;
 				}
@@ -417,6 +425,7 @@ package
 				{
 					trace("remove hero");
 					heroes.splice(i, 1);
+					grid.removeObj(killable._owner);
 					killable._owner.destroy();
 					--i;
 				}
