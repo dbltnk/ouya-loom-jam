@@ -71,7 +71,7 @@ package
             }
 
             var atlas:TextureAtlas = new TextureAtlas(Texture.fromAsset(path + atlasName + ".png"), xml.rootElement());
-            anim = new MovieClip(atlas.getTextures(atlasName + animName), 6);
+            anim = new MovieClip(atlas.getTextures(animName), 6);
             anim.x = -1000;
             anim.y = -1000; 
             Loom2D.juggler.add(anim);

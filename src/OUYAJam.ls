@@ -210,7 +210,8 @@ package
 					{
 						spawnBuilding(idx, tx,ty, "assets/village_house.png", "assets/village_house_broken.png", true);
 						
-						spawnPig(tx,ty,Config.PIG_RANGE,"","","");
+						spawnPig(tx,ty, Config.PIG_SPEED, Config.PIG_RANGE, "assets/", "animals", "schwein");
+						spawnPig(tx,ty, Config.PIG_SPEED, Config.PIG_RANGE, "assets/", "animals", "schwein");
 					}										
 					else if (idx == Map.TYPE_STORAGE_PLACE)
 					{
@@ -221,6 +222,9 @@ package
 						var storageMover = storage.lookupComponentByName("mover") as BuildingMover;
 						storageMover.heroDamage = Config.STORAGE_HERO_DAMAGE;
 						storageMover.damageTimeout = Config.STORAGE_DAMAGE_TIMEOUT;
+
+						spawnPig(tx,ty, Config.CHICKEN_SPEED, Config.CHICKEN_SPEED, "assets/", "animals", "huhn");
+						spawnPig(tx,ty, Config.CHICKEN_SPEED, Config.CHICKEN_SPEED, "assets/", "animals", "huhn");
 					}										
 					else if (idx == Map.TYPE_WALL)
 					{
@@ -755,12 +759,12 @@ package
             return gameObject;
         }
         
-        public function spawnPig(x:Number, y:Number, range:Number, path:String, atlasName:String, animName:String):LoomGameObject 
+        public function spawnPig(x:Number, y:Number, speed:Number, range:Number, path:String, atlasName:String, animName:String):LoomGameObject 
         {
 			trace("spawn pig");
             var gameObject = new LoomGameObject();
             gameObject.owningGroup = group;
-            var mover = new PigMover(x,y,range);
+            var mover = new PigMover(x,y,speed,range);
 
 			gameObject.addComponent(new Killable(), "killable");
 
