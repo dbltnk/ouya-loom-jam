@@ -320,8 +320,8 @@ package
                         hm = getHeroMover(j);
                         if (hm && hm.hitTestSphere(p, pm.radius));
                         {
-                            // TODO kill hero
-                            // TODO kill projectile
+                            hm.health -= pm.damage;
+                            killGameObject(pm._owner);
                             trace("Hero down!");
                             break;
                         }   
@@ -363,6 +363,17 @@ package
 					--i;
 				}
 			}
+            for (i=0; i < projectiles.length; i++)
+            {
+                killable = projectiles[i].lookupComponentByName("killable") as Killable;
+                if (killable && killable.dead)
+                {
+                    trace("remove projectile");
+                    projectiles.splice(i, 1);
+                    killable._owner.destroy();
+                    --i;
+                }
+            }
 			for (i=0; i < cities.length; i++)
 			{
 				killable = cities[i].lookupComponentByName("killable") as Killable;
@@ -576,6 +587,7 @@ package
             renderer.addBinding("x", "@mover.x");
             renderer.addBinding("y", "@mover.y");
             projectile.addComponent(renderer, "renderer");
+            projectile.addComponent(new Killable(), "killable");
             projectile.initialize();
 
             projectiles.pushSingle(projectile);
@@ -715,6 +727,15 @@ package
                 return null;
 
             return buildings[index].lookupComponentByName("mover") as BuildingMover;
+        }
+
+        public function killGameObject(object:LoomGameObject):void
+        {
+            if (object)
+            {
+                var k:Killable = object.lookupComponentByName("killable") as Killable;
+                if (k) k.dead = true;
+            }
         }
     }
 }
