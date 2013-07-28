@@ -645,6 +645,8 @@ package
             var renderer:PlayerRenderer = new PlayerRenderer(path, atlasName);
             renderer.addBinding("x", "@mover.x");
             renderer.addBinding("y", "@mover.y");
+            renderer.addBinding("state", "@mover.state");
+            renderer.addBinding("direction", "@mover.direction");
             renderer.addBinding("lookAngle", "@mover.lookAngle");
             
 			gameObject.addComponent(new Killable(), "killable");

@@ -16,7 +16,13 @@ package
 		protected var path:String;
 		protected var atlasName:String;
 
-		protected var anim:MovieClip;
+        protected var atlas:TextureAtlas;
+        protected var anims:Dictionary;
+
+		protected var currentAnim:MovieClip;
+        protected var currentState:int = PlayerState.STAND;
+        protected var currentDirection:int = PlayerDirection.RIGHT;
+
 		
         protected var lookDirectionIndicator:Sprite;
 
@@ -38,11 +44,11 @@ package
          */
         public function set x(value:Number):void
         {
-            if(anim)
-                anim.x = value;
+            if(currentAnim)
+                currentAnim.x = value;
 
             if (lookDirectionIndicator)
-                lookDirectionIndicator.x = value + (anim.width / 2);
+                lookDirectionIndicator.x = value + (currentAnim.width / 2);
         }
 
         /**
@@ -52,11 +58,11 @@ package
          */
         public function set y(value:Number):void
         {
-            if(anim)
-                anim.y = value;
+            if(currentAnim)
+                currentAnim.y = value;
 
             if (lookDirectionIndicator)
-                lookDirectionIndicator.y = value + (anim.height / 2);
+                lookDirectionIndicator.y = value + (currentAnim.height / 2);
         }
 
         public function set lookAngle(value:Number):void
@@ -76,6 +82,62 @@ package
             }
         }
 
+        public function set state(value:int):void
+        {
+            if (value != currentState)
+                setAnimation(value, currentDirection);
+        }
+        public function set direction(value:int):void
+        {   
+            if (value != currentDirection)
+                setAnimation(currentState, value);
+        }
+
+        protected function setAnimation(state:int, direction:int):void
+        {
+            var str:String = "";
+            switch (direction)
+            {
+                case PlayerDirection.LEFT:
+                    str += "left"
+                    break;
+                case PlayerDirection.RIGHT:
+                    str += "right"
+                    break;
+            }
+            switch (state)
+            {
+                case PlayerState.STAND:
+                    str += "-stand"
+                    break;
+                case PlayerState.WALK:
+                    str += "-walk"
+                    break;
+            }
+            // set new animation
+            if (anims && anims[str])
+            {
+                var anim:MovieClip = anims[str] as MovieClip;
+                
+                if (anim == currentAnim)
+                    return;
+
+                if (currentAnim)
+                {
+                    anim.x = currentAnim.x;
+                    anim.y = currentAnim.y;
+                    currentAnim.visible = false;
+                    currentAnim.stop();
+                }
+                trace("set new anim: " + str);
+                anim.play();
+                anim.visible = true;
+                currentAnim = anim;
+
+                currentState = state;
+                currentDirection = direction;
+            }
+        }
 		/**
          * Executed when this renderer is added. It create a sprites and sets the correct texture for it.
          *
@@ -100,14 +162,36 @@ package
             	return false;
             }
 
-            var atlas:TextureAtlas = new TextureAtlas(Texture.fromAsset(path + atlasName + ".png"), xml.rootElement());
-            anim = new MovieClip(atlas.getTextures(atlasName + "-front-walk"), 6);
-            anim.x = -1000;
-            anim.y = -1000; 
-            Loom2D.juggler.add(anim);
-            Loom2D.stage.addChild(anim);
+            atlas = new TextureAtlas(Texture.fromAsset(path + atlasName + ".png"), xml.rootElement());
+            anims = new Dictionary();
+            
+            addAnim("right-stand");
+            addAnim("right-walk");
+            addAnim("left-stand");
+            addAnim("left-walk");
+
+            setAnimation(currentState, currentDirection);
 
             return true;
+        }
+        
+        protected function addAnim(name:String):void
+        {
+            if (atlas)
+            {
+                trace("get animation: " + atlasName + "-" + name);
+                var anim:MovieClip = new MovieClip(atlas.getTextures(atlasName + "-" + name ), 6);
+                if (anim)
+                {
+                    anims[name] = anim;
+                    anim.x = -1000;
+                    anim.y = -1000; 
+                    anim.visible = false;
+                    anim.stop();
+                    Loom2D.juggler.add(anim);
+                    Loom2D.stage.addChild(anim);
+                }
+            }
         }
         /**
          * This is meant to remove the sprite from the main layer.
@@ -116,6 +200,8 @@ package
         {
             Loom2D.stage.removeChild(lookDirectionIndicator);
             Loom2D.stage.removeChild(anim);
+            // TODO kill all anims
+            //Loom2D.stage.removeChild(anim);
 
             super.onRemove();
         } 
