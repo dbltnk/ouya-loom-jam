@@ -107,6 +107,7 @@ package
     	{
     		if (Geometry.doSpheresOverap(x, y, this.radius, p.x, p.y, radius))
 			{
+    			trace("hit:", x, y, this.radius, p.x, p.y, radius);
 				return true;
 			}
     		return false;
