@@ -16,7 +16,7 @@ package
     import loom2d.tmx.TMXTileMap;
     import cocosdenshion.SimpleAudioEngine;
     import loom2d.display.Sprite;
-
+    import loom2d.math.Point;
     import system.platform.Gamepad;
 
     import loom2d.display.MovieClip;
@@ -41,7 +41,11 @@ package
 		
 		public var forgeX:Number = 0;
 		public var forgeY:Number = 0;
-		
+		public var healX:Number = 0;
+		public var healY:Number = 0;
+		public var storageX:Number = 0;
+		public var storageY:Number = 0;
+				
 		public function Map(map:TMXTileMap)
 		{
 			this.map = map;
@@ -182,6 +186,20 @@ package
 						forgeMover.heroDamage = Config.FORGE_HERO_DAMAGE;
 						forgeMover.damageTimeout = Config.FORGE_DAMAGE_TIMEOUT;
 					}
+					else if (idx == Map.TYPE_HEALPOINT)
+					{
+						map.healX = tx;
+						map.healY = ty;
+						
+						spawnBuilding(idx, tx,ty, "assets/healpoint.png", "assets/healpoint_broken.png", true);
+					}
+					else if (idx == Map.TYPE_STORAGE_PLACE)
+					{
+						map.storageX = tx;
+						map.storageY = ty;
+						
+						spawnBuilding(idx, tx,ty, "assets/storage_place.png", "assets/storage_place_broken.png", true);
+					}										
 					else if (idx == Map.TYPE_WALL)
 					{
 						spawnBuilding(idx, tx,ty, "assets/wall.png", "assets/wall_broken.png", true);
@@ -284,9 +302,16 @@ package
             if (!isPlaying() || lowFps)
                 return;
                 
-            var mover:PlayerMover;
             var n:int = players.length;
-            for (var i=0; i < n; i++)
+            var i:int;
+            var j:int;
+            var mover:PlayerMover;
+            var pm:ProjectileMover;
+            var p:Point;
+            var hr:HeroRenderer;
+            var hm:HeroMover;
+
+            for (i=0; i < n; i++)
             {
                 mover = getPlayerMover(i);
                 if (mover)
@@ -296,14 +321,29 @@ package
             n = projectiles.length;
             for (i = 0; i < n; i ++)
             {
-                var pm = getProjectileMover(i);
+                pm = getProjectileMover(i);
                 if (pm)
+                {
                     pm.move(dt);
+                    p = new Point(pm.x, pm.y);
+
+                    for (j=0; j < heroes.length; j++)
+                    {
+                        hr = getHeroRenderer(j);
+                        if (hr && hr.hitTest(p));
+                        {
+                            // TODO kill hero
+                            // TODO kill projectile
+                            trace("Hero down!");
+                            break;
+                        }   
+                    }
+                }
             }
             
             for (i=0; i < heroes.length; i++)
             {
-                var hm = getHeroMover(i);
+                hm = getHeroMover(i);
                 if (hm)
                     hm.move(dt);
             }
@@ -549,14 +589,15 @@ package
             projectiles.pushSingle(projectile);
         }
         
-        public function spawnHero(x:Number, y:Number):LoomGameObject 
+        public function spawnHero(x:Number, y:Number, target:String):LoomGameObject 
         {
             var gameObject = new LoomGameObject();
             gameObject.owningGroup = group;
             //~ create a new mover and bind it to the pad
             var mover = new HeroMover();
-            mover.x = x;
-            mover.y = y;
+            mover.x = x+30;
+            mover.y = y+80;
+            mover.target = target;
 
 			gameObject.addComponent(new Killable(), "killable");
 
@@ -574,6 +615,14 @@ package
 
             return gameObject;
         }
+        
+        public function spawnHeroGroup(x:Number, y:Number, target:String, amount:Number):void 
+        {
+			for (var i=0; i < amount; i++)
+            {
+				OUYAJam.instance.spawnHero(x, y, target);
+            } 
+		}
         
         public function spawnBuilding(type:int, x:Number, y:Number, normalImage:String, brokenImage:String, solid:Boolean):LoomGameObject 
         {
@@ -652,7 +701,13 @@ package
 
             return projectiles[index].lookupComponentByName("mover") as ProjectileMover;
         }
-        
+        public function getHeroRenderer(index:int):HeroRenderer
+        {
+            if (index < 0 || index >= heroes.length)
+                return null;
+
+            return heroes[index].lookupComponentByName("renderer") as HeroRenderer;
+        }
         public function getHeroMover(index:int):HeroMover
         {
             if (index < 0 || index >= heroes.length)
