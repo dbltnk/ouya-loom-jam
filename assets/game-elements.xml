@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with TexturePacker http://www.codeandweb.com/texturepacker-->
-<!-- $TexturePacker:SmartUpdate:317b82c66e79f19c1be81bf387206849:1/1$ -->
+<!-- $TexturePacker:SmartUpdate:8128b2049d5af3da99efba9cb908ca6e:1/1$ -->
 <TextureAtlas imagePath="game-elements.png">
     <SubTexture name="enemy_big_a_0" x="42" y="170" width="42" height="48" frameX="-2" frameY="0" frameWidth="50" frameHeight="50"/>
     <SubTexture name="enemy_big_a_1" x="60" y="68" width="40" height="48" frameX="-3" frameY="0" frameWidth="50" frameHeight="50"/>
@@ -14,18 +14,19 @@
     <SubTexture name="enemy_small_w_1" x="60" y="34" width="24" height="34" frameX="-10" frameY="0" frameWidth="34" frameHeight="34"/>
     <SubTexture name="enemy_small_w_2" x="60" y="0" width="24" height="34" frameX="-8" frameY="0" frameWidth="34" frameHeight="34"/>
     <SubTexture name="enemy_small_w_3" x="32" y="220" width="26" height="34" frameX="-8" frameY="0" frameWidth="34" frameHeight="34"/>
-    <SubTexture name="health_0" x="166" y="158" width="10" height="20" frameX="-50" frameY="-23" frameWidth="60" frameHeight="60"/>
+    <SubTexture name="health_0" x="244" y="0" width="10" height="20" frameX="-50" frameY="-23" frameWidth="60" frameHeight="60"/>
     <SubTexture name="health_1" x="144" y="0" width="22" height="40" frameX="-38" frameY="-3" frameWidth="60" frameHeight="60"/>
     <SubTexture name="health_2" x="84" y="212" width="44" height="44" frameX="-16" frameY="0" frameWidth="60" frameHeight="60"/>
     <SubTexture name="health_3" x="84" y="0" width="60" height="44" frameX="0" frameY="0" frameWidth="60" frameHeight="60"/>
     <SubTexture name="health_4" x="0" y="120" width="60" height="50" frameX="0" frameY="0" frameWidth="60" frameHeight="60"/>
     <SubTexture name="health_5" x="0" y="60" width="60" height="60"/>
     <SubTexture name="health_6" x="0" y="0" width="60" height="60"/>
-    <SubTexture name="huhn_0" x="202" y="0" width="18" height="19"/>
-    <SubTexture name="huhn_1" x="184" y="177" width="18" height="19"/>
-    <SubTexture name="huhn_2" x="176" y="158" width="18" height="19"/>
-    <SubTexture name="huhn_3" x="166" y="178" width="18" height="19"/>
-    <SubTexture name="look-direction" x="150" y="144" width="36" height="14" frameX="-62" frameY="-42" frameWidth="98" frameHeight="98"/>
+    <SubTexture name="hero" x="158" y="204" width="24" height="28" frameX="-9" frameY="-3" frameWidth="34" frameHeight="34"/>
+    <SubTexture name="huhn_0" x="174" y="20" width="18" height="19"/>
+    <SubTexture name="huhn_1" x="192" y="20" width="18" height="19"/>
+    <SubTexture name="huhn_2" x="226" y="19" width="18" height="19"/>
+    <SubTexture name="huhn_3" x="226" y="0" width="18" height="19"/>
+    <SubTexture name="look-direction" x="174" y="0" width="18" height="20" frameX="-80" frameY="-38" frameWidth="98" frameHeight="98"/>
     <SubTexture name="mage-left-stand-1" x="98" y="116" width="26" height="48" frameX="-4" frameY="0" frameWidth="34" frameHeight="50"/>
     <SubTexture name="mage-left-walk-1" x="140" y="158" width="26" height="46" frameX="-4" frameY="-2" frameWidth="34" frameHeight="50"/>
     <SubTexture name="mage-left-walk-2" x="98" y="116" width="26" height="48" frameX="-4" frameY="0" frameWidth="34" frameHeight="50"/>
@@ -36,9 +37,9 @@
     <SubTexture name="mage-right-walk-2" x="84" y="164" width="26" height="48" frameX="-4" frameY="0" frameWidth="34" frameHeight="50"/>
     <SubTexture name="mage-right-walk-3" x="100" y="66" width="26" height="46" frameX="-4" frameY="-2" frameWidth="34" frameHeight="50"/>
     <SubTexture name="mage-right-walk-4" x="84" y="164" width="26" height="48" frameX="-4" frameY="0" frameWidth="34" frameHeight="50"/>
-    <SubTexture name="projectile" x="158" y="244" width="10" height="10"/>
-    <SubTexture name="schwein_0" x="158" y="224" width="34" height="20" frameX="0" frameY="-10" frameWidth="34" frameHeight="34"/>
-    <SubTexture name="schwein_1" x="158" y="204" width="34" height="20" frameX="0" frameY="-9" frameWidth="34" frameHeight="34"/>
+    <SubTexture name="projectile" x="150" y="144" width="10" height="10"/>
+    <SubTexture name="schwein_0" x="192" y="0" width="34" height="20" frameX="0" frameY="-10" frameWidth="34" frameHeight="34"/>
+    <SubTexture name="schwein_1" x="158" y="232" width="34" height="20" frameX="0" frameY="-9" frameWidth="34" frameHeight="34"/>
     <SubTexture name="schwein_2" x="118" y="44" width="34" height="20" frameX="0" frameY="-10" frameWidth="34" frameHeight="34"/>
     <SubTexture name="schwein_3" x="84" y="44" width="34" height="22" frameX="0" frameY="-9" frameWidth="34" frameHeight="34"/>
 </TextureAtlas>
