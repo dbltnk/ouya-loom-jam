@@ -12,11 +12,12 @@ package
 
     import loom2d.events.KeyboardEvent;
     import loom.platform.LoomKey;
+    import loom.gameframework.LoomComponent;
     import loom.gameframework.LoomGameObject;
     import loom2d.tmx.TMXTileMap;
     import cocosdenshion.SimpleAudioEngine;
     import loom2d.display.Sprite;
-
+    import loom2d.math.Point;
     import system.platform.Gamepad;
 
     import loom2d.display.MovieClip;
@@ -41,7 +42,11 @@ package
 		
 		public var forgeX:Number = 0;
 		public var forgeY:Number = 0;
-		
+		public var healX:Number = 0;
+		public var healY:Number = 0;
+		public var storageX:Number = 0;
+		public var storageY:Number = 0;
+				
 		public function Map(map:TMXTileMap)
 		{
 			this.map = map;
@@ -86,6 +91,7 @@ package
         private var gamepadsConnected:Boolean = false;
 
         public var players:Vector.<LoomGameObject>;
+        public var projectiles:Vector.<LoomGameObject>;
         public var heroes:Vector.<LoomGameObject>;
         public var cities:Vector.<LoomGameObject>;
         public var buildings:Vector.<LoomGameObject>;
@@ -107,6 +113,7 @@ package
             heroes = new Vector.<LoomGameObject>();
             cities = new Vector.<LoomGameObject>();
             players = new Vector.<LoomGameObject>();
+            projectiles = new Vector.<LoomGameObject>();
             buildings = new Vector.<LoomGameObject>();
             village = new Village();
 
@@ -156,13 +163,50 @@ package
 						
 						spawnCity(tx, ty);
 					}
+					else if (idx == Map.TYPE_FOOD_PLACE)
+					{
+						var food = spawnBuilding(idx, tx,ty, "assets/food_place.png", "assets/food_place_broken.png", false);
+						var foodMover = food.lookupComponentByName("mover") as BuildingMover;
+						foodMover.breakOnEmptyFood = true;
+						foodMover.food = Config.FOOD_AMOUNT;
+					}
+					else if (idx == Map.TYPE_RES_PLACE)
+					{
+						var res = spawnBuilding(idx, tx,ty, "assets/res_place.png", "assets/res_place_broken.png", false);
+						var resMover = res.lookupComponentByName("mover") as BuildingMover;
+						resMover.breakOnEmptyResources = true;
+						resMover.resources = Config.RESOURCE_AMOUNT;
+					}
 					else if (idx == Map.TYPE_ITEMFORGE)
 					{
 						map.forgeX = tx;
 						map.forgeY = ty;
 						
-						spawnBuilding(idx, tx,ty, "assets/itemforge.png", "assets/itemforge_broken.png", true);
+						var forge = spawnBuilding(idx, tx,ty, "assets/itemforge.png", "assets/itemforge_broken.png", true);
+						var forgeMover = forge.lookupComponentByName("mover") as BuildingMover;
+						forgeMover.heroDamage = Config.FORGE_HERO_DAMAGE;
+						forgeMover.damageTimeout = Config.FORGE_DAMAGE_TIMEOUT;
 					}
+					else if (idx == Map.TYPE_HEALPOINT)
+					{
+						map.healX = tx;
+						map.healY = ty;
+						
+						var heal = spawnBuilding(idx, tx,ty, "assets/healpoint.png", "assets/healpoint_broken.png", true);
+						var healMover = heal.lookupComponentByName("mover") as BuildingMover;
+						healMover.heroDamage = Config.HEALPOINT_HERO_DAMAGE;
+						healMover.damageTimeout = Config.HEALPOINT_DAMAGE_TIMEOUT;
+					}
+					else if (idx == Map.TYPE_STORAGE_PLACE)
+					{
+						map.storageX = tx;
+						map.storageY = ty;
+						
+						var storage = spawnBuilding(idx, tx,ty, "assets/storage_place.png", "assets/storage_place_broken.png", true);
+						var storageMover = storage.lookupComponentByName("mover") as BuildingMover;
+						storageMover.heroDamage = Config.STORAGE_HERO_DAMAGE;
+						storageMover.damageTimeout = Config.STORAGE_DAMAGE_TIMEOUT;
+					}										
 					else if (idx == Map.TYPE_WALL)
 					{
 						spawnBuilding(idx, tx,ty, "assets/wall.png", "assets/wall_broken.png", true);
@@ -197,7 +241,12 @@ package
 
             for (i=0; i < pads.length; i++)
             {  
-                player = spawnPlayer(Config.PLAYER_SPEED, Config.PLAYER_ATTACK_RANGE, Config.PLAYER_USE_RANGE, "assets/player/", "mage", "mage-front-stand");
+                player = spawnPlayer(Config.PLAYER_SPEED,
+                                     Config.PLAYER_ATTACK_RANGE,
+                                     Config.PLAYER_ATTACK_DAMAGE,
+                                     Config.PLAYER_ATTACK_COOL_DOWN,
+                                     Config.PLAYER_USE_RANGE,
+                                     "assets/player/", "mage", "mage-front-stand");
                 
                 mover = getPlayerMover(i);
                 if (mover)
@@ -209,15 +258,27 @@ package
             if (players.length == 0)
             {
                 trace("defaulting to key controls");
-                player = spawnPlayer(Config.PLAYER_SPEED, Config.PLAYER_ATTACK_RANGE, Config.PLAYER_USE_RANGE, "assets/player/", "mage", "mage-front-stand");
+                player = spawnPlayer(Config.PLAYER_SPEED,
+                                     Config.PLAYER_ATTACK_RANGE,
+                                     Config.PLAYER_ATTACK_DAMAGE,
+                                     Config.PLAYER_ATTACK_COOL_DOWN,
+                                     Config.PLAYER_USE_RANGE,
+                                     "assets/player/", "mage", "mage-front-stand");
                 mover = getPlayerMover(0);
                 if (mover)
-                    mover.bindToKeys(LoomKey.W, LoomKey.A, LoomKey.S, LoomKey.D);
+                    mover.bindToKeys(LoomKey.W, LoomKey.A, LoomKey.S, LoomKey.D,
+						LoomKey.R, LoomKey.T);
                     
-                player = spawnPlayer(Config.PLAYER_SPEED, Config.PLAYER_ATTACK_RANGE, Config.PLAYER_USE_RANGE, "assets/player/", "mage", "mage-front-stand");
+                player = spawnPlayer(Config.PLAYER_SPEED,
+                                     Config.PLAYER_ATTACK_RANGE,
+                                     Config.PLAYER_ATTACK_DAMAGE,
+                                     Config.PLAYER_ATTACK_COOL_DOWN,
+                                     Config.PLAYER_USE_RANGE,
+                                     "assets/player/", "mage", "mage-front-stand");
                 mover = getPlayerMover(1);
                 if (mover)
-                    mover.bindToKeys(LoomKey.UP_ARROW, LoomKey.LEFT_ARROW, LoomKey.DOWN_ARROW, LoomKey.RIGHT_ARROW);
+                    mover.bindToKeys(LoomKey.UP_ARROW, LoomKey.LEFT_ARROW, LoomKey.DOWN_ARROW, LoomKey.RIGHT_ARROW,
+						LoomKey.N, LoomKey.M);
             }
 
             playing = true;
@@ -253,17 +314,52 @@ package
             if (!isPlaying() || lowFps)
                 return;
                 
+            var n:int = players.length;
+            var i:int;
+            var j:int;
             var mover:PlayerMover;
-            for (var i=0; i < players.length; i++)
+            var pm:ProjectileMover;
+            var p:Point;
+            var hm:HeroMover;
+
+            for (i=0; i < n; i++)
             {
                 mover = getPlayerMover(i);
                 if (mover)
                     mover.move(dt);
             }
+
+            n = projectiles.length;
+            for (i = 0; i < n; i ++)
+            {
+                pm = getProjectileMover(i);
+                if (pm)
+                {
+                    pm.move(dt);
+                    // don't check against fresh projectiles
+                    if (pm.fresh)
+                        continue;
+
+                    p = new Point(pm.x, pm.y);
+
+                    for (j=0; j < heroes.length; j++)
+                    {
+                        hm = getHeroMover(j);
+
+                        if (hm && hm.hitTestSphere(p, pm.radius))
+                        {
+                            hm.health -= pm.damage;
+                            killObject(pm);
+                            trace("Hero down!");
+                            break;
+                        }   
+                    }
+                }
+            }
             
             for (i=0; i < heroes.length; i++)
             {
-                var hm = getHeroMover(i);
+                hm = getHeroMover(i);
                 if (hm)
                     hm.move(dt);
             }
@@ -279,8 +375,66 @@ package
 				var b = getBuildingMover(i);
 				if (b) b.update(dt);
 			}
-			
+
 			village.update(dt);
+			
+			// remove dead objects
+			var killable : Killable = null;
+			for (i=0; i < players.length; i++)
+			{
+				killable = players[i].lookupComponentByName("killable") as Killable;
+				if (killable && killable.dead)
+				{
+					trace("remove player");
+					players.splice(i, 1);
+					killable._owner.destroy();
+					--i;
+				}
+			}
+            for (i=0; i < projectiles.length; i++)
+            {
+                killable = projectiles[i].lookupComponentByName("killable") as Killable;
+                if (killable && killable.dead)
+                {
+                    trace("remove projectile");
+                    projectiles.splice(i, 1);
+                    killable._owner.destroy();
+                    --i;
+                }
+            }
+			for (i=0; i < cities.length; i++)
+			{
+				killable = cities[i].lookupComponentByName("killable") as Killable;
+				if (killable && killable.dead)
+				{
+					trace("remove city");
+					cities.splice(i, 1);
+					killable._owner.destroy();
+					--i;
+				}
+			}
+			for (i=0; i < buildings.length; i++)
+			{
+				killable = buildings[i].lookupComponentByName("killable") as Killable;
+				if (killable && killable.dead)
+				{
+					trace("remove building");
+					buildings.splice(i, 1);
+					killable._owner.destroy();
+					--i;
+				}
+			}
+			for (i=0; i < heroes.length; i++)
+			{
+				killable = heroes[i].lookupComponentByName("killable") as Killable;
+				if (killable && killable.dead)
+				{
+					trace("remove hero");
+					heroes.splice(i, 1);
+					killable._owner.destroy();
+					--i;
+				}
+			}
         }
 
         override public function onTick():void
@@ -397,7 +551,7 @@ package
 				var pickedSound:int = Math.floor(randomNumber * athmoList.length);
 				var sound:String = athmoList[pickedSound];
 				//~ trace("SOUND",sound);
-				trace("done",randomNumber,pickedSound,athmoList.length,sound,SimpleAudioEngine.sharedEngine().getEffectsVolume())
+				//~ trace("done",randomNumber,pickedSound,athmoList.length,sound,SimpleAudioEngine.sharedEngine().getEffectsVolume())
 				SimpleAudioEngine.sharedEngine().playEffect(sound, false); 
 				lastTimeWePlayedAnAthmoSound = Platform.getEpochTime();
 			}
@@ -409,6 +563,8 @@ package
         
         protected function spawnPlayer(speed:Number,
                                        attackRange:Number,
+                                       attackDamage:Number,
+                                       attackCoolDown:Number,
                                        useRange:Number,
                                        path:String,
                                        atlasName:String,
@@ -417,15 +573,17 @@ package
             var gameObject = new LoomGameObject();
             gameObject.owningGroup = group;
             // create a new mover and bind it to the pad
-            var mover = new PlayerMover(speed, attackRange, useRange);
+            var mover:PlayerMover = new PlayerMover(speed, attackRange, attackDamage, attackCoolDown, useRange);
             //mover.bindToPad(pad);
             gameObject.addComponent(mover, "mover");
             // create a new player renderer, bind it to the mover and save in component gameObject
-            var renderer = new PlayerRenderer(path, atlasName, aniName);
+            var renderer:PlayerRenderer = new PlayerRenderer(path, atlasName, aniName);
             renderer.addBinding("x", "@mover.x");
             renderer.addBinding("y", "@mover.y");
             renderer.addBinding("lookAngle", "@mover.lookAngle");
             
+			gameObject.addComponent(new Killable(), "killable");
+
             gameObject.addComponent(renderer, "renderer");
             gameObject.initialize();
 
@@ -433,15 +591,47 @@ package
 
             return gameObject;
         }
+
+        public function spawnProjectile(playerMover:PlayerMover,
+                                        posX:Number, posY:Number,
+                                        directionX:Number, directionY:Number,
+                                        damage:Number, range:Number):void
+        {
+            var projectile:LoomGameObject = new LoomGameObject();
+            projectile.owningGroup = group;
+
+            var mover:ProjectileMover = new ProjectileMover(
+                posX,
+                posY,
+                directionX,
+                directionY,
+                Config.PROJECTILE_SPEED,
+                damage
+            );
+            // TODO range
+            projectile.addComponent(mover, "mover");
+
+            var renderer:ProjectileRenderer = new ProjectileRenderer();
+            renderer.addBinding("x", "@mover.x");
+            renderer.addBinding("y", "@mover.y");
+            projectile.addComponent(renderer, "renderer");
+            projectile.addComponent(new Killable(), "killable");
+            projectile.initialize();
+
+            projectiles.pushSingle(projectile);
+        }
         
-        public function spawnHero(x:Number, y:Number):LoomGameObject 
+        public function spawnHero(x:Number, y:Number, target:String):LoomGameObject 
         {
             var gameObject = new LoomGameObject();
             gameObject.owningGroup = group;
             //~ create a new mover and bind it to the pad
             var mover = new HeroMover();
-            mover.x = x;
-            mover.y = y;
+            mover.x = x+30;
+            mover.y = y+80;
+            mover.target = target;
+
+			gameObject.addComponent(new Killable(), "killable");
 
             //mover.bindToPad(pad);
             gameObject.addComponent(mover, "mover");
@@ -458,6 +648,14 @@ package
             return gameObject;
         }
         
+        public function spawnHeroGroup(x:Number, y:Number, target:String, amount:Number):void 
+        {
+			for (var i=0; i < amount; i++)
+            {
+				OUYAJam.instance.spawnHero(x, y, target);
+            } 
+		}
+        
         public function spawnBuilding(type:int, x:Number, y:Number, normalImage:String, brokenImage:String, solid:Boolean):LoomGameObject 
         {
             var gameObject = new LoomGameObject();
@@ -469,6 +667,8 @@ package
             mover.type = type;
             mover.solid = solid;
             //~ mover.broken = true;
+
+			gameObject.addComponent(new Killable(), "killable");
 
             gameObject.addComponent(mover, "mover");
             // create a new player renderer, bind it to the mover and save in component gameObject
@@ -497,6 +697,8 @@ package
             gameObject.addComponent(city, "city");
             gameObject.initialize();
 
+			gameObject.addComponent(new Killable(), "killable");
+
             var renderer = new BuildingRenderer();
             renderer.addBinding("x", "@city.x");
             renderer.addBinding("y", "@city.y");
@@ -524,7 +726,13 @@ package
 
             return players[index].lookupComponentByName("mover") as PlayerMover;
         }
-        
+        public function getProjectileMover(index:int):ProjectileMover
+        {
+            if (index < 0 || index >= projectiles.length)
+                return null;
+
+            return projectiles[index].lookupComponentByName("mover") as ProjectileMover;
+        }
         public function getHeroMover(index:int):HeroMover
         {
             if (index < 0 || index >= heroes.length)
@@ -547,6 +755,29 @@ package
                 return null;
 
             return buildings[index].lookupComponentByName("mover") as BuildingMover;
+        }
+        
+        public function findBuildingInRange(x:Number, y:Number, r:Number):BuildingMover
+        {
+			for (var i:int = 0; i < buildings.length; ++i)
+            {
+				var b = getBuildingMover(i);
+				if (Geometry.doSpheresOverap(x,y,r, b.x,b.y,b.radius))
+				{
+					return b;
+				}
+			}
+			
+			return null;
+		}
+
+        public function killObject(object:LoomComponent):void
+        {
+            if (object && object._owner)
+            {
+                var k:Killable = object._owner.lookupComponentByName("killable") as Killable;
+                if (k) k.dead = true;
+            }
         }
     }
 }

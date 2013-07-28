@@ -6,6 +6,7 @@ package
     import loom2d.Loom2D;
     import loom2d.display.Image;
     import loom2d.display.MovieClip;
+
     import loom2d.textures.Texture;
     import loom2d.textures.TextureAtlas;
     import system.xml.XMLDocument;

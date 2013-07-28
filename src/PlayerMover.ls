@@ -18,6 +18,13 @@ package
 		public var leftKey:int;
 		public var downKey:int;
 		public var rightKey:int;
+		public var useKey:int;
+		public var attackKey:int;
+		
+    	public var health:Number = Config.PLAYER_HP;
+    	public var healthMax:Number = Config.PLAYER_HP;		
+
+		public var radius:Number = Config.PLAYER_RADIUS;
 
     	public var x:Number = 0;
     	public var y:Number = 0;
@@ -29,28 +36,54 @@ package
     	public var lookY:Number = 0;
     	public var lookAngle:Number = 0;
 
-    	public var attack:Number = 0;
     	public var use:Number = 0;
+    	public var attack:Number = 0;
 
+        public var attackCoolDown:Number = 0;
+        public var attackDamage:Number = 0;
     	public var attackRange:Number = 0;
     	public var useRange:Number = 0;
 
     	public var speed:Number = 0;
+    	
+    	public var harvestTimeout:Timeout;
+
+        protected var coolTime:Number = 0;
 
     	public function PlayerMover(speed:Number,
+                                    attackDamage:Number,
 	    							attackRange:Number,
+                                    attackCoolDown:Number,
 	    							useRange:Number)
     	{
     		this.speed = speed;
+            this.attackDamage = attackDamage;
     		this.attackRange = attackRange;
+            this.attackCoolDown = attackCoolDown;
     		this.useRange = useRange;
+    		
+    		harvestTimeout = new Timeout();
+    		harvestTimeout.timeout = Config.PLAYER_HARVEST_TIMEOUT;
     	}
 
     	public function move(dt:Number):void
     	{
     		x += vX * (dt / 1000) * speed;
             y += vY * (dt / 1000) * speed;
+
+            if (!hasCooledDown())
+                coolTime -= dt;
+                
+            executeAttack();
+            executeUse();
     	}
+
+        public function hasCooledDown():Boolean
+        {
+            if (coolTime < 0)
+                return true;
+            return false;
+        }
 
     	public function bindToPad(pad:Gamepad):void
     	{
@@ -98,7 +131,7 @@ package
 	           	break;
 
 	           	case 5:
-	           		attack = state;
+                    attack = state;
 	           	break;
 
 	           	default:
@@ -112,12 +145,46 @@ package
         	lookAngle = (lookX == 0 && lookY == 0) ? -1 : Math.atan2(lookY, lookX);
         }
 
-    	public function bindToKeys(up:int, left:int, down:int, right:int):void
+		protected function executeUse():void
+		{
+			if (use > 0.5)
+			{
+				trace("use");
+				var b = OUYAJam.instance.findBuildingInRange(x,y,radius);
+				if (b)
+				if (harvestTimeout.tryToActivate())
+				{
+					trace("use found");
+					var a = Math.min(b.resources, Config.PLAYER_HARVEST_AMOUNT);
+					if (a > 0) { b.resources -= a; OUYAJam.instance.village.resources += a; }
+					a = Math.min(b.food, Config.PLAYER_HARVEST_AMOUNT);
+					if (a > 0) { b.food -= a; OUYAJam.instance.village.food += a; }
+					trace("VILLAGE", "food", OUYAJam.instance.village.food, "resources", OUYAJam.instance.village.resources);
+				}
+			}
+		}
+
+        protected function executeAttack():void
+        {
+            if (attack > 0.5 && hasCooledDown())
+            {
+                coolTime = attackCoolDown;
+                // if player does not look into a specific direction, attack in direction of walking
+                if (lookX == 0 && lookY == 0)
+                    OUYAJam.instance.spawnProjectile(this, x, y, vX, vY, attackDamage, attackRange);
+                else
+                    OUYAJam.instance.spawnProjectile(this, x, y, lookX, lookY, attackDamage, attackRange);
+            }
+        }
+
+    	public function bindToKeys(up:int, left:int, down:int, right:int, attack:int, use:int):void
     	{
 			upKey = up;
 			leftKey = left;
 			downKey = down;
 			rightKey = right;
+			attackKey = attack;
+			useKey = use;
 			
     		Loom2D.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
     		Loom2D.stage.addEventListener(KeyboardEvent.KEY_UP, keyUpHandler);
@@ -134,6 +201,10 @@ package
                 vX = -1;
             if(keycode == rightKey)
                 vX = 1;
+            if(keycode == useKey)
+                use = 1;
+            if(keycode == attackKey)
+                attack = 1;
         }
 
         protected function keyUpHandler(event:KeyboardEvent):void
@@ -147,6 +218,10 @@ package
                 vX = 0;
             if(keycode == rightKey)
                 vX = 0;
+            if(keycode == useKey)
+                use = 0;
+            if(keycode == attackKey)
+                attack = 0;
         }
     }
 }
