@@ -7,8 +7,6 @@ package
     import loom2d.display.Image;
     import loom2d.display.MovieClip;
 
-    import loom2d.textures.Texture;
-    import loom2d.textures.TextureAtlas;
     import system.xml.XMLDocument;
 
 	public class HeroRenderer extends AnimatedComponent
@@ -51,7 +49,7 @@ package
             if(!super.onAdd())
                 return false;
 
-            image = new Image(Texture.fromAsset("assets/hero.png"));
+            image = OUYAJam.instance.getImage("hero");//new Image(Texture.fromAsset("assets/hero.png"));
             image.x = -1000;
             image.y = -1000;
             Loom2D.stage.addChild(image);

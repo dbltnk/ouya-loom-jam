@@ -7,16 +7,10 @@ package
     import loom2d.display.Sprite;
     import loom2d.display.Image;
     import loom2d.display.MovieClip;
-    import loom2d.textures.Texture;
-    import loom2d.textures.TextureAtlas;
     import system.xml.XMLDocument;
 
 	public class PlayerRenderer extends AnimatedComponent
 	{
-		protected var path:String;
-		protected var atlasName:String;
-
-        protected var atlas:TextureAtlas;
         protected var anims:Dictionary;
 
 		protected var currentAnim:MovieClip;
@@ -26,15 +20,14 @@ package
 		
         protected var lookDirectionIndicator:Sprite;
 
-		public function PlayerRenderer(path:String, atlasName:String)
-		{
-			if (!path || !atlasName)
-			{
-				return;
-			}
+        protected var aniName:String;
 
-			this.path = path;
-			this.atlasName = atlasName;
+		public function PlayerRenderer(aniName:String)
+		{
+			if (!aniName)
+                return;
+
+            this.aniName = aniName;
 		}
 
 		/**
@@ -99,7 +92,7 @@ package
 
         protected function setAnimation(state:int, direction:int):void
         {
-            var str:String = atlasName;
+            var str:String = aniName;
             switch (direction)
             {
                 case PlayerDirection.LEFT:
@@ -152,27 +145,22 @@ package
             if(!super.onAdd())
                 return false;
 
-            var img:Image = new Image(Texture.fromAsset("assets/look-direction.png"));
-            lookDirectionIndicator = new Sprite();
-            lookDirectionIndicator.addChild(img);
-            lookDirectionIndicator.center();
-            lookDirectionIndicator.visible = false;
-            Loom2D.stage.addChild(lookDirectionIndicator);
-
-            var xml:XMLDocument = new XMLDocument();
-            if (xml.loadFile(path + atlasName + ".xml") != 0)
+            var img:Image = OUYAJam.instance.getImage( "look-direction" );
+            if (img)
             {
-            	trace("failed to load atlas data file for atlas " + atlasName );
-            	return false;
+                lookDirectionIndicator = new Sprite();
+                lookDirectionIndicator.addChild(img);
+                lookDirectionIndicator.center();
+                lookDirectionIndicator.visible = false;
+                Loom2D.stage.addChild(lookDirectionIndicator);
             }
 
-            atlas = new TextureAtlas(Texture.fromAsset(path + atlasName + ".png"), xml.rootElement());
             anims = new Dictionary();
             
-            addAnim(atlasName + "-right-stand");
-            addAnim(atlasName + "-right-walk");
-            addAnim(atlasName + "-left-stand");
-            addAnim(atlasName + "-left-walk");
+            addAnim(aniName + "-right-stand");
+            addAnim(aniName + "-right-walk");
+            addAnim(aniName + "-left-stand");
+            addAnim(aniName + "-left-walk");
 
             setAnimation(currentState, currentDirection);
 
@@ -181,20 +169,17 @@ package
         
         protected function addAnim(name:String):void
         {
-            if (atlas)
+            
+            var anim:MovieClip = OUYAJam.instance.getAnimation( name );
+            if (anim)
             {
-                trace("get animation: " + name);
-                var anim:MovieClip = new MovieClip(atlas.getTextures( name ), 6);
-                if (anim)
-                {
-                    anims[name] = anim;
-                    anim.x = -1000;
-                    anim.y = -1000; 
-                    anim.visible = false;
-                    anim.stop();
-                    Loom2D.juggler.add(anim);
-                    Loom2D.stage.addChild(anim);
-                }
+                anims[name] = anim;
+                anim.x = -1000;
+                anim.y = -1000; 
+                anim.visible = false;
+                anim.stop();
+                Loom2D.juggler.add(anim);
+                Loom2D.stage.addChild(anim);
             }
         }
         /**
@@ -216,9 +201,8 @@ package
                 }
                 anims[i] = null;
             }
+
             Loom2D.stage.removeChild(lookDirectionIndicator);
-            // TODO kill all anims
-            //Loom2D.stage.removeChild(anim);
 
             super.onRemove();
         } 

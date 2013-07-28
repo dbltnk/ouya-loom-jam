@@ -164,6 +164,7 @@
             <filename>../assets/original/mage-left-walk-4.png</filename>
             <filename>../assets/look-direction.png</filename>
             <filename>../assets/projectile.png</filename>
+            <filename>../assets/hero.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

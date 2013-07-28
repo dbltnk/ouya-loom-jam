@@ -190,9 +190,17 @@ package
 				{
 					trace("use found");
 					var a = Math.min(b.resources, Config.PLAYER_HARVEST_AMOUNT);
-					if (a > 0) { b.resources -= a; OUYAJam.instance.village.resources += a; }
+					if (a > 0) { 
+						b.resources -= a; 
+						OUYAJam.instance.village.resources += a; 
+						OUYAJam.instance.playEffect("char_action_wood_");
+					}
 					a = Math.min(b.food, Config.PLAYER_HARVEST_AMOUNT);
-					if (a > 0) { b.food -= a; OUYAJam.instance.village.food += a; }
+					if (a > 0) { 
+						b.food -= a; 
+						OUYAJam.instance.village.food += a; 
+						OUYAJam.instance.playEffect("char_action_pumpkin_");
+					}
 					trace("VILLAGE", "food", OUYAJam.instance.village.food, "resources", OUYAJam.instance.village.resources);
 				}
 			}
@@ -202,6 +210,8 @@ package
         {
             if (attack > 0.5 && hasCooledDown())
             {
+				OUYAJam.instance.playEffect("char_action_hit_");
+				
                 coolTime = attackCoolDown;
                 // if player does not look into a specific direction, attack in direction of walking
                 if (lookX == 0 && lookY == 0)
