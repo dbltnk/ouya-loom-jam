@@ -44,8 +44,10 @@ package
          */
         public function set x(value:Number):void
         {
-            if(currentAnim)
-                currentAnim.x = value;
+            if (!currentAnim)
+                return;
+
+            currentAnim.x = value;
 
             if (lookDirectionIndicator)
                 lookDirectionIndicator.x = value + (currentAnim.width / 2);
@@ -58,8 +60,10 @@ package
          */
         public function set y(value:Number):void
         {
-            if(currentAnim)
-                currentAnim.y = value;
+            if(!currentAnim)
+                return;
+
+            currentAnim.y = value;
 
             if (lookDirectionIndicator)
                 lookDirectionIndicator.y = value + (currentAnim.height / 2);
