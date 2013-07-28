@@ -17,7 +17,7 @@ package
     	public var broken:Boolean = false;
     	public var lastSpawnTime:Number = 0;
     	public var spawnTimeout:Number = Config.CITY_SPAWN_TIMEOUT;
-    	public var spawnCount:int = 100;
+    	public var spawnCount:int = Config.CITY_SPAWN_COUNT;
 		
     	public function update(dt:Number):void
     	{

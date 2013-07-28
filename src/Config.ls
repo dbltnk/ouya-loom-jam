@@ -3,11 +3,14 @@ package
     public class Config
     {
     	public static const FANCY:Number = 0;
-    	public static const CITY_SPAWN_TIMEOUT:Number = 2000;
+    	public static const CITY_SPAWN_TIMEOUT:Number = 5000;
+    	public static const CITY_SPAWN_COUNT:int = 100;
     	
     	public static const HERO_SPEED:Number = 100;
     	public static const HERO_HP:Number = 100;
     	public static const HERO_RADIUS:Number = 16;
+    	public static const HERO_DAMAGE_TIMEOUT:Number = 5000;
+    	public static const HERO_DAMAGE:Number = 20;
     	
     	public static const BUILDING_RADIUS:Number = 8;
     	public static const BUILDING_HP:Number = 100;

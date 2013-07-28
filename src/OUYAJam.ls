@@ -854,6 +854,8 @@ package
         
         public function spawnHero(x:Number, y:Number, target:String):LoomGameObject 
         {
+			OUYAJam.instance.playEffect("enemy_action_spawn_");
+			
             var gameObject = new LoomGameObject();
             gameObject.owningGroup = group;
             //~ create a new mover and bind it to the pad
