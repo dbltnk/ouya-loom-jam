@@ -16,7 +16,7 @@ package
     import loom2d.tmx.TMXTileMap;
     import cocosdenshion.SimpleAudioEngine;
     import loom2d.display.Sprite;
-
+    import loom2d.math.Point;
     import system.platform.Gamepad;
 
     import loom2d.display.MovieClip;
@@ -267,9 +267,16 @@ package
             if (!isPlaying() || lowFps)
                 return;
                 
-            var mover:PlayerMover;
             var n:int = players.length;
-            for (var i=0; i < n; i++)
+            var i:int;
+            var j:int;
+            var mover:PlayerMover;
+            var pm:ProjectileMover;
+            var p:Point;
+            var hr:HeroRenderer;
+            var hm:HeroMover;
+
+            for (i=0; i < n; i++)
             {
                 mover = getPlayerMover(i);
                 if (mover)
@@ -279,14 +286,29 @@ package
             n = projectiles.length;
             for (i = 0; i < n; i ++)
             {
-                var pm = getProjectileMover(i);
+                pm = getProjectileMover(i);
                 if (pm)
+                {
                     pm.move(dt);
+                    p = new Point(pm.x, pm.y);
+
+                    for (j=0; j < heroes.length; j++)
+                    {
+                        hr = getHeroRenderer(j);
+                        if (hr && hr.hitTest(p));
+                        {
+                            // TODO kill hero
+                            // TODO kill projectile
+                            trace("Hero down!");
+                            break;
+                        }   
+                    }
+                }
             }
             
             for (i=0; i < heroes.length; i++)
             {
-                var hm = getHeroMover(i);
+                hm = getHeroMover(i);
                 if (hm)
                     hm.move(dt);
             }
@@ -580,7 +602,13 @@ package
 
             return projectiles[index].lookupComponentByName("mover") as ProjectileMover;
         }
-        
+        public function getHeroRenderer(index:int):HeroRenderer
+        {
+            if (index < 0 || index >= heroes.length)
+                return null;
+
+            return heroes[index].lookupComponentByName("renderer") as HeroRenderer;
+        }
         public function getHeroMover(index:int):HeroMover
         {
             if (index < 0 || index >= heroes.length)
