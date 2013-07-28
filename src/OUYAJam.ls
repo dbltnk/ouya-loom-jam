@@ -41,7 +41,11 @@ package
 		
 		public var forgeX:Number = 0;
 		public var forgeY:Number = 0;
-		
+		public var healX:Number = 0;
+		public var healY:Number = 0;
+		public var storageX:Number = 0;
+		public var storageY:Number = 0;
+				
 		public function Map(map:TMXTileMap)
 		{
 			this.map = map;
@@ -163,6 +167,20 @@ package
 						
 						spawnBuilding(idx, tx,ty, "assets/itemforge.png", "assets/itemforge_broken.png", true);
 					}
+					else if (idx == Map.TYPE_HEALPOINT)
+					{
+						map.healX = tx;
+						map.healY = ty;
+						
+						spawnBuilding(idx, tx,ty, "assets/healpoint.png", "assets/healpoint_broken.png", true);
+					}
+					else if (idx == Map.TYPE_STORAGE_PLACE)
+					{
+						map.storageX = tx;
+						map.storageY = ty;
+						
+						spawnBuilding(idx, tx,ty, "assets/storage_place.png", "assets/storage_place_broken.png", true);
+					}										
 					else if (idx == Map.TYPE_WALL)
 					{
 						spawnBuilding(idx, tx,ty, "assets/wall.png", "assets/wall_broken.png", true);
@@ -434,14 +452,15 @@ package
             return gameObject;
         }
         
-        public function spawnHero(x:Number, y:Number):LoomGameObject 
+        public function spawnHero(x:Number, y:Number, target:String):LoomGameObject 
         {
             var gameObject = new LoomGameObject();
             gameObject.owningGroup = group;
             //~ create a new mover and bind it to the pad
             var mover = new HeroMover();
-            mover.x = x;
-            mover.y = y;
+            mover.x = x+30;
+            mover.y = y+80;
+            mover.target = target;
 
             //mover.bindToPad(pad);
             gameObject.addComponent(mover, "mover");
