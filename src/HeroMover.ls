@@ -105,7 +105,7 @@ package
 
     	public function hitTestSphere(p:Point, radius:Number):Boolean
     	{
-    		if (Geometry.doSpheresOverap(x, y, radius, p.x, p.y, radius))
+    		if (Geometry.doSpheresOverap(x, y, this.radius, p.x, p.y, radius))
 			{
 				return true;
 			}
