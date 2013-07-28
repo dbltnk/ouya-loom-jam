@@ -22,7 +22,7 @@
         <key>dataFormat</key>
         <string>sparrow</string>
         <key>textureFileName</key>
-        <filename>../assets/animals.png</filename>
+        <filename>../assets/game-elements.png</filename>
         <key>flipPVR</key>
         <false/>
         <key>ditherType</key>
@@ -111,7 +111,7 @@
             <enum type="AndEngine::MagFilter">MagLinear</enum>
         </struct>
         <key>dataFileName</key>
-        <filename>../assets/animals.xml</filename>
+        <filename>../assets/game-elements.xml</filename>
         <key>multiPack</key>
         <false/>
         <key>mainExtension</key>
@@ -148,14 +148,22 @@
         </struct>
         <key>fileList</key>
         <array>
-            <filename>../assets/schwein_0.png</filename>
-            <filename>../assets/schwein_1.png</filename>
-            <filename>../assets/schwein_2.png</filename>
-            <filename>../assets/schwein_3.png</filename>
-            <filename>../assets/huhn_0.png</filename>
-            <filename>../assets/huhn_1.png</filename>
-            <filename>../assets/huhn_2.png</filename>
-            <filename>../assets/huhn_3.png</filename>
+            <filename>../assets/enemy_big</filename>
+            <filename>../assets/enemy_small</filename>
+            <filename>../assets/health</filename>
+            <filename>../assets/animals</filename>
+            <filename>../assets/original/mage-right-stand-1.png</filename>
+            <filename>../assets/original/mage-right-walk-1.png</filename>
+            <filename>../assets/original/mage-right-walk-2.png</filename>
+            <filename>../assets/original/mage-right-walk-3.png</filename>
+            <filename>../assets/original/mage-right-walk-4.png</filename>
+            <filename>../assets/original/mage-left-stand-1.png</filename>
+            <filename>../assets/original/mage-left-walk-1.png</filename>
+            <filename>../assets/original/mage-left-walk-2.png</filename>
+            <filename>../assets/original/mage-left-walk-3.png</filename>
+            <filename>../assets/original/mage-left-walk-4.png</filename>
+            <filename>../assets/look-direction.png</filename>
+            <filename>../assets/projectile.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
