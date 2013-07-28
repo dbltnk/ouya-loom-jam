@@ -872,6 +872,7 @@ package
             var renderer = new HeroRenderer();
             renderer.addBinding("x", "@mover.x");
             renderer.addBinding("y", "@mover.y");
+            //~ renderer.addBinding("isAttacking", "@mover.isAttacking");
             
             gameObject.addComponent(renderer, "renderer");
             gameObject.initialize();

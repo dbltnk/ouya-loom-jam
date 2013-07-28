@@ -34,13 +34,15 @@ package
     	public var target:String = "";
     	public var lastDevTime:Number = 0;
     	public var dev:Number = 0;    	
+    	
+    	public var isAttacking:Boolean = false;
 
 		public function isDead():Boolean
 		{
 			return health <= 0;
 		}
-
-    	public function move(dt:Number):void
+		
+		public function move(dt:Number):void
     	{
 			//~ trace(target);
 			if (target == "forge") {
@@ -107,6 +109,8 @@ package
 			}
 			
 			OUYAJam.instance.grid.updateObject(_owner, x, y);
+			
+			isAttacking = (Platform.getTime() - lastDamageTime) < damageTimeout;
     	}
 
     	public function hitTestSphere(p:Point, radius:Number):Boolean
