@@ -274,7 +274,7 @@ package
                 trace("Added player " + i);
             }
 
-            if (players.length == 0)
+            if (players.length <= 0)
             {
                 trace("defaulting to key controls");
                 player = spawnPlayer(Config.PLAYER_SPEED,
@@ -287,7 +287,10 @@ package
                 if (mover)
                     mover.bindToKeys(LoomKey.W, LoomKey.A, LoomKey.S, LoomKey.D,
 						LoomKey.R, LoomKey.T);
-                    
+			}
+            
+			if (players.length <= 1)
+            {
                 player = spawnPlayer(Config.PLAYER_SPEED,
                                      Config.PLAYER_ATTACK_RANGE,
                                      Config.PLAYER_ATTACK_DAMAGE,
