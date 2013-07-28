@@ -202,6 +202,8 @@ package
         {
             if (attack > 0.5 && hasCooledDown())
             {
+				OUYAJam.instance.playEffect("char_action_hit_");
+				
                 coolTime = attackCoolDown;
                 // if player does not look into a specific direction, attack in direction of walking
                 if (lookX == 0 && lookY == 0)
