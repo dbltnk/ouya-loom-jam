@@ -222,6 +222,7 @@ package
             {  
                 player = spawnPlayer(Config.PLAYER_SPEED,
                                      Config.PLAYER_ATTACK_RANGE,
+                                     Config.PLAYER_ATTACK_DAMAGE,
                                      Config.PLAYER_ATTACK_COOL_DOWN,
                                      Config.PLAYER_USE_RANGE,
                                      "assets/player/", "mage", "mage-front-stand");
@@ -238,6 +239,7 @@ package
                 trace("defaulting to key controls");
                 player = spawnPlayer(Config.PLAYER_SPEED,
                                      Config.PLAYER_ATTACK_RANGE,
+                                     Config.PLAYER_ATTACK_DAMAGE,
                                      Config.PLAYER_ATTACK_COOL_DOWN,
                                      Config.PLAYER_USE_RANGE,
                                      "assets/player/", "mage", "mage-front-stand");
@@ -247,6 +249,7 @@ package
                     
                 player = spawnPlayer(Config.PLAYER_SPEED,
                                      Config.PLAYER_ATTACK_RANGE,
+                                     Config.PLAYER_ATTACK_DAMAGE,
                                      Config.PLAYER_ATTACK_COOL_DOWN,
                                      Config.PLAYER_USE_RANGE,
                                      "assets/player/", "mage", "mage-front-stand");
@@ -521,6 +524,7 @@ package
         
         protected function spawnPlayer(speed:Number,
                                        attackRange:Number,
+                                       attackDamage:Number,
                                        attackCoolDown:Number,
                                        useRange:Number,
                                        path:String,
@@ -530,7 +534,7 @@ package
             var gameObject = new LoomGameObject();
             gameObject.owningGroup = group;
             // create a new mover and bind it to the pad
-            var mover:PlayerMover = new PlayerMover(speed, attackRange, attackCoolDown, useRange);
+            var mover:PlayerMover = new PlayerMover(speed, attackRange, attackDamage, attackCoolDown, useRange);
             //mover.bindToPad(pad);
             gameObject.addComponent(mover, "mover");
             // create a new player renderer, bind it to the mover and save in component gameObject
@@ -551,7 +555,8 @@ package
 
         public function spawnProjectile(playerMover:PlayerMover,
                                         posX:Number, posY:Number,
-                                        directionX:Number, directionY:Number):void
+                                        directionX:Number, directionY:Number,
+                                        damage:Number, range:Number):void
         {
             var projectile:LoomGameObject = new LoomGameObject();
             projectile.owningGroup = group;
@@ -561,8 +566,10 @@ package
                 posY,
                 directionX,
                 directionY,
-                Config.PROJECTILE_SPEED
+                Config.PROJECTILE_SPEED,
+                damage
             );
+            // TODO range
             projectile.addComponent(mover, "mover");
 
             var renderer:ProjectileRenderer = new ProjectileRenderer();
