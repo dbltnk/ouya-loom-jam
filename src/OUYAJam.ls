@@ -242,6 +242,7 @@ package
             {  
                 player = spawnPlayer(Config.PLAYER_SPEED,
                                      Config.PLAYER_ATTACK_RANGE,
+                                     Config.PLAYER_ATTACK_DAMAGE,
                                      Config.PLAYER_ATTACK_COOL_DOWN,
                                      Config.PLAYER_USE_RANGE,
                                      "assets/player/", "mage", "mage-front-stand");
@@ -258,6 +259,7 @@ package
                 trace("defaulting to key controls");
                 player = spawnPlayer(Config.PLAYER_SPEED,
                                      Config.PLAYER_ATTACK_RANGE,
+                                     Config.PLAYER_ATTACK_DAMAGE,
                                      Config.PLAYER_ATTACK_COOL_DOWN,
                                      Config.PLAYER_USE_RANGE,
                                      "assets/player/", "mage", "mage-front-stand");
@@ -268,6 +270,7 @@ package
                     
                 player = spawnPlayer(Config.PLAYER_SPEED,
                                      Config.PLAYER_ATTACK_RANGE,
+                                     Config.PLAYER_ATTACK_DAMAGE,
                                      Config.PLAYER_ATTACK_COOL_DOWN,
                                      Config.PLAYER_USE_RANGE,
                                      "assets/player/", "mage", "mage-front-stand");
@@ -316,7 +319,6 @@ package
             var mover:PlayerMover;
             var pm:ProjectileMover;
             var p:Point;
-            var hr:HeroRenderer;
             var hm:HeroMover;
 
             for (i=0; i < n; i++)
@@ -337,11 +339,11 @@ package
 
                     for (j=0; j < heroes.length; j++)
                     {
-                        hr = getHeroRenderer(j);
-                        if (hr && hr.hitTest(p));
+                        hm = getHeroMover(j);
+                        if (hm && hm.hitTestSphere(p, pm.radius));
                         {
-                            // TODO kill hero
-                            // TODO kill projectile
+                            hm.health -= pm.damage;
+                            killGameObject(pm._owner);
                             trace("Hero down!");
                             break;
                         }   
@@ -383,6 +385,17 @@ package
 					--i;
 				}
 			}
+            for (i=0; i < projectiles.length; i++)
+            {
+                killable = projectiles[i].lookupComponentByName("killable") as Killable;
+                if (killable && killable.dead)
+                {
+                    trace("remove projectile");
+                    projectiles.splice(i, 1);
+                    killable._owner.destroy();
+                    --i;
+                }
+            }
 			for (i=0; i < cities.length; i++)
 			{
 				killable = cities[i].lookupComponentByName("killable") as Killable;
@@ -544,6 +557,7 @@ package
         
         protected function spawnPlayer(speed:Number,
                                        attackRange:Number,
+                                       attackDamage:Number,
                                        attackCoolDown:Number,
                                        useRange:Number,
                                        path:String,
@@ -553,7 +567,7 @@ package
             var gameObject = new LoomGameObject();
             gameObject.owningGroup = group;
             // create a new mover and bind it to the pad
-            var mover:PlayerMover = new PlayerMover(speed, attackRange, attackCoolDown, useRange);
+            var mover:PlayerMover = new PlayerMover(speed, attackRange, attackDamage, attackCoolDown, useRange);
             //mover.bindToPad(pad);
             gameObject.addComponent(mover, "mover");
             // create a new player renderer, bind it to the mover and save in component gameObject
@@ -574,7 +588,8 @@ package
 
         public function spawnProjectile(playerMover:PlayerMover,
                                         posX:Number, posY:Number,
-                                        directionX:Number, directionY:Number):void
+                                        directionX:Number, directionY:Number,
+                                        damage:Number, range:Number):void
         {
             var projectile:LoomGameObject = new LoomGameObject();
             projectile.owningGroup = group;
@@ -584,14 +599,17 @@ package
                 posY,
                 directionX,
                 directionY,
-                Config.PROJECTILE_SPEED
+                Config.PROJECTILE_SPEED,
+                damage
             );
+            // TODO range
             projectile.addComponent(mover, "mover");
 
             var renderer:ProjectileRenderer = new ProjectileRenderer();
             renderer.addBinding("x", "@mover.x");
             renderer.addBinding("y", "@mover.y");
             projectile.addComponent(renderer, "renderer");
+            projectile.addComponent(new Killable(), "killable");
             projectile.initialize();
 
             projectiles.pushSingle(projectile);
@@ -709,13 +727,6 @@ package
 
             return projectiles[index].lookupComponentByName("mover") as ProjectileMover;
         }
-        public function getHeroRenderer(index:int):HeroRenderer
-        {
-            if (index < 0 || index >= heroes.length)
-                return null;
-
-            return heroes[index].lookupComponentByName("renderer") as HeroRenderer;
-        }
         public function getHeroMover(index:int):HeroMover
         {
             if (index < 0 || index >= heroes.length)
@@ -753,5 +764,14 @@ package
 			
 			return null;
 		}
+
+        public function killGameObject(object:LoomGameObject):void
+        {
+            if (object)
+            {
+                var k:Killable = object.lookupComponentByName("killable") as Killable;
+                if (k) k.dead = true;
+            }
+        }
     }
 }

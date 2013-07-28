@@ -40,6 +40,7 @@ package
     	public var attack:Number = 0;
 
         public var attackCoolDown:Number = 0;
+        public var attackDamage:Number = 0;
     	public var attackRange:Number = 0;
     	public var useRange:Number = 0;
 
@@ -50,11 +51,13 @@ package
         protected var coolTime:Number = 0;
 
     	public function PlayerMover(speed:Number,
+                                    attackDamage:Number,
 	    							attackRange:Number,
                                     attackCoolDown:Number,
 	    							useRange:Number)
     	{
     		this.speed = speed;
+            this.attackDamage = attackDamage;
     		this.attackRange = attackRange;
             this.attackCoolDown = attackCoolDown;
     		this.useRange = useRange;
@@ -168,9 +171,9 @@ package
                 coolTime = attackCoolDown;
                 // if player does not look into a specific direction, attack in direction of walking
                 if (lookX == 0 && lookY == 0)
-                    OUYAJam.instance.spawnProjectile(this, x, y, vX, vY);
+                    OUYAJam.instance.spawnProjectile(this, x, y, vX, vY, attackDamage, attackRange);
                 else
-                    OUYAJam.instance.spawnProjectile(this, x, y, lookX, lookY);
+                    OUYAJam.instance.spawnProjectile(this, x, y, lookX, lookY, attackDamage, attackRange);
             }
         }
 

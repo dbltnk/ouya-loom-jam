@@ -12,8 +12,11 @@ package
 		public var vY:Number = 0;
 
 		public var speed:Number = 0;
+		public var damage:Number = 0;
 
-		public function ProjectileMover(x:Number, y:Number, vX:Number, vY:Number, speed:Number)
+		public var radius:Number = Config.PROJECTILE_RADIUS;
+
+		public function ProjectileMover(x:Number, y:Number, vX:Number, vY:Number, speed:Number, damage:Number)
 		{
 			this.x = x;
 			this.y = y;
@@ -22,6 +25,7 @@ package
 			this.vY = vY;
 			
 			this.speed = speed;
+			this.damage = damage;
 			// norm the vector. vX and vY may not be 0 at the same time. Would cause division by 0.
 			var l:Number = Math.sqrt(vX * vX + vY * vY);
 			this.vX /= l;

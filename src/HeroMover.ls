@@ -5,6 +5,7 @@ package
     import loom.gameframework.LoomComponent;
 
     import system.platform.Gamepad;
+    import loom2d.math.Point;
 
     import loom2d.events.KeyboardEvent;
     import loom.platform.LoomKey;
@@ -100,6 +101,16 @@ package
 				var killable = _owner.lookupComponentByName("killable") as Killable;
 				killable.dead = true;
 			}
+    	}
+
+    	public function hitTestSphere(p:Point, radius:Number):Boolean
+    	{
+    		if (Geometry.doSpheresOverap(x, y, this.radius, p.x, p.y, radius))
+			{
+    			trace("hit:", x, y, this.radius, p.x, p.y, radius);
+				return true;
+			}
+    		return false;
     	}
     }
 }

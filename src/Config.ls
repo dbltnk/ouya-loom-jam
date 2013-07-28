@@ -17,6 +17,7 @@ package
     	
     	public static const PLAYER_SPEED:Number = 100; //50;
     	public static const PLAYER_ATTACK_RANGE:Number = 48;
+        public static const PLAYER_ATTACK_DAMAGE:Number = 1000;
     	public static const PLAYER_ATTACK_COOL_DOWN:Number = 1000;
     	public static const PLAYER_USE_RANGE:Number = 48;
     	public static const PLAYER_RADIUS:Number = 16;
@@ -25,6 +26,7 @@ package
     	public static const PLAYER_HARVEST_AMOUNT:Number = 10;
     	
     	public static const PROJECTILE_SPEED:Number = 200;
+        public static const PROJECTILE_RADIUS:Number = 4;
     	
     	public static const FORGE_HERO_DAMAGE:Number = 1000;
     	public static const FORGE_DAMAGE_TIMEOUT:Number = 500;
