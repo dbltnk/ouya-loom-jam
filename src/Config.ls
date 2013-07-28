@@ -31,6 +31,8 @@ package
     	public static const FORGE_HERO_DAMAGE:Number = 1000;
     	public static const FORGE_DAMAGE_TIMEOUT:Number = 500;
     	
+    	public static const PIG_RANGE:Number = 128;
+    	
     	public static const STORAGE_HERO_DAMAGE:Number = 1000;
     	public static const STORAGE_DAMAGE_TIMEOUT:Number = 500;
     	

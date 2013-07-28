@@ -11,24 +11,24 @@ package
     import loom2d.textures.TextureAtlas;
     import system.xml.XMLDocument;
 
-	public class PlayerRenderer extends AnimatedComponent
+	public class PigRenderer extends AnimatedComponent
 	{
 		protected var path:String;
 		protected var atlasName:String;
+		protected var animName:String;
 
 		protected var anim:MovieClip;
 		
-        protected var lookDirectionIndicator:Sprite;
-
-		public function PlayerRenderer(path:String, atlasName:String)
+		public function PigRenderer(path:String, atlasName:String, animName:String)
 		{
-			if (!path || !atlasName)
+			if (!path || !atlasName || !animName)
 			{
 				return;
 			}
 
 			this.path = path;
 			this.atlasName = atlasName;
+			this.animName = animName;
 		}
 
 		/**
@@ -40,9 +40,6 @@ package
         {
             if(anim)
                 anim.x = value;
-
-            if (lookDirectionIndicator)
-                lookDirectionIndicator.x = value + (anim.width / 2);
         }
 
         /**
@@ -54,26 +51,6 @@ package
         {
             if(anim)
                 anim.y = value;
-
-            if (lookDirectionIndicator)
-                lookDirectionIndicator.y = value + (anim.height / 2);
-        }
-
-        public function set lookAngle(value:Number):void
-        {
-            if (!lookDirectionIndicator)
-                return;
-            // hide if value is invalid
-            if (value < 0)
-            {
-                lookDirectionIndicator.visible = false;
-            }
-            else
-            {
-                lookDirectionIndicator.rotation = value;
-                if (!lookDirectionIndicator.visible)
-                    lookDirectionIndicator.visible = true;
-            }
         }
 
 		/**
@@ -86,13 +63,6 @@ package
             if(!super.onAdd())
                 return false;
 
-            var img:Image = new Image(Texture.fromAsset("assets/look-direction.png"));
-            lookDirectionIndicator = new Sprite();
-            lookDirectionIndicator.addChild(img);
-            lookDirectionIndicator.center();
-            lookDirectionIndicator.visible = false;
-            Loom2D.stage.addChild(lookDirectionIndicator);
-
             var xml:XMLDocument = new XMLDocument();
             if (xml.loadFile(path + atlasName + ".xml") != 0)
             {
@@ -101,7 +71,7 @@ package
             }
 
             var atlas:TextureAtlas = new TextureAtlas(Texture.fromAsset(path + atlasName + ".png"), xml.rootElement());
-            anim = new MovieClip(atlas.getTextures(atlasName + "-front-walk"), 6);
+            anim = new MovieClip(atlas.getTextures(atlasName + animName), 6);
             anim.x = -1000;
             anim.y = -1000; 
             Loom2D.juggler.add(anim);
@@ -114,7 +84,6 @@ package
          */
         protected function onRemove():void
         {
-            Loom2D.stage.removeChild(lookDirectionIndicator);
             Loom2D.stage.removeChild(anim);
 
             super.onRemove();
