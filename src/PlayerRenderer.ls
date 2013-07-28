@@ -99,14 +99,14 @@ package
 
         protected function setAnimation(state:int, direction:int):void
         {
-            var str:String = "";
+            var str:String = atlasName;
             switch (direction)
             {
                 case PlayerDirection.LEFT:
-                    str += "left"
+                    str += "-left"
                     break;
                 case PlayerDirection.RIGHT:
-                    str += "right"
+                    str += "-right"
                     break;
             }
             switch (state)
@@ -169,10 +169,10 @@ package
             atlas = new TextureAtlas(Texture.fromAsset(path + atlasName + ".png"), xml.rootElement());
             anims = new Dictionary();
             
-            addAnim("right-stand");
-            addAnim("right-walk");
-            addAnim("left-stand");
-            addAnim("left-walk");
+            addAnim(atlasName + "-right-stand");
+            addAnim(atlasName + "-right-walk");
+            addAnim(atlasName + "-left-stand");
+            addAnim(atlasName + "-left-walk");
 
             setAnimation(currentState, currentDirection);
 
@@ -183,8 +183,8 @@ package
         {
             if (atlas)
             {
-                trace("get animation: " + atlasName + "-" + name);
-                var anim:MovieClip = new MovieClip(atlas.getTextures(atlasName + "-" + name ), 6);
+                trace("get animation: " + name);
+                var anim:MovieClip = new MovieClip(atlas.getTextures( name ), 6);
                 if (anim)
                 {
                     anims[name] = anim;
