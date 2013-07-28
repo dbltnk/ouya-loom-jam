@@ -41,5 +41,8 @@ package
     	public static const VILLAGE_DAMAGE_TIMEOUT:Number = 500;
     	
     	public static const PATH_ASSETS:String = "assets/";
+    	
+    	public static const VOLUME_MUSIC:Number = 1;
+    	public static const VOLUME_SFX:Number = 0.2;
     }
 }

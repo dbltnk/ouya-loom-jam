@@ -1,12 +1,15 @@
 package
 {
-
+	import loom2d.math.Point;
     import loom.gameframework.LoomComponent;
 
 	public class ProjectileMover extends LoomComponent
 	{
 		public var x:Number = 0;
 		public var y:Number = 0;
+		
+		public var source:Point;
+		public var range:Number = 0;
 
 		public var vX:Number = 0;
 		public var vY:Number = 0;
@@ -18,10 +21,13 @@ package
 
 		public var radius:Number = Config.PROJECTILE_RADIUS;
 
-		public function ProjectileMover(x:Number, y:Number, vX:Number, vY:Number, speed:Number, damage:Number)
+		public function ProjectileMover(x:Number, y:Number, vX:Number, vY:Number, speed:Number, damage:Number, range:Number)
 		{
 			this.x = x;
 			this.y = y;
+			
+			this.range = range;
+			source = new Point(x,y);
 
 			this.vX = vX;
 			this.vY = vY;
@@ -38,8 +44,32 @@ package
     	{
     		x += vX * (dt / 1000) * speed;
             y += vY * (dt / 1000) * speed;
-            // make sure this is being displayed at least one frame
-            fresh = false;
+
+			// don't check against fresh projectiles
+			if (fresh) { fresh = false; return; }
+
+			var p = new Point(x, y);
+
+			for (var j=0; j < OUYAJam.instance.heroes.length; j++)
+			{
+				var hm = OUYAJam.instance.getHeroMover(j);
+
+				if (hm && hm.hitTestSphere(p, radius))
+				{
+					hm.health -= damage;
+					OUYAJam.instance.killObject(this);
+					trace("Hero down!");
+					break;
+				}   
+			}			
+			
+			// range check
+			var dx = x - source.x;
+			var dy = y - source.y;
+			if (dx*dx+dy*dy >= range*range)
+			{
+				OUYAJam.instance.killObject(this);
+			}
     	}
 	}
 }

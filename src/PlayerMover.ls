@@ -3,6 +3,7 @@ package
     import loom2d.Loom2D;
     import cocosdenshion.SimpleAudioEngine;
     import loom.gameframework.LoomComponent;
+	import loom2d.math.Point;
 
     import system.platform.Gamepad;
 
@@ -71,6 +72,18 @@ package
     		x += vX * (dt / 1000) * speed;
             y += vY * (dt / 1000) * speed;
 
+			// collision?
+            for (var i:int = 0; i < OUYAJam.instance.buildings.length; ++i)
+            {
+				var b = OUYAJam.instance.getBuildingMover(i);
+				if (b.isSolid() && Geometry.doSpheresOverap(x,y,radius, b.x,b.y,b.radius))
+				{
+					var p = Geometry.resolveAOverlapB(x,y,radius, b.x,b.y,b.radius);
+					x += p.x;
+					y += p.y;
+				}
+			}
+			
             if (!hasCooledDown())
                 coolTime -= dt;
                 
