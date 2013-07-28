@@ -26,14 +26,16 @@ package
 				lastSpawnTime = Platform.getTime();
 				var randomNumber = Math.random();
 				if (randomNumber <= 0.33) {
-					OUYAJam.instance.spawnHero(x, y, "heal");					
+					//~ OUYAJam.instance.spawnHeroGroup(x, y, "heal", 5 * Math.random());
+					OUYAJam.instance.spawnHero(x, y, "heal");														
 				}
 				else if (randomNumber <= 0.66) {
-					OUYAJam.instance.spawnHero(x, y, "storage");					
-					
+					//~ OUYAJam.instance.spawnHeroGroup(x, y, "storage", 5 * Math.random());					
+					OUYAJam.instance.spawnHero(x, y, "storage");														
 				}
 				else {
-					OUYAJam.instance.spawnHero(x, y, "forge");										
+					//~ OUYAJam.instance.spawnHeroGroup(x, y, "forge", 5 * Math.random());	
+					OUYAJam.instance.spawnHero(x, y, "forge");																												
 				}
 
 				--spawnCount;
