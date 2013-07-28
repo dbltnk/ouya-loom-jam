@@ -512,7 +512,7 @@ package
 				var pickedSound:int = Math.floor(randomNumber * athmoList.length);
 				var sound:String = athmoList[pickedSound];
 				//~ trace("SOUND",sound);
-				trace("done",randomNumber,pickedSound,athmoList.length,sound,SimpleAudioEngine.sharedEngine().getEffectsVolume())
+				//~ trace("done",randomNumber,pickedSound,athmoList.length,sound,SimpleAudioEngine.sharedEngine().getEffectsVolume())
 				SimpleAudioEngine.sharedEngine().playEffect(sound, false); 
 				lastTimeWePlayedAnAthmoSound = Platform.getEpochTime();
 			}
