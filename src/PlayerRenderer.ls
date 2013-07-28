@@ -44,8 +44,10 @@ package
          */
         public function set x(value:Number):void
         {
-            if(currentAnim)
-                currentAnim.x = value;
+            if (!currentAnim)
+                return;
+
+            currentAnim.x = value;
 
             if (lookDirectionIndicator)
                 lookDirectionIndicator.x = value + (currentAnim.width / 2);
@@ -58,8 +60,10 @@ package
          */
         public function set y(value:Number):void
         {
-            if(currentAnim)
-                currentAnim.y = value;
+            if(!currentAnim)
+                return;
+
+            currentAnim.y = value;
 
             if (lookDirectionIndicator)
                 lookDirectionIndicator.y = value + (currentAnim.height / 2);
@@ -95,14 +99,14 @@ package
 
         protected function setAnimation(state:int, direction:int):void
         {
-            var str:String = "";
+            var str:String = atlasName;
             switch (direction)
             {
                 case PlayerDirection.LEFT:
-                    str += "left"
+                    str += "-left"
                     break;
                 case PlayerDirection.RIGHT:
-                    str += "right"
+                    str += "-right"
                     break;
             }
             switch (state)
@@ -165,10 +169,10 @@ package
             atlas = new TextureAtlas(Texture.fromAsset(path + atlasName + ".png"), xml.rootElement());
             anims = new Dictionary();
             
-            addAnim("right-stand");
-            addAnim("right-walk");
-            addAnim("left-stand");
-            addAnim("left-walk");
+            addAnim(atlasName + "-right-stand");
+            addAnim(atlasName + "-right-walk");
+            addAnim(atlasName + "-left-stand");
+            addAnim(atlasName + "-left-walk");
 
             setAnimation(currentState, currentDirection);
 
@@ -179,8 +183,8 @@ package
         {
             if (atlas)
             {
-                trace("get animation: " + atlasName + "-" + name);
-                var anim:MovieClip = new MovieClip(atlas.getTextures(atlasName + "-" + name ), 6);
+                trace("get animation: " + name);
+                var anim:MovieClip = new MovieClip(atlas.getTextures( name ), 6);
                 if (anim)
                 {
                     anims[name] = anim;
@@ -198,6 +202,20 @@ package
          */
         protected function onRemove():void
         {
+            currentAnim = null;
+
+            var anim:MovieClip;
+            for (var i in anims)
+            {
+                anim = anims[i] as MovieClip;
+                if (anim)
+                {
+                    Loom2D.stage.removeChild(anim);
+                    Loom2D.juggler.remove(anim);
+                    anim.stop();
+                }
+                anims[i] = null;
+            }
             Loom2D.stage.removeChild(lookDirectionIndicator);
             // TODO kill all anims
             //Loom2D.stage.removeChild(anim);
