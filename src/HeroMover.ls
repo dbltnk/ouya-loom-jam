@@ -3,6 +3,7 @@ package
     import loom2d.Loom2D;
     import cocosdenshion.SimpleAudioEngine;
     import loom.gameframework.LoomComponent;
+    import loom.gameframework.LoomGameObject;
 
     import system.platform.Gamepad;
     import loom2d.math.Point;
@@ -74,10 +75,9 @@ package
             y += vY * (dt / 1000) * speed * dev;
             
             // collision?
-            for (var i:int = 0; i < OUYAJam.instance.buildings.length; ++i)
-            {
-				var b = OUYAJam.instance.getBuildingMover(i);
-				if (b.isSolid() && Geometry.doSpheresOverap(x,y,radius, b.x,b.y,b.radius))
+            OUYAJam.instance.grid.visitObjects(x-2*radius,y-radius,4*radius,4*radius, _owner, function (o:LoomGameObject):void{
+				var b:BuildingMover = o.lookupComponentByName("mover") as BuildingMover;
+				if (b && b.isSolid() && Geometry.doSpheresOverap(x,y,radius, b.x,b.y,b.radius))
 				{
 					var p = Geometry.resolveAOverlapB(x,y,radius, b.x,b.y,b.radius);
 					x += p.x;
@@ -93,7 +93,7 @@ package
 						}
 					}					
 				}
-			}
+			});
 			
 			if (isDead())
 			{
@@ -101,6 +101,8 @@ package
 				var killable = _owner.lookupComponentByName("killable") as Killable;
 				killable.dead = true;
 			}
+			
+			OUYAJam.instance.grid.updateObject(_owner, x, y);
     	}
 
     	public function hitTestSphere(p:Point, radius:Number):Boolean

@@ -74,6 +74,8 @@ package
     {
 		public static var instance:OUYAJam;
 		
+		public var grid:Grid;
+		
 		public var background:Image;
 		
         public var label:SimpleLabel;
@@ -98,6 +100,7 @@ package
         public var heroes:Vector.<LoomGameObject>;
         public var cities:Vector.<LoomGameObject>;
         public var buildings:Vector.<LoomGameObject>;
+        public var pigs:Vector.<LoomGameObject>;
         public var lastFrame:Number;
         private var playing:Boolean = false; 
         public var village:Village;
@@ -107,6 +110,8 @@ package
         override public function run():void
         {
 			instance = this;
+			
+			grid = new Grid();
 			
 			// seed random value
 			var ts:int = Platform.getEpochTime() - 1374942470;
@@ -118,6 +123,7 @@ package
             players = new Vector.<LoomGameObject>();
             projectiles = new Vector.<LoomGameObject>();
             buildings = new Vector.<LoomGameObject>();
+            pigs = new Vector.<LoomGameObject>();
             village = new Village();
 
 			// setup background
@@ -203,6 +209,9 @@ package
 					else if (idx == Map.TYPE_VILLAGE_HOUSE)
 					{
 						spawnBuilding(idx, tx,ty, "assets/village_house.png", "assets/village_house_broken.png", true);
+						
+						spawnPig(tx,ty, Config.PIG_SPEED, Config.PIG_RANGE, "assets/", "animals", "schwein");
+						spawnPig(tx,ty, Config.PIG_SPEED, Config.PIG_RANGE, "assets/", "animals", "schwein");
 					}										
 					else if (idx == Map.TYPE_STORAGE_PLACE)
 					{
@@ -213,6 +222,9 @@ package
 						var storageMover = storage.lookupComponentByName("mover") as BuildingMover;
 						storageMover.heroDamage = Config.STORAGE_HERO_DAMAGE;
 						storageMover.damageTimeout = Config.STORAGE_DAMAGE_TIMEOUT;
+
+						spawnPig(tx,ty, Config.CHICKEN_SPEED, Config.CHICKEN_SPEED, "assets/", "animals", "huhn");
+						spawnPig(tx,ty, Config.CHICKEN_SPEED, Config.CHICKEN_SPEED, "assets/", "animals", "huhn");
 					}										
 					else if (idx == Map.TYPE_WALL)
 					{
@@ -366,6 +378,12 @@ package
 				var b = getBuildingMover(i);
 				if (b) b.update(dt);
 			}
+			
+            for (i=0; i < pigs.length; i++)
+            {
+				var pi = getPigMover(i);
+				if (pi) pi.move(dt);
+			}
 
 			village.update(dt);
 			
@@ -378,6 +396,7 @@ package
 				{
 					trace("remove player");
 					players.splice(i, 1);
+					grid.removeObj(killable._owner);
 					killable._owner.destroy();
 					--i;
 				}
@@ -389,10 +408,23 @@ package
                 {
                     trace("remove projectile");
                     projectiles.splice(i, 1);
+                    grid.removeObj(killable._owner);
                     killable._owner.destroy();
                     --i;
                 }
             }
+			for (i=0; i < pigs.length; i++)
+			{
+				killable = pigs[i].lookupComponentByName("killable") as Killable;
+				if (killable && killable.dead)
+				{
+					trace("remove pig");
+					pigs.splice(i, 1);
+					grid.removeObj(killable._owner);
+					killable._owner.destroy();
+					--i;
+				}
+			}
 			for (i=0; i < cities.length; i++)
 			{
 				killable = cities[i].lookupComponentByName("killable") as Killable;
@@ -400,6 +432,7 @@ package
 				{
 					trace("remove city");
 					cities.splice(i, 1);
+					grid.removeObj(killable._owner);
 					killable._owner.destroy();
 					--i;
 				}
@@ -411,6 +444,7 @@ package
 				{
 					trace("remove building");
 					buildings.splice(i, 1);
+					grid.removeObj(killable._owner);
 					killable._owner.destroy();
 					--i;
 				}
@@ -422,6 +456,7 @@ package
 				{
 					trace("remove hero");
 					heroes.splice(i, 1);
+					grid.removeObj(killable._owner);
 					killable._owner.destroy();
 					--i;
 				}
@@ -724,6 +759,29 @@ package
             return gameObject;
         }
         
+        public function spawnPig(x:Number, y:Number, speed:Number, range:Number, path:String, atlasName:String, animName:String):LoomGameObject 
+        {
+			trace("spawn pig");
+            var gameObject = new LoomGameObject();
+            gameObject.owningGroup = group;
+            var mover = new PigMover(x,y,speed,range);
+
+			gameObject.addComponent(new Killable(), "killable");
+
+            gameObject.addComponent(mover, "mover");
+            // create a new player renderer, bind it to the mover and save in component gameObject
+            var renderer = new PigRenderer(path, atlasName, animName);
+            renderer.addBinding("x", "@mover.x");
+            renderer.addBinding("y", "@mover.y");
+            
+            gameObject.addComponent(renderer, "renderer");
+            gameObject.initialize();
+
+			pigs.pushSingle(gameObject);
+
+            return gameObject;
+        }
+        
         public function spawnCity(x:Number, y:Number):LoomGameObject 
         {
             var gameObject = new LoomGameObject();
@@ -792,6 +850,14 @@ package
                 return null;
 
             return buildings[index].lookupComponentByName("mover") as BuildingMover;
+        }
+        
+        public function getPigMover(index:int):PigMover
+        {
+            if (index < 0 || index >= pigs.length)
+                return null;
+
+            return pigs[index].lookupComponentByName("mover") as PigMover;
         }
         
         public function findBuildingInRange(x:Number, y:Number, r:Number):BuildingMover

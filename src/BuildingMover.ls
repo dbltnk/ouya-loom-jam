@@ -78,6 +78,8 @@ package
 					}
 				}
 			}
+			
+			OUYAJam.instance.grid.updateObject(_owner, x, y);
     	}
     	
     	public function isSolid():Boolean

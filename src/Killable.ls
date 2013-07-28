@@ -13,4 +13,5 @@ package
     {
     	public var dead:Boolean = false;
     }
+
 }

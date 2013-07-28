@@ -2,6 +2,7 @@ package
 {
 	import loom2d.math.Point;
     import loom.gameframework.LoomComponent;
+    import loom.gameframework.LoomGameObject;
 
 	public class ProjectileMover extends LoomComponent
 	{
@@ -49,19 +50,20 @@ package
 			if (fresh) { fresh = false; return; }
 
 			var p = new Point(x, y);
+			
+			var done = false;
 
-			for (var j=0; j < OUYAJam.instance.heroes.length; j++)
-			{
-				var hm = OUYAJam.instance.getHeroMover(j);
-
-				if (hm && hm.hitTestSphere(p, radius))
+			// collision?
+            OUYAJam.instance.grid.visitObjects(x-2*radius,y-radius,4*radius,4*radius, _owner, function (o:LoomGameObject):void{
+				var hm:HeroMover = o.lookupComponentByName("mover") as HeroMover;
+				if (!done && hm && hm.hitTestSphere(p, radius))
 				{
 					hm.health -= damage;
 					OUYAJam.instance.killObject(this);
 					trace("Hero down!");
-					break;
-				}   
-			}			
+					done = true;
+				}
+			});	
 			
 			// range check
 			var dx = x - source.x;

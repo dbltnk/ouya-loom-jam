@@ -4,6 +4,8 @@ package
     import cocosdenshion.SimpleAudioEngine;
     import loom.gameframework.LoomComponent;
 	import loom2d.math.Point;
+	
+	import loom.gameframework.LoomGameObject;
 
     import system.platform.Gamepad;
 
@@ -91,22 +93,23 @@ package
 
 
 			// collision?
-            for (var i:int = 0; i < OUYAJam.instance.buildings.length; ++i)
-            {
-				var b = OUYAJam.instance.getBuildingMover(i);
-				if (b.isSolid() && Geometry.doSpheresOverap(x,y,radius, b.x,b.y,b.radius))
+            OUYAJam.instance.grid.visitObjects(x-2*radius,y-radius,4*radius,4*radius, _owner, function (o:LoomGameObject):void{
+				var b:BuildingMover = o.lookupComponentByName("mover") as BuildingMover;
+				if (b && b.isSolid() && Geometry.doSpheresOverap(x,y,radius, b.x,b.y,b.radius))
 				{
 					var p = Geometry.resolveAOverlapB(x,y,radius, b.x,b.y,b.radius);
 					x += p.x;
 					y += p.y;
 				}
-			}
+			});
 			
             if (!hasCooledDown())
                 coolTime -= dt;
                 
             executeAttack();
             executeUse();
+            
+            OUYAJam.instance.grid.updateObject(_owner, x, y);
     	}
 
         public function hasCooledDown():Boolean
