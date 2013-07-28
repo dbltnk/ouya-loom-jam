@@ -18,7 +18,9 @@ package
 		public var leftKey:int;
 		public var downKey:int;
 		public var rightKey:int;
-
+		public var useKey:int;
+		public var attackKey:int;
+		
     	public var health:Number = Config.PLAYER_HP;
     	public var healthMax:Number = Config.PLAYER_HP;		
 
@@ -35,12 +37,15 @@ package
     	public var lookAngle:Number = 0;
 
     	public var use:Number = 0;
+    	public var attack:Number = 0;
 
         public var attackCoolDown:Number = 0;
     	public var attackRange:Number = 0;
     	public var useRange:Number = 0;
 
     	public var speed:Number = 0;
+    	
+    	public var harvestTimeout:Timeout;
 
         protected var coolTime:Number = 0;
 
@@ -53,6 +58,9 @@ package
     		this.attackRange = attackRange;
             this.attackCoolDown = attackCoolDown;
     		this.useRange = useRange;
+    		
+    		harvestTimeout = new Timeout();
+    		harvestTimeout.timeout = Config.PLAYER_HARVEST_TIMEOUT;
     	}
 
     	public function move(dt:Number):void
@@ -62,6 +70,8 @@ package
 
             if (!hasCooledDown())
                 coolTime -= dt;
+                
+            executeAttack();
     	}
 
         public function hasCooledDown():Boolean
@@ -117,7 +127,7 @@ package
 	           	break;
 
 	           	case 5:
-                    executeAttack(state);
+                    attack = state;
 	           	break;
 
 	           	default:
@@ -131,9 +141,9 @@ package
         	lookAngle = (lookX == 0 && lookY == 0) ? -1 : Math.atan2(lookY, lookX);
         }
 
-        protected function executeAttack(state:float):void
+        protected function executeAttack():void
         {
-            if (hasCooledDown())
+            if (attack > 0.5 && hasCooledDown())
             {
                 coolTime = attackCoolDown;
                 // if player does not look into a specific direction, attack in direction of walking
@@ -144,12 +154,14 @@ package
             }
         }
 
-    	public function bindToKeys(up:int, left:int, down:int, right:int):void
+    	public function bindToKeys(up:int, left:int, down:int, right:int, attack:int, use:int):void
     	{
 			upKey = up;
 			leftKey = left;
 			downKey = down;
 			rightKey = right;
+			attackKey = attack;
+			useKey = use;
 			
     		Loom2D.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
     		Loom2D.stage.addEventListener(KeyboardEvent.KEY_UP, keyUpHandler);
@@ -166,6 +178,10 @@ package
                 vX = -1;
             if(keycode == rightKey)
                 vX = 1;
+            if(keycode == useKey)
+                use = 1;
+            if(keycode == attackKey)
+                attack = 1;
         }
 
         protected function keyUpHandler(event:KeyboardEvent):void
@@ -179,6 +195,10 @@ package
                 vX = 0;
             if(keycode == rightKey)
                 vX = 0;
+            if(keycode == useKey)
+                use = 0;
+            if(keycode == attackKey)
+                attack = 0;
         }
     }
 }
