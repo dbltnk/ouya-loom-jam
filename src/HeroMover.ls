@@ -30,6 +30,8 @@ package
 
     	public var speed:Number = Config.HERO_SPEED;
     	public var target:String = "";
+    	public var lastDevTime:Number = 0;
+    	public var dev:Number = 0;    	
 
 		public function isDead():Boolean
 		{
@@ -61,7 +63,12 @@ package
 			vX /= l;
 			vY /= l;
 			
-			var dev = Math.min(Math.max(0.1,Math.random()),0.9)	
+			if (lastDevTime == 0 || Platform.getEpochTime() - lastDevTime > 0.2)
+			{
+				dev = Math.min(Math.max(0.3,Math.random()),0.9)	
+				lastDevTime = Platform.getEpochTime();
+				//~ trace(lastDevTime, dev);
+			}
     		x += vX * (dt / 1000) * speed * dev;
             y += vY * (dt / 1000) * speed * dev;
             
