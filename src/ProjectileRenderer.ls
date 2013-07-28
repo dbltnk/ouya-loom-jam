@@ -8,11 +8,8 @@ package
 	public class ProjectileRenderer extends AnimatedComponent
 	{
 		protected var image:Image;
-
-		public function ProjectileRenderer()
-		{
-
-		}
+		protected var hW:Number;
+		protected var hH:Number;
 
 		/**
          * Built in setter to propagate x position value changes for data binding as a component.
@@ -22,7 +19,7 @@ package
         public function set x(value:Number):void
         {
             if(image)
-                image.x = value;
+                image.x = value - hW;
         }
 
         /**
@@ -33,7 +30,7 @@ package
         public function set y(value:Number):void
         {
             if(image)
-                image.y = value;
+                image.y = value - hH;
         }
 
         protected function onAdd():Boolean
@@ -45,6 +42,9 @@ package
             image.x = -1000;
             image.y = -1000;
             Loom2D.stage.addChild(image);
+
+            hH = image.height / 2;
+            hW = image.width / 2;
             return true;
         }
         /**

@@ -275,6 +275,14 @@ package
                 if (mover)
                     mover.move(dt);
             }
+
+            n = projectiles.length;
+            for (i = 0; i < n; i ++)
+            {
+                var pm = getProjectileMover(i);
+                if (pm)
+                    pm.move(dt);
+            }
             
             for (i=0; i < heroes.length; i++)
             {
@@ -294,7 +302,7 @@ package
 				var b = getBuildingMover(i);
 				if (b) b.update(dt);
 			}
-			
+
 			village.update(dt);
         }
 
@@ -564,6 +572,13 @@ package
                 return null;
 
             return players[index].lookupComponentByName("mover") as PlayerMover;
+        }
+        public function getProjectileMover(index:int):ProjectileMover
+        {
+            if (index < 0 || index >= projectiles.length)
+                return null;
+
+            return projectiles[index].lookupComponentByName("mover") as ProjectileMover;
         }
         
         public function getHeroMover(index:int):HeroMover
