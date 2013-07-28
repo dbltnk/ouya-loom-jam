@@ -161,7 +161,10 @@ package
 						map.forgeX = tx;
 						map.forgeY = ty;
 						
-						spawnBuilding(idx, tx,ty, "assets/itemforge.png", "assets/itemforge_broken.png", true);
+						var forge = spawnBuilding(idx, tx,ty, "assets/itemforge.png", "assets/itemforge_broken.png", true);
+						var forgeMover = forge.lookupComponentByName("mover") as BuildingMover;
+						forgeMover.heroDamage = Config.FORGE_HERO_DAMAGE;
+						forgeMover.damageTimeout = Config.FORGE_DAMAGE_TIMEOUT;
 					}
 					else if (idx == Map.TYPE_WALL)
 					{
@@ -281,6 +284,53 @@ package
 			}
 			
 			village.update(dt);
+			
+			// remove dead objects
+			var killable : Killable = null;
+			for (i=0; i < players.length; i++)
+			{
+				killable = players[i].lookupComponentByName("killable") as Killable;
+				if (killable && killable.dead)
+				{
+					trace("remove player");
+					players.splice(i, 1);
+					killable._owner.destroy();
+					--i;
+				}
+			}
+			for (i=0; i < cities.length; i++)
+			{
+				killable = cities[i].lookupComponentByName("killable") as Killable;
+				if (killable && killable.dead)
+				{
+					trace("remove city");
+					cities.splice(i, 1);
+					killable._owner.destroy();
+					--i;
+				}
+			}
+			for (i=0; i < buildings.length; i++)
+			{
+				killable = buildings[i].lookupComponentByName("killable") as Killable;
+				if (killable && killable.dead)
+				{
+					trace("remove building");
+					buildings.splice(i, 1);
+					killable._owner.destroy();
+					--i;
+				}
+			}
+			for (i=0; i < heroes.length; i++)
+			{
+				killable = heroes[i].lookupComponentByName("killable") as Killable;
+				if (killable && killable.dead)
+				{
+					trace("remove hero");
+					heroes.splice(i, 1);
+					killable._owner.destroy();
+					--i;
+				}
+			}
         }
 
         override public function onTick():void
@@ -426,6 +476,8 @@ package
             renderer.addBinding("y", "@mover.y");
             renderer.addBinding("lookAngle", "@mover.lookAngle");
             
+			gameObject.addComponent(new Killable(), "killable");
+
             gameObject.addComponent(renderer, "renderer");
             gameObject.initialize();
 
@@ -442,6 +494,8 @@ package
             var mover = new HeroMover();
             mover.x = x;
             mover.y = y;
+
+			gameObject.addComponent(new Killable(), "killable");
 
             //mover.bindToPad(pad);
             gameObject.addComponent(mover, "mover");
@@ -470,6 +524,8 @@ package
             mover.solid = solid;
             //~ mover.broken = true;
 
+			gameObject.addComponent(new Killable(), "killable");
+
             gameObject.addComponent(mover, "mover");
             // create a new player renderer, bind it to the mover and save in component gameObject
             var renderer = new BuildingRenderer();
@@ -496,6 +552,8 @@ package
             city.y = y;
             gameObject.addComponent(city, "city");
             gameObject.initialize();
+
+			gameObject.addComponent(new Killable(), "killable");
 
             var renderer = new BuildingRenderer();
             renderer.addBinding("x", "@city.x");
