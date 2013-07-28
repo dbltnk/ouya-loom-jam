@@ -446,12 +446,20 @@ package
             return gameObject;
         }
 
-        public function spawnProjectile(playerMover:PlayerMover):void
+        public function spawnProjectile(playerMover:PlayerMover,
+                                        posX:Number, posY:Number,
+                                        directionX:Number, directionY:Number):void
         {
             var projectile:LoomGameObject = new LoomGameObject();
             projectile.owningGroup = group;
 
-            var mover:ProjectileMover = new ProjectileMover();
+            var mover:ProjectileMover = new ProjectileMover(
+                posX,
+                posY,
+                directionX,
+                directionY,
+                Config.PROJECTILE_SPEED
+            );
             projectile.addComponent(mover, "mover");
 
             var renderer:ProjectileRenderer = new ProjectileRenderer();

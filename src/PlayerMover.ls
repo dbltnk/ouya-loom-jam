@@ -131,7 +131,11 @@ package
             if (hasCooledDown())
             {
                 coolTime = attackCoolDown;
-                OUYAJam.instance.spawnProjectile(this);
+                // if player does not look into a specific direction, attack in direction of walking
+                if (lookX == 0 && lookY == 0)
+                    OUYAJam.instance.spawnProjectile(this, x, y, vX, vY);
+                else
+                    OUYAJam.instance.spawnProjectile(this, x, y, lookX, lookY);
             }
         }
 
