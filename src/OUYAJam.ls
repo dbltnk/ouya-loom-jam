@@ -197,6 +197,10 @@ package
 						healMover.heroDamage = Config.HEALPOINT_HERO_DAMAGE;
 						healMover.damageTimeout = Config.HEALPOINT_DAMAGE_TIMEOUT;
 					}
+					else if (idx == Map.TYPE_VILLAGE_HOUSE)
+					{
+						spawnBuilding(idx, tx,ty, "assets/village_house.png", "assets/village_house_broken.png", true);
+					}										
 					else if (idx == Map.TYPE_STORAGE_PLACE)
 					{
 						map.storageX = tx;
