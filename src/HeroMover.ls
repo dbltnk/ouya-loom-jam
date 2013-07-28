@@ -40,7 +40,7 @@ package
 
     	public function move(dt:Number):void
     	{
-			
+			//~ trace(target);
 			if (target == "forge") {
 				vX = OUYAJam.instance.map.forgeX - x;
 				vY = OUYAJam.instance.map.forgeY - y;								
@@ -54,9 +54,9 @@ package
 				vY = OUYAJam.instance.map.storageY - y;								
 			}
 
-			if (target == "forge" && x >= OUYAJam.instance.map.forgeX) {
-				target = "heal"
-			}
+			//~ if (target == "forge" && x >= OUYAJam.instance.map.forgeX) {
+				//~ target = "heal"
+			//~ }
 
 			//~ trace(vX,vY);
 			var l = Math.sqrt(vX*vX+vY*vY);
