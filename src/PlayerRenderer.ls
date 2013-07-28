@@ -199,7 +199,6 @@ package
         protected function onRemove():void
         {
             Loom2D.stage.removeChild(lookDirectionIndicator);
-            Loom2D.stage.removeChild(anim);
             // TODO kill all anims
             //Loom2D.stage.removeChild(anim);
 
