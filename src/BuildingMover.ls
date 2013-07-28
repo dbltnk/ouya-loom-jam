@@ -24,6 +24,9 @@ package
     	public var hp:Number = Config.BUILDING_HP;
     	public var hpMax:Number = Config.BUILDING_HP;
   
+		public var breakOnEmptyFood:Boolean = false;
+		public var breakOnEmptyResources:Boolean = false;
+	
 		public var lastDamageTime:Number = -100000;
 		public var damageTimeout:Number = 0;
     	public var heroDamage:Number = 0;
@@ -32,6 +35,8 @@ package
     	public function update(dt:Number):void
     	{
 			broken = hp <= 0;
+			if (breakOnEmptyFood) broken = broken || food <= 0;
+			if (breakOnEmptyResources) broken = broken || resources <= 0;
 			
 			var overlap:Number = 5;
 			

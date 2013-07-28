@@ -162,6 +162,20 @@ package
 						
 						spawnCity(tx, ty);
 					}
+					else if (idx == Map.TYPE_FOOD_PLACE)
+					{
+						var food = spawnBuilding(idx, tx,ty, "assets/food_place.png", "assets/food_place_broken.png", false);
+						var foodMover = food.lookupComponentByName("mover") as BuildingMover;
+						foodMover.breakOnEmptyFood = true;
+						foodMover.food = Config.FOOD_AMOUNT;
+					}
+					else if (idx == Map.TYPE_RES_PLACE)
+					{
+						var res = spawnBuilding(idx, tx,ty, "assets/res_place.png", "assets/res_place_broken.png", false);
+						var resMover = res.lookupComponentByName("mover") as BuildingMover;
+						resMover.breakOnEmptyResources = true;
+						resMover.resources = Config.RESOURCE_AMOUNT;
+					}
 					else if (idx == Map.TYPE_ITEMFORGE)
 					{
 						map.forgeX = tx;
@@ -177,14 +191,20 @@ package
 						map.healX = tx;
 						map.healY = ty;
 						
-						spawnBuilding(idx, tx,ty, "assets/healpoint.png", "assets/healpoint_broken.png", true);
+						var heal = spawnBuilding(idx, tx,ty, "assets/healpoint.png", "assets/healpoint_broken.png", true);
+						var healMover = heal.lookupComponentByName("mover") as BuildingMover;
+						healMover.heroDamage = Config.HEALPOINT_HERO_DAMAGE;
+						healMover.damageTimeout = Config.HEALPOINT_DAMAGE_TIMEOUT;
 					}
 					else if (idx == Map.TYPE_STORAGE_PLACE)
 					{
 						map.storageX = tx;
 						map.storageY = ty;
 						
-						spawnBuilding(idx, tx,ty, "assets/storage_place.png", "assets/storage_place_broken.png", true);
+						var storage = spawnBuilding(idx, tx,ty, "assets/storage_place.png", "assets/storage_place_broken.png", true);
+						var storageMover = storage.lookupComponentByName("mover") as BuildingMover;
+						storageMover.heroDamage = Config.STORAGE_HERO_DAMAGE;
+						storageMover.damageTimeout = Config.STORAGE_DAMAGE_TIMEOUT;
 					}										
 					else if (idx == Map.TYPE_WALL)
 					{
@@ -245,7 +265,8 @@ package
                                      "assets/player/", "mage", "mage-front-stand");
                 mover = getPlayerMover(0);
                 if (mover)
-                    mover.bindToKeys(LoomKey.W, LoomKey.A, LoomKey.S, LoomKey.D);
+                    mover.bindToKeys(LoomKey.W, LoomKey.A, LoomKey.S, LoomKey.D,
+						LoomKey.T, LoomKey.Z);
                     
                 player = spawnPlayer(Config.PLAYER_SPEED,
                                      Config.PLAYER_ATTACK_RANGE,
@@ -255,7 +276,8 @@ package
                                      "assets/player/", "mage", "mage-front-stand");
                 mover = getPlayerMover(1);
                 if (mover)
-                    mover.bindToKeys(LoomKey.UP_ARROW, LoomKey.LEFT_ARROW, LoomKey.DOWN_ARROW, LoomKey.RIGHT_ARROW);
+                    mover.bindToKeys(LoomKey.UP_ARROW, LoomKey.LEFT_ARROW, LoomKey.DOWN_ARROW, LoomKey.RIGHT_ARROW,
+						LoomKey.N, LoomKey.M);
             }
 
             playing = true;

@@ -8,6 +8,9 @@ package
         {
 			var dbax = ax-bx;
 			var dbay = ay-by;
+			var rr = ar + br;
+			if (Math.abs(dbax) > rr) return false;
+			if (Math.abs(dbay) > rr) return false;
 			var l = Math.sqrt(dbax*dbax+dbay*dbay);
             var overlap = l - ar - br;
             return overlap < 0;
