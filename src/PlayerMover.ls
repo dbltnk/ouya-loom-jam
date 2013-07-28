@@ -19,6 +19,11 @@ package
 		public var downKey:int;
 		public var rightKey:int;
 
+    	public var health:Number = Config.PLAYER_HP;
+    	public var healthMax:Number = Config.PLAYER_HP;		
+
+		public var radius:Number = Config.PLAYER_RADIUS;
+
     	public var x:Number = 0;
     	public var y:Number = 0;
 
@@ -29,20 +34,24 @@ package
     	public var lookY:Number = 0;
     	public var lookAngle:Number = 0;
 
-    	public var attack:Number = 0;
     	public var use:Number = 0;
 
+        public var attackCoolDown:Number = 0;
     	public var attackRange:Number = 0;
     	public var useRange:Number = 0;
 
     	public var speed:Number = 0;
 
+        protected var coolTime:Number = 0;
+
     	public function PlayerMover(speed:Number,
 	    							attackRange:Number,
+                                    attackCoolDown:Number,
 	    							useRange:Number)
     	{
     		this.speed = speed;
     		this.attackRange = attackRange;
+            this.attackCoolDown = attackCoolDown;
     		this.useRange = useRange;
     	}
 
@@ -50,7 +59,17 @@ package
     	{
     		x += vX * (dt / 1000) * speed;
             y += vY * (dt / 1000) * speed;
+
+            if (!hasCooledDown())
+                coolTime -= dt;
     	}
+
+        public function hasCooledDown():Boolean
+        {
+            if (coolTime < 0)
+                return true;
+            return false;
+        }
 
     	public function bindToPad(pad:Gamepad):void
     	{
@@ -98,7 +117,7 @@ package
 	           	break;
 
 	           	case 5:
-	           		attack = state;
+                    executeAttack(state);
 	           	break;
 
 	           	default:
@@ -110,6 +129,19 @@ package
         protected function updateLookAngle():void
         {
         	lookAngle = (lookX == 0 && lookY == 0) ? -1 : Math.atan2(lookY, lookX);
+        }
+
+        protected function executeAttack(state:float):void
+        {
+            if (hasCooledDown())
+            {
+                coolTime = attackCoolDown;
+                // if player does not look into a specific direction, attack in direction of walking
+                if (lookX == 0 && lookY == 0)
+                    OUYAJam.instance.spawnProjectile(this, x, y, vX, vY);
+                else
+                    OUYAJam.instance.spawnProjectile(this, x, y, lookX, lookY);
+            }
         }
 
     	public function bindToKeys(up:int, left:int, down:int, right:int):void

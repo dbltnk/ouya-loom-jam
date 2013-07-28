@@ -15,18 +15,26 @@ package
     {
     	public var x:Number = 0;
     	public var y:Number = 0;
-    	public var radius:Number = 16;
+    	public var radius:Number = Config.HERO_RADIUS;
 
-		public var lastDamageTime:Number = 0;
+		public var lastDamageTime:Number = -100000;
 		public var damageTimeout:Number = 1000;
 		
 		public var damage:Number = 10;
 		
     	public var vX:Number = 0;
     	public var vY:Number = 0;
+    	
+    	public var health:Number = Config.HERO_HP;
+    	public var healthMax:Number = Config.HERO_HP;
 
     	public var speed:Number = Config.HERO_SPEED;
     	public var target:String = "";
+
+		public function isDead():Boolean
+		{
+			return health <= 0;
+		}
 
     	public function move(dt:Number):void
     	{
@@ -57,6 +65,7 @@ package
     		x += vX * (dt / 1000) * speed * dev;
             y += vY * (dt / 1000) * speed * dev;
             
+            // collision?
             for (var i:int = 0; i < OUYAJam.instance.buildings.length; ++i)
             {
 				var b = OUYAJam.instance.getBuildingMover(i);
@@ -66,12 +75,23 @@ package
 					x += p.x;
 					y += p.y;
 					
+					// attack?
 					if (Platform.getTime() - lastDamageTime > damageTimeout)
 					{
-						b.hp -= damage;
-						lastDamageTime = Platform.getTime();	
+						if (b.type == Map.TYPE_WALL)
+						{
+							b.hp -= damage;
+							lastDamageTime = Platform.getTime();
+						}
 					}					
 				}
+			}
+			
+			if (isDead())
+			{
+				trace("omg im dead");
+				var killable = _owner.lookupComponentByName("killable") as Killable;
+				killable.dead = true;
 			}
     	}
     }
