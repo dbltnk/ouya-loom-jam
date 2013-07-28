@@ -50,5 +50,7 @@ package
     	
     	public static const VOLUME_MUSIC:Number = 1;
     	public static const VOLUME_SFX:Number = 0.2;
+
+        public static const ANIMATION_FRAME_RATE:int = 6;
     }
 }

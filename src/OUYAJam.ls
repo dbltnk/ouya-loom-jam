@@ -3,6 +3,7 @@ package
     import loom.Application;
     import loom2d.display.StageScaleMode;
     import loom2d.display.Image;
+    import loom2d.textures.TextureAtlas;
     import loom2d.textures.Texture;
     import loom2d.ui.SimpleLabel;
     import loom2d.math.Point;
@@ -106,6 +107,8 @@ package
         public var village:Village;
 
 		public var map:Map;
+
+		public var atlas:TextureAtlas;
 		
         override public function run():void
         {
@@ -117,6 +120,9 @@ package
 			var ts:int = Platform.getEpochTime() - 1374942470;
 			for (var i:int = 0; i < ts % 47; ++i) Math.random();
 			
+			// load large game texture
+            loadGameTextures();
+
             // setup object lists
             heroes = new Vector.<LoomGameObject>();
             cities = new Vector.<LoomGameObject>();
@@ -144,7 +150,8 @@ package
             //~ trace("storage", map.getTile(0,4,14));
             //~ trace("wall", map.getTile(0,14,2));
             //~ trace("test", map.getTile(0,1,1));
-			            
+			
+
 			var mapImgDict = new Dictionary();
 			mapImgDict[Map.TYPE_HEALPOINT] = "assets/healpoint.png";
 			mapImgDict[Map.TYPE_VILLAGE_HOUSE] = "assets/village_house.png";
@@ -881,6 +888,65 @@ package
                 var k:Killable = object._owner.lookupComponentByName("killable") as Killable;
                 if (k) k.dead = true;
             }
+        }
+
+        public function loadGameTextures():void
+        {
+
+            // load texture atlas
+            var atlasName:String = Config.PATH_ASSETS+"game-elements";
+            // get atlas data
+            var xml:XMLDocument = new XMLDocument();
+            if (xml.loadFile(atlasName + ".xml") != 0)
+            {
+            	trace("failed to load atlas data file for atlas " + atlasName );
+            	return;
+            }
+
+            atlas = new TextureAtlas(Texture.fromAsset(atlasName + ".png"), xml.rootElement());
+            textures = new Dictionary();
+            animations = new Dictionary();
+        }
+        
+        protected var textures:Dictionary;
+        protected var animations:Dictionary;
+
+        public function getImage(name:String):Image
+        {
+        	trace("Getting image '" + name + "'");
+
+        	if (!textures[name])
+        	{
+        		trace("Image '"+name+"' not available. Extracting from atlas...");
+        		textures[name] = atlas.getTexture( name );
+        	}
+        	
+        	if (!textures[name])
+        	{
+        		trace("Failed to extract texture '"+name+"' from atlas.");
+        		return null;
+        	}
+
+        	return new Image(textures[name] as Texture);
+        }
+
+        public function getAnimation(name:String):MovieClip
+        {
+        	trace("Getting animation '" + name + "'");
+
+        	if (!animations[name])
+        	{
+        		trace("Animation '"+name+"' not available. Extracting from atlas...");
+        		animations[name] = atlas.getTextures( name );
+        	}
+        	
+        	if (!animations[name])
+        	{
+        		trace("Failed to extract animation '"+name+"' from atlas.");
+        		return null;
+        	}
+
+        	return new MovieClip(animations[ name ] as Vector.<Texture>, Config.ANIMATION_FRAME_RATE);
         }
     }
 }
