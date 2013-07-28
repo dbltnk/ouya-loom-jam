@@ -10,6 +10,16 @@ package
     import loom2d.events.KeyboardEvent;
     import loom.platform.LoomKey;
 
+
+    enum PlayerState {
+        STAND = 0,
+        WALK
+    }
+    enum PlayerDirection {
+        RIGHT = 0,
+        LEFT
+    }
+
     public class PlayerMover extends LoomComponent
     {
 
@@ -46,10 +56,13 @@ package
     	public var useRange:Number = 0;
 
     	public var speed:Number = 0;
+        public var state:int = 0;
+        public var direction:int = 0;
     	
     	public var harvestTimeout:Timeout;
 
         protected var coolTime:Number = 0;
+
 
     	public function PlayerMover(speed:Number,
                                     attackDamage:Number,
@@ -71,6 +84,11 @@ package
     	{
     		x += vX * (dt / 1000) * speed;
             y += vY * (dt / 1000) * speed;
+
+            state = (vX == 0 && vY == 0) ? PlayerState.STAND : PlayerState.WALK;
+            direction = (vX < 0) ? PlayerDirection.LEFT : PlayerDirection.RIGHT;
+
+
 
 			// collision?
             for (var i:int = 0; i < OUYAJam.instance.buildings.length; ++i)
@@ -184,9 +202,9 @@ package
                 coolTime = attackCoolDown;
                 // if player does not look into a specific direction, attack in direction of walking
                 if (lookX == 0 && lookY == 0)
-                    OUYAJam.instance.spawnProjectile(this, x, y, vX, vY, attackDamage, attackRange);
+                    OUYAJam.instance.spawnProjectile(this, x + radius, y + radius, vX, vY, attackDamage, attackRange);
                 else
-                    OUYAJam.instance.spawnProjectile(this, x, y, lookX, lookY, attackDamage, attackRange);
+                    OUYAJam.instance.spawnProjectile(this, x + radius, y + radius, lookX, lookY, attackDamage, attackRange);
             }
         }
 
