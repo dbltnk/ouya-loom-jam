@@ -92,6 +92,7 @@ package
         public var buildings:Vector.<LoomGameObject>;
         public var lastFrame:Number;
         private var playing:Boolean = false; 
+        public var village:Village;
 
 		public var map:Map;
 		
@@ -109,6 +110,7 @@ package
             players = new Vector.<LoomGameObject>();
             projectiles = new Vector.<LoomGameObject>();
             buildings = new Vector.<LoomGameObject>();
+            village = new Village();
 
 			// setup background
 			background = new Image(Texture.fromAsset("assets/bg.png"));
@@ -161,11 +163,11 @@ package
 						map.forgeX = tx;
 						map.forgeY = ty;
 						
-						spawnBuilding(idx, tx,ty, "assets/itemforge.png", "assets/itemforge_broken.png");
+						spawnBuilding(idx, tx,ty, "assets/itemforge.png", "assets/itemforge_broken.png", true);
 					}
 					else if (idx == Map.TYPE_WALL)
 					{
-						spawnBuilding(idx, tx,ty, "assets/wall.png", "assets/wall_broken.png");
+						spawnBuilding(idx, tx,ty, "assets/wall.png", "assets/wall_broken.png", true);
 					}
 					else
 					{
@@ -292,6 +294,8 @@ package
 				var b = getBuildingMover(i);
 				if (b) b.update(dt);
 			}
+			
+			village.update(dt);
         }
 
         override public function onTick():void
@@ -495,7 +499,7 @@ package
             return gameObject;
         }
         
-        public function spawnBuilding(type:int, x:Number, y:Number, normalImage:String, brokenImage:String):LoomGameObject 
+        public function spawnBuilding(type:int, x:Number, y:Number, normalImage:String, brokenImage:String, solid:Boolean):LoomGameObject 
         {
             var gameObject = new LoomGameObject();
             gameObject.owningGroup = group;
@@ -504,6 +508,7 @@ package
             mover.x = x;
             mover.y = y;
             mover.type = type;
+            mover.solid = solid;
             //~ mover.broken = true;
 
             gameObject.addComponent(mover, "mover");
